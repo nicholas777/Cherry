@@ -9,34 +9,45 @@
 
 namespace Cherry
 {
+
 	// Application class, contains a representation 
 	// of the Game
 	
 	class CHERRY_API Application
 	{
 	public:
+		struct ApplicationConfig
+		{
+			int WindowWidth, WindowHeight;
+			std::string WindowTitle;
+			bool IsVSync;
+		};
+
+	public:
 		Application();
 		~Application();
 
-		bool isRunning;
+		LayerStack& GetLayerStack() { return *m_LayerStack; };
+		void PushLayer(Layer* layer) { m_LayerStack->PushLayer(layer); };
 
-		inline LayerStack& GetLayerStack() { return m_LayerStack; };
+		void Run();
+		void Cherry::Application::OnEvent(Event* e);
 
-		void Run(void (*update)());
-		static void Cherry::Application::OnEvent(Event* e);
-
-		static void InitEngine();
-		
 		static Application& GetApplication();
 		Window* GetWindow();
+
+		bool IsRunning;
+	protected:
+		ApplicationConfig Configuration;
 	private:
-		static Cherry::Application* m_Game;
-		static LayerStack m_LayerStack;
+		static Cherry::Application* s_Application;
+
+		LayerStack* m_LayerStack;
 		Window* m_Window;
+
+		float m_LastFrame = 0.0f;
 	};
 
-	// Defined by the client
-	void CHERRY_API OnStart();
-	void CHERRY_API OnUpdate();
-	void CHERRY_API OnShutdown();
+	// Defined by client
+	Application* CreateApplication();
 }

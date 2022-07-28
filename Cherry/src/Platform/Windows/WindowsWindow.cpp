@@ -5,14 +5,13 @@
 #include "Events/Event.h"
 #include "core/Application.h"
 
-#include "glad/glad.h"
 
 namespace Cherry
 {
 	static bool GLFWInit = false;
 
 	static void ErrorCallback(int error, const char* msg) {
-		Application::OnEvent(new GameErrorEvent((std::string("GLFW ERROR: ") + std::string(msg)).c_str()));
+		Application::GetApplication().OnEvent(new GameErrorEvent((std::string("GLFW ERROR: ") + std::string(msg)).c_str()));
 	}
 
 	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -20,20 +19,20 @@ namespace Cherry
 		switch (action)
 		{
 		case GLFW_PRESS:
-			Application::OnEvent(new KeyPressEvent(key, false));
+			Application::GetApplication().OnEvent(new KeyPressEvent(key, false));
 			break;
 		case GLFW_RELEASE:
-			Application::OnEvent(new KeyReleaseEvent(key));
+			Application::GetApplication().OnEvent(new KeyReleaseEvent(key));
 			break;
 		case GLFW_REPEAT:
-			Application::OnEvent(new KeyPressEvent(key, true));
+			Application::GetApplication().OnEvent(new KeyPressEvent(key, true));
 			break;
 		}
 	}
 
 	static void MouseMoveCallback(GLFWwindow* window, double xpos, double ypos)
 	{
-		Application::OnEvent(new MouseMoveEvent(int(xpos), int(ypos)));
+		Application::GetApplication().OnEvent(new MouseMoveEvent(int(xpos), int(ypos)));
 	}
 
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -41,40 +40,40 @@ namespace Cherry
 		switch (action)
 		{
 		case GLFW_PRESS:
-			Application::OnEvent(new MouseClickEvent(button));
+			Application::GetApplication().OnEvent(new MouseClickEvent(button));
 			break;
 		case GLFW_RELEASE:
-			Application::OnEvent(new MouseReleaseEvent(button));
+			Application::GetApplication().OnEvent(new MouseReleaseEvent(button));
 			break;
 		}
 	}
 
 	void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 	{
-		Application::OnEvent(new MouseScrollEvent(int(yoffset)));
+		Application::GetApplication().OnEvent(new MouseScrollEvent(yoffset));
 	}
 
 	void WindowCloseCallback(GLFWwindow* window)
 	{
-		Application::OnEvent(new WindowCloseEvent());
-		Application::GetApplication().isRunning = false;
+		Application::GetApplication().OnEvent(new WindowCloseEvent());
+		Application::GetApplication().IsRunning = false;
 		CH_CORE_INFO("window closing");
 	}
 
 	void WindowResizeCallback(GLFWwindow* window, int width, int height)
 	{
-		Application::OnEvent(new WindowResizeEvent(width, height));
+		Application::GetApplication().OnEvent(new WindowResizeEvent(width, height));
 	}
 	
 	void WindowFocusCallback(GLFWwindow* window, int focused)
 	{
 		if (focused)
 		{
-			Application::OnEvent(new WindowFocusEvent());
+			Application::GetApplication().OnEvent(new WindowFocusEvent());
 		}
 		else
 		{
-			Application::OnEvent(new WindowUnfocusEvent());
+			Application::GetApplication().OnEvent(new WindowUnfocusEvent());
 		}
 	}
 
@@ -93,17 +92,15 @@ namespace Cherry
 		}
 
 		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		Application::OnEvent(new WindowOpenEvent());
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
+
+		Application::GetApplication().OnEvent(new WindowOpenEvent());
 
 		CH_ASSERT(m_Window, "GLFW window is null");
-		
-		glfwMakeContextCurrent(m_Window);
-
-		int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-
 		SetVSync(true);
 
-		// sets callback functions
+		// callback functions
 
 		glfwSetKeyCallback(m_Window, KeyCallback);
 		glfwSetCursorPosCallback(m_Window, MouseMoveCallback);
@@ -117,6 +114,11 @@ namespace Cherry
 	WindowsWindow::~WindowsWindow()
 	{
 		delete m_Window;
+	}
+
+	float WindowsWindow::GetTime()
+	{
+		return glfwGetTime();
 	}
 
 	void WindowsWindow::OnUpdate()

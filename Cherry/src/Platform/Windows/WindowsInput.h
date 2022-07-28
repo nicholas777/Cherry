@@ -42,12 +42,14 @@ namespace Cherry
 			return GetMousePosImpl()[1];
 		};
 
-	public:
+	private:
 		WindowsInput* Initialize()
 		{
 			window = static_cast<GLFWwindow*>(Application::GetApplication().GetWindow()->GetNativeWindow());
 			return this;
 		}
+
+		friend void Cherry::Input::Init();
 	};
 
 #ifdef CH_PLATFORM_WINDOWS

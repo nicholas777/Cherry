@@ -3,6 +3,7 @@
 #include "epch.h"
 #include "Core.h"
 #include "Events/Event.h"
+#include "core/Timestep.h"
 
 namespace Cherry
 {
@@ -10,13 +11,27 @@ namespace Cherry
 	{
 	public:
 
-		Layer() {};
+		Layer()
+			: m_Name("Unknows") 
+		{
+		}
+
+		Layer(std::string name) 
+			: m_Name(name) 
+		{
+		}
+
 		virtual ~Layer() {};
 
-		virtual void OnAttach() = 0;
-		virtual void OnDetach() = 0;
-		virtual void OnUpdate() = 0;
-		virtual void OnEvent(Event* e) = 0;
+		std::string GetName() { return m_Name; }
+		void SetName(std::string name) { m_Name = name; }
 
+		virtual void OnAttach() {};
+		virtual void OnDetach() {};
+		virtual void OnUpdate(Timestep delta) {};
+		virtual void OnEvent(Event* e) {};
+
+	private:
+		std::string m_Name;
 	};
 }

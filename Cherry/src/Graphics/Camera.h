@@ -1,0 +1,29 @@
+#pragma once
+
+#include "Math/Matrix.h"
+#include "Math/Transform.h"
+
+namespace Cherry
+{
+	class CHERRY_API Camera
+	{
+	public:
+		Camera() {}
+		Camera(Vector2f pos, float left, float right, float top, float bottom, float nearPlane, float farPlane, Vector3f up);
+
+		void Translate(float x, float y);
+		void Rotate(float angle);
+
+		inline Matrix4x4f CalcVP() { return m_VP; };
+
+	private:
+		Matrix4x4f m_ProjectionMatrix;
+		TransformationMatrix m_ViewMatrix;
+
+		Matrix4x4f m_VP;
+
+		Vector2f m_Position;
+
+		void GenViewMatrix(Vector2f pos, Vector3f up);
+	};
+}

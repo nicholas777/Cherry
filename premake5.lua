@@ -29,14 +29,17 @@ project "Cherry"
 
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp"
 	}
 
 	includedirs {
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/GLFW/include",
-		"%{prj.name}/vendor/GLAD/include"
+		"%{prj.name}/vendor/GLAD/include",
+		"%{prj.name}/vendor/stb_image"
 	}
 
 	links {

@@ -5,20 +5,14 @@
 
 #ifdef CH_PLATFORM_WINDOWS
 
-extern void Cherry::OnStart();
-extern void Cherry::OnUpdate();
-extern void Cherry::OnShutdown();
+extern Cherry::Application* Cherry::CreateApplication();
 
 int main(int argc, char** argv) {
-	Cherry::Application::InitEngine();
-	Cherry::OnStart();
+	auto app = Cherry::CreateApplication();
 
-	void (*update)();
-	update = &Cherry::OnUpdate;
+	app->Run();
 
-	Cherry::Application::GetApplication().Run(update);
-
-	Cherry::OnShutdown();
+	delete app;
 }
 
 #endif

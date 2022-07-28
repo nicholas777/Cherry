@@ -1,42 +1,58 @@
 #include "epch.h"
 #include "Application.h"
-#include "../Events/EventListener.h"
-#include "../Events/EventType.h"
-#include "../Events/Input.h"
+#include "Events/EventListener.h"
+#include "Events/EventType.h"
+#include "Platform/Windows/WindowsInput.h"
 #include "Events/Input.h"
 #include "KeyCodes.h"
+#include "Timestep.h"
+#include "Platform/OpenGL/OpenGLTexture.h"
 
-Cherry::Application* Cherry::Application::m_Game;
-Cherry::LayerStack Cherry::Application::m_LayerStack;
+Cherry::Application* Cherry::Application::s_Application;
 
 Cherry::Application::Application()
 {
-	CH_INFO("Entered Application constructor");
-	isRunning = true;
+	Cherry::Log::Init();
+	Cherry::EventListener::InitEventListenerSystem();
+
+	Configuration = ApplicationConfig();
+	m_LayerStack = new LayerStack;
+
+	s_Application = this;
 }
 
 Cherry::Application::~Application()
 {
 	delete m_Window;
+	delete m_LayerStack;
 }
 
-void Cherry::Application::Run(void (*update)())
+void Cherry::Application::Run()
 {
-	m_Window = Window::Create(WindowData(600, 400, "Game Engine", true));
+	IsRunning = true;
+
+	m_Window = Window::Create({ Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.IsVSync });
+
 	Input::Init();
 
-	while (isRunning)
+	for (auto layer : *m_LayerStack)
 	{
-		m_Window->OnUpdate();
-		update();
-
-		CH_TRACE(Input::GetKeyPressed(Key::W) ? "w pressed" : "");
-
-		for (Layer* layer : m_LayerStack)
-			layer->OnUpdate();
+		layer->OnAttach();
 	}
 
-	delete m_Window;
+	Timestep DeltaTime;
+
+	while (IsRunning)
+	{
+		float time = m_Window->GetTime();
+		DeltaTime = Timestep(time - m_LastFrame);
+		m_LastFrame = time;
+
+		m_Window->OnUpdate();
+
+		for (Layer* layer : *m_LayerStack)
+			layer->OnUpdate(DeltaTime);
+	}
 }
 
 void Cherry::Application::OnEvent(Event* e)
@@ -46,7 +62,7 @@ void Cherry::Application::OnEvent(Event* e)
 		listener->OnEvent(*e);
 	}
 
-	for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+	for (auto it = (*m_LayerStack).end(); it != (*m_LayerStack).begin();)
 	{
 		(**--it).OnEvent(e);
 
@@ -57,18 +73,9 @@ void Cherry::Application::OnEvent(Event* e)
 	delete e;
 }
 
-void Cherry::Application::InitEngine()
-{
-	Cherry::Log::Init();
-
-	Cherry::EventListener::InitEventListenerSystem();
-	m_Game = new Application();
-
-}
-
 Cherry::Application& Cherry::Application::GetApplication()
 {
-	return *m_Game;
+	return *s_Application;
 }
 
 Cherry::Window* Cherry::Application::GetWindow()

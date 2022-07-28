@@ -1,229 +1,166 @@
 #pragma once
 
 #include "core/Core.h"
+#include "core/Log.h"
+#include <cstdint>
 
 namespace Cherry
 {
-
+	template<typename T>
 	class CHERRY_API Vector2
 	{
-	public:
-		float x, y;
+		typedef Vector2<T> type;
 
-		Vector2(float x, float y)
+	public: 
+		T x, y;
+
+		template <typename T>
+		Vector2(T x, T y)
 		{
 			this->x = x;
 			this->y = y;
-		}
+		};
 
 		Vector2()
 		{
 			this->x = 0;
 			this->y = 0;
 		}
+		
+		T* Data()
+		{
+			T* arr = new T[2];
 
-		float operator[](int index)
+			arr[0] = x;
+			arr[1] = y;
+
+			return arr;
+		}
+
+		float& operator[](int index)
 		{
 			if (index == 0) return x;
 			if (index == 1) return y;
 
-			CH_ERROR("Error in Vector2::operator[]: specified index is either too large or too small");
+			CH_ERROR("Error in Vector::operator[]: specified index is either too large or too small");
 			return 0;
 		}
 
-		bool operator==(Vector2 other)
+		bool operator==(type other)
 		{
 			return x == other.x && y == other.y;
 		}
 
-		bool operator!=(Vector2 other)
+		bool operator!=(type other)
 		{
-			return !(*(this) == other);
+			return !(x == other.x && y == other.y);
 		}
 
-		Vector2 operator+(Vector2 other)
+		type operator+(type other)
 		{
-			return Vector2(x + other.x, y + other.y);
+			return type(x + other.x, y + other.y);
 		}
 
-		Vector2 operator+(int other)
+		template <typename T>
+		type operator+(T other)
 		{
-			return Vector2(x + other, y + other);
+			return type(x + other, y + other);
 		}
 
-		Vector2 operator+(float other)
-		{
-			return Vector2(x + other, y + other);
-		}
-
-		Vector2 operator+(double other)
-		{
-			return Vector2(x + other, y + other);
-		}
-
-		void operator+=(Vector2 other)
+		void operator+=(type other)
 		{
 			x += other.x;
 			y += other.y;
 		}
 
-		void operator+=(int other)
+		template <typename T>
+		void operator+=(T other)
 		{
 			x += other;
 			y += other;
 		}
 
-		void operator+=(float other)
+		type operator-(type other)
 		{
-			x += other;
-			y += other;
+			return type(x - other.x, y - other.y);
 		}
 
-		void operator+=(double other)
+		template <typename T>
+		type operator-(T other)
 		{
-			x += other;
-			y += other;
+			return type(x - other, y - other);
 		}
 
-		Vector2 operator-(Vector2 other)
-		{
-			return Vector2(x - other.x, y - other.y);
-		}
-
-		Vector2 operator-(int other)
-		{
-			return Vector2(x - other, y - other);
-		}
-
-		Vector2 operator-(float other)
-		{
-			return Vector2(x - other, y - other);
-		}
-
-		Vector2 operator-(double other)
-		{
-			return Vector2(x - other, y - other);
-		}
-
-		void operator-=(Vector2 other)
+		void operator-=(type other)
 		{
 			x -= other.x;
 			y -= other.y;
 		}
 
-		void operator-=(int other)
+		template <typename T>
+		void operator-=(T other)
 		{
 			x -= other;
 			y -= other;
 		}
 
-		void operator-=(float other)
+		template <typename T>
+		type operator*(T other)
 		{
-			x -= other;
-			y -= other;
+			return type(x * other, y * other);
 		}
 
-		void operator-=(double other)
+		type operator*(type other)
 		{
-			x -= other;
-			y -= other;
+			return type(x * other.x, y * other.y);
 		}
 
-		Vector2 operator*(int other)
-		{
-			return Vector2(x * other, y * other);
-		}
-
-		Vector2 operator*(float other)
-		{
-			return Vector2(x * other, y * other);
-		}
-
-		Vector2 operator*(double other)
-		{
-			return Vector2(x * other, y * other);
-		}
-
-		Vector2 operator*(Vector2 other)
-		{
-			return Vector2(x * other.x, y * other.y);
-		}
-
-		void operator*=(int other)
+		template <typename T>
+		void operator*=(T other)
 		{
 			x *= other;
 			y *= other;
 		}
 
-		void operator*=(float other)
-		{
-			x *= other;
-			y *= other;
-		}
-
-		void operator*=(double other)
-		{
-			x *= other;
-			y *= other;
-		}
-
-		void operator*=(Vector2 other)
+		void operator*=(type other)
 		{
 			x *= other.x;
 			y *= other.x;
 		}
 
-		Vector2 operator/(int other)
+		template <typename T>
+		type operator/(T other)
 		{
-			return Vector2(x / other, y / other);
+			return type(x / other, y / other);
 		}
 
-		Vector2 operator/(float other)
+		type operator/(type other)
 		{
-			return Vector2(x / other, y / other);
+			return type(x / other.x, y / other.y);
 		}
 
-		Vector2 operator/(double other)
-		{
-			return Vector2(x / other, y / other);
-		}
-
-		Vector2 operator/(Vector2 other)
-		{
-			return Vector2(x / other.x, y / other.y);
-		}
-
-		void operator/=(int other)
+		void operator/=(T other)
 		{
 			x /= other;
 			y /= other;
 		}
 
-		void operator/=(float other)
-		{
-			x /= other;
-			y /= other;
-		}
-
-		void operator/=(double other)
-		{
-			x /= other;
-			y /= other;
-		}
-
-		void operator/=(Vector2 other)
+		void operator/=(type other)
 		{
 			x /= other.x;
 			y /= other.y;
 		}
 	};
 
+	template<typename T>
 	class CHERRY_API Vector3
 	{
+		typedef Vector3<T> type;
+
 	public:
 		float x, y, z;
 
-		Vector3(float x, float y, float z)
+		Vector3(T x, T y, T z)
 		{
 			this->x = x;
 			this->y = y;
@@ -237,212 +174,135 @@ namespace Cherry
 			this->z = 0;
 		}
 
-		float operator[](int index)
+		template <typename T>
+		Vector3(Vector2<T> vec)
+		{
+			x = vec.x;
+			y = vec.y;
+			z = 0;
+		}
+
+		T* Data()
+		{
+			T* arr = new T[3];
+
+			arr[0] = x;
+			arr[1] = y;
+			arr[2] = z;
+
+			return arr;
+		}
+
+		float& operator[](int index)
 		{
 			if (index == 0) return x;
 			if (index == 1) return y;
 			if (index == 2) return z;
 
-			CH_ERROR("Error in Vector3::operator[]: specified index is either too large or too small");
-			return 0;
+			CH_ERROR("Error in type::operator[]: specified index is either too large or too small");
+			return x;
 		}
 
-		bool operator==(Vector3 other)
+		bool operator==(type other)
 		{
 			return x == other.x && y == other.y && z == other.z;
 		}
 
-		bool operator!=(Vector3 other)
+		bool operator!=(type other)
 		{
 			return !(*(this) == other);
 		}
 
-		Vector3 operator+(int other)
+		type operator+(T other)
 		{
-			return Vector3(x + other, y + other, z + other);
+			return type(x + other, y + other, z + other);
 		}
 
-		Vector3 operator+(float other)
+		type operator+(type other)
 		{
-			return Vector3(x + other, y + other, z + other);
+			return type(x + other.x, y + other.y, z + other.z);
 		}
 
-		Vector3 operator+(double other)
-		{
-			return Vector3(x + other, y + other, z + other);
-		}
-
-		Vector3 operator+(Vector3 other)
-		{
-			return Vector3(x + other.x, y + other.y, z + other.z);
-		}
-
-		void operator+=(int other)
+		void operator+=(T other)
 		{
 			x += other;
 			y += other;
 			z += other;
 		}
 
-		void operator+=(float other)
-		{
-			x += other;
-			y += other;
-			z += other;
-		}
-
-		void operator+=(double other)
-		{
-			x += other;
-			y += other;
-			z += other;
-		}
-
-		void operator+=(Vector3 other)
+		void operator+=(type other)
 		{
 			x += other.x;
 			y += other.y;
 			z += other.z;
 		}
 
-		Vector3 operator-(int other)
+		type operator-(T other)
 		{
-			return Vector3(x - other, y - other, z - other);
+			return type(x - other, y - other, z - other);
 		}
 
-		Vector3 operator-(float other)
+		type operator-(type other)
 		{
-			return Vector3(x - other, y - other, z - other);
+			return type(x - other.x, y - other.y, z - other.z);
 		}
 
-		Vector3 operator-(double other)
-		{
-			return Vector3(x - other, y - other, z - other);
-		}
-
-		Vector3 operator-(Vector3 other)
-		{
-			return Vector3(x - other.x, y - other.y, z - other.z);
-		}
-
-		void operator-=(int other)
+		void operator-=(T other)
 		{
 			x -= other;
 			y -= other;
 			z -= other;
 		}
 
-		void operator-=(float other)
-		{
-			x -= other;
-			y -= other;
-			z -= other;
-		}
-
-		void operator-=(double other)
-		{
-			x -= other;
-			y -= other;
-			z -= other;
-		}
-
-		void operator-=(Vector3 other)
+		void operator-=(type other)
 		{
 			x -= other.x;
 			y -= other.y;
 			z -= other.z;
 		}
 
-		Vector3 operator*(int other)
+		type operator*(T other)
 		{
-			return Vector3(x * other, y * other, z * other);
+			return type(x * other, y * other, z * other);
 		}
 
-		Vector3 operator*(float other)
+		type operator*(type other)
 		{
-			return Vector3(x * other, y * other, z * other);
+			return type(x * other.x, y * other.y, z * other.z);
 		}
 
-		Vector3 operator*(double other)
-		{
-			return Vector3(x * other, y * other, z * other);
-		}
-
-		Vector3 operator*(Vector3 other)
-		{
-			return Vector3(x * other.x, y * other.y, z * other.z);
-		}
-
-		void operator*=(int other)
-		{
-			x -= other;
-			y -= other;
-			z -= other;
-		}
-
-		void operator*=(float other)
+		void operator*=(T other)
 		{
 			x *= other;
 			y *= other;
 			z *= other;
 		}
 
-		void operator*=(double other)
-		{
-			x *= other;
-			y *= other;
-			z *= other;
-		}
-
-		void operator*=(Vector3 other)
+		void operator*=(type other)
 		{
 			x *= other.x;
 			y *= other.y;
 			z *= other.z;
 		}
 
-		Vector3 operator/(int other)
+		type operator/(T other)
 		{
-			return Vector3(x / other, y / other, z / other);
+			return type(x / other, y / other, z / other);
 		}
 
-		Vector3 operator/(float other)
+		type operator/(type other)
 		{
-			return Vector3(x / other, y / other, z / other);
+			return type(x / other.x, y / other.y, z / other.z);
 		}
 
-		Vector3 operator/(double other)
-		{
-			return Vector3(x / other, y / other, z / other);
-		}
-
-		Vector3 operator/(Vector3 other)
-		{
-			return Vector3(x / other.x, y / other.y, z / other.z);
-		}
-
-		void operator/=(int other)
+		void operator/=(T other)
 		{
 			x /= other;
 			y /= other;
 			z /= other;
 		}
 
-		void operator/=(float other)
-		{
-			x /= other;
-			y /= other;
-			z /= other;
-		}
-
-		void operator/=(double other)
-		{
-			x /= other;
-			y /= other;
-			z /= other;
-		}
-
-		void operator/=(Vector3 other)
+		void operator/=(type other)
 		{
 			x /= other.x;
 			y /= other.y;
@@ -450,12 +310,14 @@ namespace Cherry
 		}
 	};
 
+	template<typename T>
 	class CHERRY_API Vector4
 	{
+		typedef Vector4<T> type;
 	public:
 		float x, y, z, w;
 
-		Vector4(float x, float y, float z, float w)
+		Vector4(T x, T y, T z, T w)
 		{
 			this->x = x;
 			this->y = y;
@@ -471,48 +333,50 @@ namespace Cherry
 			this->w = 0;
 		}
 
-		float operator[](int index)
+		T* Data()
+		{
+			T* arr = new T[4];
+
+			arr[0] = x;
+			arr[1] = y;
+			arr[2] = z;
+			arr[3] = w;
+
+			return arr;
+		}
+
+		float& operator[](int index)
 		{
 			if (index == 0) return x;
 			if (index == 1) return y;
 			if (index == 2) return z;
 			if (index == 3) return w;
 
-			CH_ERROR("Error in Vector4::operator[]: specified index is either too large or too small");
-			return 0;
+			CH_ERROR("Error in type::operator[]: specified index is either too large or too small");
+			return x;
 		}
 
-		bool operator==(Vector4 other)
+		bool operator==(type other)
 		{
 			return x == other.x && y == other.y && z == other.z && w == other.w;
 		}
 
-		bool operator!=(Vector4 other)
+		bool operator!=(type other)
 		{
 			return !(*(this) == other);
 		}
 
-		Vector4 operator+(int other)
+		type operator+(T other)
 		{
-			return Vector4(x + other, y + other, z + other, w + other);
+			return type(x + other, y + other, z + other, w + other);
 		}
 
-		Vector4 operator+(float other)
+		type operator+(type other)
 		{
-			return Vector4(x + other, y + other, z + other, w + other);
+			return type(x + other.x, y + other.y, z + other.z, w + other.w);
 		}
 
-		Vector4 operator+(double other)
-		{
-			return Vector4(x + other, y + other, z + other, w + other);
-		}
-
-		Vector4 operator+(Vector4 other)
-		{
-			return Vector4(x + other.x, y + other.y, z + other.z, w + other.w);
-		}
-
-		void operator+=(int other)
+		void operator+=(T other)
 		{
 			x += other;
 			y += other;
@@ -520,23 +384,7 @@ namespace Cherry
 			w += other;
 		}
 
-		void operator+=(float other)
-		{
-			x += other;
-			y += other;
-			z += other;
-			w += other;
-		}
-
-		void operator+=(double other)
-		{
-			x += other;
-			y += other;
-			z += other;
-			w += other;
-		}
-
-		void operator+=(Vector4 other)
+		void operator+=(type other)
 		{
 			x += other.x;
 			y += other.y;
@@ -544,27 +392,17 @@ namespace Cherry
 			w += other.w;
 		}
 
-		Vector4 operator-(int other)
+		type operator-(T other)
 		{
-			return Vector4(x - other, y - other, z - other, w - other);
+			return type(x - other, y - other, z - other, w - other);
 		}
 
-		Vector4 operator-(float other)
+		type operator-(type other)
 		{
-			return Vector4(x - other, y - other, z - other, w - other);
+			return type(x - other.x, y - other.y, z - other.z, w - other.w);
 		}
 
-		Vector4 operator-(double other)
-		{
-			return Vector4(x - other, y - other, z - other, w - other);
-		}
-
-		Vector4 operator-(Vector4 other)
-		{
-			return Vector4(x - other.x, y - other.y, z - other.z, w - other.w);
-		}
-
-		void operator-=(int other)
+		void operator-=(T other)
 		{
 			x -= other;
 			y -= other;
@@ -572,23 +410,7 @@ namespace Cherry
 			w -= other;
 		}
 
-		void operator-=(float other)
-		{
-			x -= other;
-			y -= other;
-			z -= other;
-			w -= other;
-		}
-
-		void operator-=(double other)
-		{
-			x -= other;
-			y -= other;
-			z -= other;
-			w -= other;
-		}
-
-		void operator-=(Vector4 other)
+		void operator-=(type other)
 		{
 			x -= other.x;
 			y -= other.y;
@@ -596,27 +418,17 @@ namespace Cherry
 			w -= other.w;
 		}
 
-		Vector4 operator*(int other)
+		type operator*(T other)
 		{
-			return Vector4(x * other, y * other, z * other, w * other);
+			return type(x * other, y * other, z * other, w * other);
 		}
 
-		Vector4 operator*(float other)
+		type operator*(type other)
 		{
-			return Vector4(x * other, y * other, z * other, w * other);
+			return type(x * other.x, y * other.y, z * other.z, w * other.w);
 		}
 
-		Vector4 operator*(double other)
-		{
-			return Vector4(x * other, y * other, z * other, w * other);
-		}
-
-		Vector4 operator*(Vector4 other)
-		{
-			return Vector4(x * other.x, y * other.y, z * other.z, w * other.w);
-		}
-
-		void operator*=(int other)
+		void operator*=(T other)
 		{
 			x *= other;
 			y *= other;
@@ -624,23 +436,7 @@ namespace Cherry
 			w *= other;
 		}
 
-		void operator*=(float other)
-		{
-			x *= other;
-			y *= other;
-			z *= other;
-			w *= other;
-		}
-
-		void operator*=(double other)
-		{
-			x *= other;
-			y *= other;
-			z *= other;
-			w *= other;
-		}
-
-		void operator*=(Vector4 other)
+		void operator*=(type other)
 		{
 			x *= other.x;
 			y *= other.y;
@@ -648,27 +444,17 @@ namespace Cherry
 			w *= other.w;
 		}
 
-		Vector4 operator/(int other)
+		type operator/(T other)
 		{
-			return Vector4(x / other, y / other, z / other, w / other);
+			return type(x / other, y / other, z / other, w / other);
 		}
 
-		Vector4 operator/(float other)
+		type operator/(type other)
 		{
-			return Vector4(x / other, y / other, z / other, w / other);
+			return type(x / other.x, y / other.y, z / other.z, w / other.w);
 		}
 
-		Vector4 operator/(double other)
-		{
-			return Vector4(x / other, y / other, z / other, w / other);
-		}
-
-		Vector4 operator/(Vector4 other)
-		{
-			return Vector4(x / other.x, y / other.y, z / other.z, w / other.w);
-		}
-
-		void operator/=(int other)
+		void operator/=(T other)
 		{
 			x /= other;
 			y /= other;
@@ -676,23 +462,7 @@ namespace Cherry
 			w /= other;
 		}
 
-		void operator/=(float other)
-		{
-			x /= other;
-			y /= other;
-			z /= other;
-			w /= other;
-		}
-
-		void operator/=(double other)
-		{
-			x /= other;
-			y /= other;
-			z /= other;
-			w /= other;
-		}
-
-		void operator/=(Vector4 other)
+		void operator/=(type other)
 		{
 			x /= other.x;
 			y /= other.y;
@@ -700,4 +470,19 @@ namespace Cherry
 			w /= other.w;
 		}
 	};
+
+	typedef Vector2<float> Vector2f;
+	typedef Vector2<int> Vector2i;
+	typedef Vector2<std::uint32_t> Vector2ui;
+	typedef Vector2<double> Vector2d;
+
+	typedef Vector3<float> Vector3f;
+	typedef Vector3<int> Vector3i;
+	typedef Vector3<std::uint32_t> Vector3ui;
+	typedef Vector3<double> Vector3d;
+
+	typedef Vector4<float> Vector4f;
+	typedef Vector4<int> Vector4i;
+	typedef Vector4<std::uint32_t> Vector4ui;
+	typedef Vector4<double> Vector4d;
 }

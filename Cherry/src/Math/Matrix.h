@@ -3,242 +3,191 @@
 #include "core/Core.h"
 #include "Vector.h"
 
-
-// TODO: rewrite math library using templates, see glm source
 namespace Cherry
 {
+	template<typename T>
 	class CHERRY_API Matrix2x2
 	{
-	private:
-		Vector2 rows[2];
+		typedef Vector2<T> vec_type;
+		typedef Matrix2x2<T> type;
 
+	protected:
+		vec_type columns[2];
 	public:
+
 		Matrix2x2()
 		{
-			rows[0] = Vector2();
-			rows[1] = Vector2();
+			columns[0] = vec_type();
+			columns[1] = vec_type();
 		}
 
 		Matrix2x2(
-			float m00, float m01, 
+			float m00, float m01,
 			float m10, float m11)
 		{
-			rows[0] = Vector2(m00, m01);
-			rows[1] = Vector2(m10, m11);
+			columns[0] = vec_type(m00, m10);
+			columns[1] = vec_type(m01, m11);
 		}
 
-		Matrix2x2(Vector2 m0, Vector2 m1)
+		Matrix2x2(vec_type m0, vec_type m1)
 		{
-			rows[0] = m0;
-			rows[1] = m1;
+			columns[0] = m0;
+			columns[1] = m1;
 		}
 
-		static Matrix2x2 Identity()
+		float* ToArray()
 		{
-			return Matrix2x2(
-				1, 0, 
+			float* value = new float[4];
+
+			value[0] = columns[0][0];
+			value[1] = columns[0][1];
+			value[2] = columns[1][0];
+			value[3] = columns[1][1];
+		}
+
+		static type Identity()
+		{
+			return type(
+				1, 0,
 				0, 1
 			);
 		}
 
 		void SetIdentity()
 		{
-			rows[0].x = 1;
-			rows[0].y = 0;
+			columns[0].x = 1;
+			columns[0].y = 0;
 
-			rows[1].x = 0;
-			rows[1].y = 1;
+			columns[1].x = 0;
+			columns[1].y = 1;
 		}
 
-		Vector2 GetRow(int index)
+		vec_type GetRow(int index)
 		{
-			return rows[index]
+			return vec_type(columns[0][index], columns[1][inde]);
 		}
 
-		Vector2 GetColumn(int index)
+		vec_type GetColumn(int index)
 		{
-			return Vector2(rows[0][index], rows[1][index]);
+			return columns[index];
 		}
 
-		bool operator==(Matrix2x2 other)
+		bool operator==(type other)
 		{
-			return rows[0] == other[0] && rows[1] == other[1];
+			return columns[0] == other[0] && columns[1] == other[1];
 		}
 
-		bool operator!=(Matrix2x2 other)
+		bool operator!=(type other)
 		{
-			return !(rows[0] == other[0] && rows[1] == other[1]);
+			return !(columns[0] == other[0] && columns[1] == other[1]);
 		}
-
-		Vector2 operator[](int index)
+		
+		vec_type& operator[](int index)
 		{
-			if (index == 0) return rows[0];
-			if (index == 1) return rows[1];
+			if (index == 0) return columns[0];
+			if (index == 1) return columns[1];
 
-			CH_ERROR("In Matrix2x2::operator[]: Index out of bounds");
+			CH_ERROR("In type::operator[]: Index out of bounds");
+			return vec_type();
 		}
 
 		// Addition
 
-		Matrix2x2 operator+(int num)
+		type operator+(T num)
 		{
-			return Matrix2x2(rows[0] + num, rows[1] + num);
+			return type(columns[0] + num, columns[1] + num);
 		}
 
-		Matrix2x2 operator+(float num)
+		type operator+(type mat)
 		{
-			return Matrix2x2(rows[0] + num, rows[1] + num);
+			return type(columns[0] + mat[0], columns[1] + mat[1]);
 		}
 
-		Matrix2x2 operator+(double num)
+		void operator+=(T num)
 		{
-			return Matrix2x2(rows[0] + num, rows[1] + num);
+			columns[0] += num;
+			columns[1] += num;
 		}
 
-		Matrix2x2 operator+(Matrix2x2 mat)
+		void operator+=(type mat)
 		{
-			return Matrix2x2(rows[0] + mat[0], rows[1] + mat[1]);
-		}
-
-		void operator+=(int num)
-		{
-			rows[0] += num;
-			rows[1] += num;
-		}
-
-		void operator+=(float num)
-		{
-			rows[0] += num;
-			rows[1] += num;
-		}
-
-		void operator+=(double num)
-		{
-			rows[0] += num;
-			rows[1] += num;
-		}
-
-		void operator+=(Matrix2x2 mat)
-		{
-			rows[0] += mat[0];
-			rows[1] += mat[1];
+			columns[0] += mat[0];
+			columns[1] += mat[1];
 		}
 
 		// Subtraction
 
-		Matrix2x2 operator-(int num)
+		type operator-(T num)
 		{
-			return Matrix2x2(rows[0] - num, rows[1] - num);
+			return type(columns[0] - num, columns[1] - num);
 		}
 
-		Matrix2x2 operator-(float num)
+		type operator-(type mat)
 		{
-			return Matrix2x2(rows[0] - num, rows[1] - num);
+			return type(columns[0] - mat[0], columns[1] - mat[1]);
 		}
 
-		Matrix2x2 operator-(double num)
+		void operator-=(T num)
 		{
-			return Matrix2x2(rows[0] - num, rows[1] - num);
+			columns[0] -= num;
+			columns[1] -= num;
 		}
 
-		Matrix2x2 operator-(Matrix2x2 mat)
+		void operator-=(type mat)
 		{
-			return Matrix2x2(rows[0] - mat[0], rows[1] - mat[1]);
-		}
-
-		void operator-=(int num)
-		{
-			rows[0] -= num;
-			rows[1] -= num;
-		}
-
-		void operator-=(float num)
-		{
-			rows[0] -= num;
-			rows[1] -= num;
-		}
-
-		void operator-=(double num)
-		{
-			rows[0] -= num;
-			rows[1] -= num;
-		}
-
-		void operator-=(Matrix2x2 mat)
-		{
-			rows[0] -= mat[0];
-			rows[1] -= mat[1];
+			columns[0] -= mat[0];
+			columns[1] -= mat[1];
 		}
 
 		// Multiplication
 
-		Matrix2x2 operator*(int num)
+		type operator*(T num)
 		{
-			return Matrix2x2(rows[0] * num, rows[1] * num);
+			return type(columns[0] * num, columns[1] * num);
 		}
 
-		Matrix2x2 operator*(float num)
+		vec_type operator*(vec_type vec)
 		{
-			return Matrix2x2(rows[0] * num, rows[1] * num);
+			return columns[0] * vec[0] + columns[1] * vec[1];
 		}
 
-		Matrix2x2 operator*(double num)
+		type operator*(type Mat)
 		{
-			return Matrix2x2(rows[0] * num, rows[1] * num);
+			return type(
+				columns	[0][0] * Mat[0][0] + columns[1][0] * Mat[0][1],
+				columns[0][1] * Mat[0][0] + columns[1][1] * Mat[0][1],
+				columns[0][0] * Mat[1][0] + columns[1][0] * Mat[1][1],
+				columns[0][1] * Mat[1][0] + columns[1][1] * Mat[1][1]);
 		}
 
-		Vector2 operator*(Vector2 vec)
+		void operator*=(T other)
 		{
-			return Vector2(rows[0][0], rows[1][0]) * vec[0] + 
-				   Vector2(rows[0][1], rows[1][1]) * vec[1];
+			columns[0] *= other;
+			columns[1] *= other;
 		}
 
-		Matrix2x2 operator*(Matrix2x2 Mat)
+		void operator*=(type other)
 		{
-			return Matrix2x2(
-				*this * Mat.GetColumn(0),
-				*this * Mat.GetColumn(1)
-			);
-		}
-
-		void operator*=(int other)
-		{
-			rows[0] *= other;
-			rows[1] *= other;
-		}
-
-		void operator*=(float other)
-		{
-			rows[0] *= other;
-			rows[1] *= other;
-		}
-
-		void operator*=(double other)
-		{
-			rows[0] *= other;
-			rows[1] *= other;
-		}
-
-		// TODO: Optimize Matrix2x2::operator*=() and Matrix3x3::operator*=()
-		void operator*=(Matrix2x2 other)
-		{
-			Matrix2x2 mat = *this * other;
-			rows[0] = mat[0];
-			rows[1] = mat[1];
+			type mat = *this * other;
+			columns[0] = mat[0];
+			columns[1] = mat[1];
 		}
 	};
 
+	template<typename T>
 	class CHERRY_API Matrix3x3
 	{
-	private:
-		Vector3 rows[3];
+		typedef Matrix3x3<T> type;
+		typedef Vector3<T> vec_type;
 
+	protected:
+		vec_type columns[3];
 	public:
 		Matrix3x3()
 		{
-			rows[0] = Vector3();
-			rows[1] = Vector3();
-			rows[2] = Vector3();
+			columns[0] = vec_type();
+			columns[1] = vec_type();
+			columns[2] = vec_type();
 		}
 
 		Matrix3x3(
@@ -246,21 +195,39 @@ namespace Cherry
 			float m10, float m11, float m12, 
 			float m20, float m21, float m22)
 		{
-			rows[0] = Vector3(m00, m01, m02);
-			rows[1] = Vector3(m10, m11, m12);
-			rows[2] = Vector3(m20, m21, m22);
+			columns[0] = vec_type(m00, m10, m20);
+			columns[1] = vec_type(m01, m11, m21);
+			columns[2] = vec_type(m02, m12, m22);
 		}
 
-		Matrix3x3(Vector3 m0, Vector3 m1, Vector3 m2)
+		Matrix3x3(vec_type m0, vec_type m1, vec_type m2)
 		{
-			rows[0] = m0;
-			rows[1] = m1;
-			rows[2] = m2;
+			columns[0] = m0;
+			columns[1] = m1;
+			columns[2] = m2;
 		}
 
-		static Matrix3x3 Identity()
+		float* ToArray()
 		{
-			return Matrix3x3(
+			float* value = new float[9];
+
+			value[0] = columns[0][0];
+			value[1] = columns[0][1];
+			value[2] = columns[0][2];
+			value[3] = columns[1][0];
+			value[4] = columns[1][1];
+			value[5] = columns[1][2];
+			value[6] = columns[2][0];
+			value[7] = columns[2][1];
+			value[8] = columns[2][2];
+
+			return value;
+		}
+
+
+		static type Identity()
+		{
+			return type(
 				1, 0, 0, 
 				0, 1, 0, 
 				0, 0, 1
@@ -269,215 +236,172 @@ namespace Cherry
 
 		void SetIdentity()
 		{
-			rows[0].x = 1;
-			rows[0].y = 0;
-			rows[0].z = 0;
+			columns[0].x = 1;
+			columns[0].y = 0;
+			columns[0].z = 0;
 
-			rows[1].x = 0;
-			rows[1].y = 1;
-			rows[1].z = 0;
+			columns[1].x = 0;
+			columns[1].y = 1;
+			columns[1].z = 0;
 
-			rows[2].x = 0;
-			rows[2].y = 0;
-			rows[2].z = 1;
+			columns[2].x = 0;
+			columns[2].y = 0;
+			columns[2].z = 1;
 		}
 		
-		Vector3 GetRow(int index)
+		vec_type GetRow(int index)
 		{
-			return rows[index];
+			return vec_type(columns[0][index], columns[1][index], columns[2][index]);
 		}
 
-		Vector3 GetColumn(int index)
+		vec_type GetColumn(int index)
 		{
-			return Vector3(rows[0][index], rows[1][index], rows[2][index]);
+			return columns[index];
 		}
 
-		Vector3 operator[](int index)
+		vec_type& operator[](int index)
 		{
-			return rows[index];
+			return columns[index];
 		}
 
-		bool operator==(Matrix3x3 other)
+		bool operator==(type other)
 		{
-			return rows[0] == other[0] && rows[1] == other[1] && rows[2] == other[2];
+			return columns[0] == other[0] && columns[1] == other[1] && columns[2] == other[2];
 		}
 
-		bool operator!=(Matrix3x3 other)
+		bool operator!=(type other)
 		{
-			return !(rows[0] == other[0] && rows[1] == other[1] && rows[2] == other[2]);
+			return !(columns[0] == other[0] && columns[1] == other[1] && columns[2] == other[2]);
 		}
 
 		// Addition
 
-		Matrix3x3 operator+(int num)
+		type operator+(T num)
 		{
-			return Matrix3x3(rows[0] + num, rows[1] + num, rows[2] + num);
+			return type(columns[0] + num, columns[1] + num, columns[2] + num);
 		}
 
-		Matrix3x3 operator+(float num)
+		type operator+(type mat)
 		{
-			return Matrix3x3(rows[0] + num, rows[1] + num, rows[2] + num);
+			return type(columns[0] + mat[0], columns[1] + mat[1], columns[2] + mat[2]);
 		}
 
-		Matrix3x3 operator+(double num)
+		void operator+=(T other)
 		{
-			return Matrix3x3(rows[0] + num, rows[1] + num, rows[2] + num);
+			columns[0] += other;
+			columns[1] += other;
+			columns[2] += other;
 		}
 
-		Matrix3x3 operator+(Matrix3x3 mat)
+		void operator+=(type other)
 		{
-			return Matrix3x3(rows[0] + mat[0], rows[1] + mat[1], rows[2] + mat[2]);
+			columns[0] += other[0];
+			columns[1] += other[1];
+			columns[2] += other[2];
 		}
 
-		void operator+=(int other)
+		type operator-(T other)
 		{
-			rows[0] += other;
-			rows[1] += other;
-			rows[2] += other;
+			return type(columns[0] - other, columns[1] - other, columns[2] - other);
 		}
 
-		void operator+=(float other)
+		type operator-(type other)
 		{
-			rows[0] += other;
-			rows[1] += other;
-			rows[2] += other;
+			return type(columns[0] - other[0], columns[1] - other[1], columns[2] - other[2]);
 		}
 
-		void operator+=(double other)
+		void operator-=(T other)
 		{
-			rows[0] += other;
-			rows[1] += other;
-			rows[2] += other;
+			columns[0] -= other;
+			columns[1] -= other;
+			columns[2] -= other;
 		}
 
-		void operator+=(Matrix3x3 other)
+		void operator-=(type other)
 		{
-			rows[0] += other[0];
-			rows[1] += other[1];
-			rows[2] += other[2];
+			columns[0] -= other[0];
+			columns[1] -= other[1];
+			columns[2] -= other[2];
 		}
 
-		Matrix3x3 operator-(int other)
+		type operator*(T other)
 		{
-			return Matrix3x3(rows[0] - other, rows[1] - other, rows[2] - other);
+			return type(columns[0] * other, columns[1] * other, columns[2] * other);
 		}
 
-		Matrix3x3 operator-(float other)
+		vec_type operator*(vec_type vec)
 		{
-			return Matrix3x3(rows[0] - other, rows[1] - other, rows[2] - other);
+			return columns[0] * vec[0] + columns[1] * vec[1] + columns[2] * vec[2];
 		}
 
-		Matrix3x3 operator-(double other)
+		type operator*(type other)
 		{
-			return Matrix3x3(rows[0] - other, rows[1] - other, rows[2] - other);
+			T SrcA00 = m1[0][0];
+			T SrcA01 = m1[0][1];
+			T SrcA02 = m1[0][2];
+			T SrcA10 = m1[1][0];
+			T SrcA11 = m1[1][1];
+			T SrcA12 = m1[1][2];
+			T SrcA20 = m1[2][0];
+			T SrcA21 = m1[2][1];
+			T SrcA22 = m1[2][2];
+
+			T SrcB00 = m2[0][0];
+			T SrcB01 = m2[0][1];
+			T SrcB02 = m2[0][2];
+			T SrcB10 = m2[1][0];
+			T SrcB11 = m2[1][1];
+			T SrcB12 = m2[1][2];
+			T SrcB20 = m2[2][0];
+			T SrcB21 = m2[2][1];
+			T SrcB22 = m2[2][2];
+
+			type Result;
+
+			Result[0][0] = SrcA00 * SrcB00 + SrcA10 * SrcB01 + SrcA20 * SrcB02;
+			Result[0][1] = SrcA01 * SrcB00 + SrcA11 * SrcB01 + SrcA21 * SrcB02;
+			Result[0][2] = SrcA02 * SrcB00 + SrcA12 * SrcB01 + SrcA22 * SrcB02;
+			Result[1][0] = SrcA00 * SrcB10 + SrcA10 * SrcB11 + SrcA20 * SrcB12;
+			Result[1][1] = SrcA01 * SrcB10 + SrcA11 * SrcB11 + SrcA21 * SrcB12;
+			Result[1][2] = SrcA02 * SrcB10 + SrcA12 * SrcB11 + SrcA22 * SrcB12;
+			Result[2][0] = SrcA00 * SrcB20 + SrcA10 * SrcB21 + SrcA20 * SrcB22;
+			Result[2][1] = SrcA01 * SrcB20 + SrcA11 * SrcB21 + SrcA21 * SrcB22;
+			Result[2][2] = SrcA02 * SrcB20 + SrcA12 * SrcB21 + SrcA22 * SrcB22;
+
+			return Result;
 		}
 
-		Matrix3x3 operator-(Matrix3x3 other)
+		void operator*=(T other)
 		{
-			return Matrix3x3(rows[0] - other[0], rows[1] - other[1], rows[2] - other[2]);
+			columns[0] *= other;
+			columns[1] *= other;
+			columns[2] *= other;
 		}
 
-		void operator-=(int other)
+		void operator*=(type other)
 		{
-			rows[0] -= other;
-			rows[1] -= other;
-			rows[2] -= other;
-		}
-
-		void operator-=(float other)
-		{
-			rows[0] -= other;
-			rows[1] -= other;
-			rows[2] -= other;
-		}
-
-		void operator-=(double other)
-		{
-			rows[0] -= other;
-			rows[1] -= other;
-			rows[2] -= other;
-		}
-
-		void operator-=(Matrix3x3 other)
-		{
-			rows[0] -= other[0];
-			rows[1] -= other[1];
-			rows[2] -= other[2];
-		}
-
-		Matrix3x3 operator*(int other)
-		{
-			return Matrix3x3(rows[0] * other, rows[1] * other, rows[2] * other);
-		}
-
-		Matrix3x3 operator*(float other)
-		{
-			return Matrix3x3(rows[0] * other, rows[1] * other, rows[2] * other);
-		}
-
-		Matrix3x3 operator*(double other)
-		{
-			return Matrix3x3(rows[0] * other, rows[1] * other, rows[2] * other);
-		}
-
-		Vector3 operator*(Vector3 vec)
-		{
-			return Vector3(rows[0][0], rows[1][0], rows[2][0]) * vec[0] +
-				Vector3(rows[0][1], rows[1][1], rows[2][1]) * vec[1] +
-				Vector3(rows[0][2], rows[1][2], rows[2][2]) * vec[2];
-		}
-
-		Matrix3x3 operator*(Matrix3x3 other)
-		{
-			return Matrix3x3(
-				*this * other[0],
-				*this * other[1],
-				*this * other[2]
-			);
-		}
-
-		void operator*=(int other)
-		{
-			rows[0] *= other;
-			rows[1] *= other;
-			rows[2] *= other;
-		}
-
-		void operator*=(float other)
-		{
-			rows[0] *= other;
-			rows[1] *= other;
-			rows[2] *= other;
-		}
-
-		void operator*=(double other)
-		{
-			rows[0] *= other;
-			rows[1] *= other;
-			rows[2] *= other;
-		}
-
-		void operator*=(Matrix3x3 other)
-		{
-			Matrix3x3 mat = *this * other;
-			rows[0] *= mat[0];
-			rows[1] *= mat[1];
-			rows[2] *= mat[2];
+			type mat = *this * other;
+			columns[0] *= mat[0];
+			columns[1] *= mat[1];
+			columns[2] *= mat[2];
 		}
 	};
 
+	template<typename T>
 	class CHERRY_API Matrix4x4
 	{
-	private:
-		Vector4 rows[4];
+		typedef Matrix4x4<T> type;
+		typedef Vector4<T> vec_type;
 
+	protected:
+		vec_type columns[4];
 	public:
 		Matrix4x4()
 		{
-			rows[0] = Vector4();
-			rows[1] = Vector4();
-			rows[2] = Vector4();
-			rows[3] = Vector4();
+			columns[0] = vec_type();
+			columns[1] = vec_type();
+			columns[2] = vec_type();
+			columns[3] = vec_type();
 		}
 
 		Matrix4x4(
@@ -486,23 +410,47 @@ namespace Cherry
 			float m20, float m21, float m22, float m23,
 			float m30, float m31, float m32, float m33)
 		{
-			rows[0] = Vector4(m00, m01, m02, m03);
-			rows[1] = Vector4(m10, m11, m12, m13);
-			rows[2] = Vector4(m20, m21, m22, m23);
-			rows[3] = Vector4(m30, m31, m32, m33);
+			columns[0] = vec_type(m00, m10, m20, m30);
+			columns[1] = vec_type(m01, m11, m21, m31);
+			columns[2] = vec_type(m02, m12, m22, m32);
+			columns[3] = vec_type(m03, m13, m23, m33);
 		}
 
-		Matrix4x4(Vector4 m0, Vector4 m1, Vector4 m2, Vector4 m3)
+		Matrix4x4(vec_type m0, vec_type m1, vec_type m2, vec_type m3)
 		{
-			rows[0] = m0;
-			rows[1] = m1;
-			rows[2] = m2;
-			rows[3] = m3;
+			columns[0] = m0;
+			columns[1] = m1;
+			columns[2] = m2;
+			columns[3] = m3;
 		}
 
-		static Matrix4x4 Identity()
+		float* ToArray()
 		{
-			return Matrix4x4(
+			float* value = new float[16];
+
+			value[0] = columns[0][0];
+			value[1] = columns[0][1];
+			value[2] = columns[0][2];
+			value[3] = columns[0][3];
+			value[4] = columns[1][0];
+			value[5] = columns[1][1];
+			value[6] = columns[1][2];
+			value[7] = columns[1][3];
+			value[8] = columns[2][0];
+			value[9] = columns[2][1];
+			value[10] = columns[2][2];
+			value[11] = columns[2][3];
+			value[12] = columns[3][0];
+			value[13] = columns[3][1];
+			value[14] = columns[3][2];
+			value[15] = columns[3][3];
+
+			return value;
+		}
+
+		static type Identity()
+		{
+			return type(
 				1, 0, 0, 0,
 				0, 1, 0, 0,
 				0, 0, 1, 0,
@@ -512,48 +460,164 @@ namespace Cherry
 
 		void SetIdentity()
 		{
-			rows[0].x = 1;
-			rows[0].y = 0;
-			rows[0].z = 0;
-			rows[0].w = 0;
+			columns[0].x = 1;
+			columns[0].y = 0;
+			columns[0].z = 0;
+			columns[0].w = 0;
 
-			rows[1].x = 0;
-			rows[1].y = 1;
-			rows[1].z = 0;
-			rows[1].w = 0;
+			columns[1].x = 0;
+			columns[1].y = 1;
+			columns[1].z = 0;
+			columns[1].w = 0;
 
-			rows[2].x = 0;
-			rows[2].y = 0;
-			rows[2].z = 1;
-			rows[2].w = 0;
+			columns[2].x = 0;
+			columns[2].y = 0;
+			columns[2].z = 1;
+			columns[2].w = 0;
 
-			rows[3].x = 0;
-			rows[3].y = 0;
-			rows[3].z = 0;
-			rows[3].w = 1;
+			columns[3].x = 0;
+			columns[3].y = 0;
+			columns[3].z = 0;
+			columns[3].w = 1;
 		}
 
-		Vector4 operator[](int index)
+		vec_type GetRow(int index)
 		{
-			return rows[index];
+			return vec_type(columns[0][index], columns[1][index], columns[2][index], columns[3][index]);
 		}
 
-		bool operator==(Matrix4x4 other)
+		vec_type GetColumn(int index)
 		{
-			return rows[0] == other[0]
-				&& rows[1] == other[1]
-				&& rows[2] == other[2]
-				&& rows[3] == other[3];
+			return columns[index];
 		}
 
-		bool operator!=(Matrix4x4 other)
+		vec_type& operator[](int index)
 		{
-			return !(rows[0] == other[0]
-				&& rows[1] == other[1]
-				&& rows[2] == other[2]
-				&& rows[3] == other[3]);
+			return columns[index];
 		}
 
-		// TODO: Implement Matrix4x4 arthithmetics,rx
+		bool operator==(type other)
+		{
+			return columns[0] == other[0]
+				&& columns[1] == other[1]
+				&& columns[2] == other[2]
+				&& columns[3] == other[3];
+		}
+
+		bool operator!=(type other)
+		{
+			return !(columns[0] == other[0]
+				&& columns[1] == other[1]
+				&& columns[2] == other[2]
+				&& columns[3] == other[3]);
+		}
+
+		type operator+(T other)
+		{
+			return type(columns[0] + other, columns[1] + other, columns[2] + other, columns[3] + other);
+		}
+
+		type operator+(type other)
+		{
+			return type(columns[0] + other[0], columns[1] + other[1], columns[2] + other[2], columns[3] + other[3]);
+		}
+
+		void operator+=(T other)
+		{
+			columns[0] += other;
+			columns[1] += other;
+			columns[2] += other;
+			columns[3] += other;
+		}
+
+		void operator+=(type other)
+		{
+			columns[0] += other[0];
+			columns[1] += other[1];
+			columns[2] += other[2];
+			columns[3] += other[3];
+		}
+
+		type operator-(T other)
+		{
+			return type(columns[0] - other, columns[1] - other, columns[2] - other, columns[3] - other);
+		}
+
+		type operator-(type other)
+		{
+			return type(columns[0] - other[0], columns[1] - other[1], columns[2] - other[2], columns[3] - other[3]);
+		}
+
+		void operator-=(type other)
+		{
+			columns[0] -= other[0];
+			columns[1] -= other[1];
+			columns[2] -= other[2];
+			columns[3] -= other[3];
+		}
+
+		void operator-=(T other)
+		{
+			columns[0] -= other;
+			columns[1] -= other;
+			columns[2] -= other;
+			columns[3] -= other;
+		}
+
+		type operator*(T other)
+		{
+			return type(columns[0] * other, columns[1] * other, columns[2] * other, columns[3] * other);
+		}
+
+		vec_type operator*(vec_type other)
+		{
+			return columns[0] * other[0]
+				+  columns[1] * other[1]
+				+  columns[2] * other[2]
+				+  columns[3] * other[3];
+		}
+
+		type operator*(type other)
+		{
+			type Result;
+			Result[0] = columns[0] * other[0][0] + columns[1] * other[0][1] + columns[2] * other[0][2] + columns[3] * other[0][3];
+			Result[1] = columns[0] * other[1][0] + columns[1] * other[1][1] + columns[2] * other[1][2] + columns[3] * other[1][3];
+			Result[2] = columns[0] * other[2][0] + columns[1] * other[2][1] + columns[2] * other[2][2] + columns[3] * other[2][3];
+			Result[3] = columns[0] * other[3][0] + columns[1] * other[3][1] + columns[2] * other[3][2] + columns[3] * other[3][3];
+			return Result;
+		}
+
+		void operator*=(T other)
+		{
+			columns[0] *= other;
+			columns[1] *= other;
+			columns[2] *= other;
+			columns[3] *= other;
+		}
+
+		void operator*=(type other)
+		{
+			type mat = *this * other;
+
+			columns[0] += mat[0];
+			columns[1] += mat[1];
+			columns[2] += mat[2];
+			columns[3] += mat[3];
+		}
 	};
+
+	typedef Matrix2x2<float>			Matrix2x2f;
+	typedef Matrix2x2<int>				Matrix2x2i;
+	typedef Matrix2x2<std::uint32_t>	Matrix2x2ui;
+	typedef Matrix2x2<double>			Matrix2x2d;
+
+	typedef Matrix3x3<float>			Matrix3x3f;
+	typedef Matrix3x3<int>				Matrix3x3i;
+	typedef Matrix3x3<std::uint32_t>	Matrix3x3ui;
+	typedef Matrix3x3<double>			Matrix3x3d;
+
+	typedef Matrix4x4<float>			Matrix4x4f;
+	typedef Matrix4x4<int>				Matrix4x4i;
+	typedef Matrix4x4<std::uint32_t>	Matrix4x4ui;
+	typedef Matrix4x4<double>			Matrix4x4d;
 }

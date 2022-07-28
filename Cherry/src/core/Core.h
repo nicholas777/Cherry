@@ -8,6 +8,9 @@
 	#endif
 #endif
 
+//TODO: proper config for rendering apis
+#define CH_PLATFORM_OPENGL 1
+
 #ifdef CH_DEBUG_MODE
 	#define CH_TRACE(...) Cherry::Log::GetClientLogger()->trace(__VA_ARGS__)
 	#define CH_INFO(...) Cherry::Log::GetClientLogger()->info(__VA_ARGS__)
