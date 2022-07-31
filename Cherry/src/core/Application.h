@@ -3,9 +3,10 @@
 #include "Core.h"
 #include "Layer.h"
 #include "LayerStack.h"
-#include "../Events/Event.h"
+#include "Events/Event.h"
 #include "Log.h"
 #include "Window.h"
+#include "Renderer/RenderAPI.h"
 
 namespace Cherry
 {
@@ -21,6 +22,8 @@ namespace Cherry
 			int WindowWidth, WindowHeight;
 			std::string WindowTitle;
 			bool IsVSync;
+
+			std::string Name = "App";
 		};
 
 	public:
@@ -29,19 +32,22 @@ namespace Cherry
 
 		LayerStack& GetLayerStack() { return *m_LayerStack; };
 		void PushLayer(Layer* layer) { m_LayerStack->PushLayer(layer); };
-
+		
 		void Run();
-		void Cherry::Application::OnEvent(Event* e);
+
+		void OnEvent(Event* e);
+		void OnWindowClose();
+		void OnWindowResize(int width, int height);
 
 		static Application& GetApplication();
 		Window* GetWindow();
 
-		bool IsRunning;
 	protected:
 		ApplicationConfig Configuration;
 	private:
 		static Cherry::Application* s_Application;
 
+		bool m_Running;
 		LayerStack* m_LayerStack;
 		Window* m_Window;
 

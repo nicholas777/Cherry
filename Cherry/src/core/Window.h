@@ -29,6 +29,7 @@ namespace Cherry
 		virtual float GetTime() = 0;
 
 		virtual void OnUpdate() = 0;
+		virtual void OnResize(int, int) = 0;
 
 		virtual void* GetNativeWindow() = 0;
 

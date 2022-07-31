@@ -58,6 +58,7 @@ namespace Cherry
 		}
 	}
 
+	// TODO: Fix copying
 	class CHERRY_API BufferElement
 	{
 	public:
@@ -65,7 +66,6 @@ namespace Cherry
 		ShaderDataType Type;
 
 		uint32_t Size;
-		uint32_t Stride;
 		uint32_t Offset;
 		uint32_t ComponentCount;
 		
@@ -73,7 +73,6 @@ namespace Cherry
 			:	Name(name), 
 				Type(type), 
 				Size(ShaderDataTypeToBytes(type)),
-				Stride(0),
 				Offset(0)
 		{
 			GenerateComponentCount();
@@ -127,6 +126,8 @@ namespace Cherry
 	class CHERRY_API VertexBuffer
 	{
 	public:
+		virtual ~VertexBuffer() = default;
+
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 
@@ -139,6 +140,8 @@ namespace Cherry
 	class CHERRY_API IndexBuffer
 	{
 	public:
+		virtual ~IndexBuffer() = default;
+
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 		virtual uint32_t GetCount() = 0;

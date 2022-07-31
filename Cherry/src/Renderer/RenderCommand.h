@@ -8,6 +8,16 @@ namespace Cherry
 	class CHERRY_API RenderCommand
 	{
 	public:
+		inline static void Init()
+		{
+			s_RenderAPI->Init();
+		}
+
+		inline static void SetViewport(int x, int y, int width, int height)
+		{
+			s_RenderAPI->SetViewport(x, y, width, height);
+		};
+
 		inline static void SetClearColor(Vector4f color)
 		{
 			s_RenderAPI->SetClearColor(color);
@@ -18,9 +28,9 @@ namespace Cherry
 			s_RenderAPI->Clear();
 		}
 
-		inline static void DrawElements(Mesh m)
+		inline static void DrawElements(Mesh* m)
 		{
-			s_RenderAPI->DrawElements(m.GetVAO());
+			s_RenderAPI->DrawElements(m->GetVAO());
 		}
 
 	private:

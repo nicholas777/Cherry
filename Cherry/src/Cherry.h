@@ -3,6 +3,7 @@
 #include "epch.h"
 
 #include "Core/Log.h"
+#include "core/Pointer.h"
 
 #include "core/Layer.h"
 #include "core/LayerStack.h"
@@ -16,9 +17,11 @@
 #include "core/MouseButtonCodes.h"
 
 #include "Renderer/RenderCommand.h"
-#include "Renderer/Renderer.h"
+#include "Renderer/Renderer3D.h"
+#include "Renderer/Renderer2D.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
+#include "Renderer/ShaderLibrary.h"
 
 #include "Graphics/Mesh.h"
 #include "Graphics/Camera.h"

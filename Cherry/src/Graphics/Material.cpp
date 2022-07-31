@@ -1,6 +1,8 @@
 #include "epch.h"
 #include "Material.h"
 
+
+
 namespace Cherry
 {
 	void Material::Set(std::string name, float value)
@@ -55,5 +57,23 @@ namespace Cherry
 	void Material::Set(std::string name, Matrix4x4f value)
 	{
 		m_Shader->SetMat4(name, value);
+	}
+
+	void Material::AddTexture(Texture* tex)
+	{
+		m_Textures.insert(m_Textures.begin(), tex);
+	}
+
+	void Material::Bind()
+	{
+		if (m_Textures.size() > 0)
+		{
+			for (int i = 0; i < m_Textures.size() - 1; i++)
+			{
+				m_Textures[i]->Bind(i);
+			}
+		}
+
+		m_Shader->Bind();
 	}
 }

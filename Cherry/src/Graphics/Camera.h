@@ -14,6 +14,8 @@ namespace Cherry
 		void Translate(float x, float y);
 		void Rotate(float angle);
 
+		Vector2f GetPosition() { return m_Position; }
+
 		inline Matrix4x4f CalcVP() { return m_VP; };
 
 	private:
@@ -23,7 +25,5 @@ namespace Cherry
 		Matrix4x4f m_VP;
 
 		Vector2f m_Position;
-
-		void GenViewMatrix(Vector2f pos, Vector3f up);
 	};
 }

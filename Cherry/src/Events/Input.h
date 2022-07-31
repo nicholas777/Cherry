@@ -4,6 +4,7 @@
 #include "EventListener.h"
 #include "core/KeyCodes.h"
 #include "core/MouseButtonCodes.h"
+#include "Math/Vector.h"
 
 namespace Cherry
 {
@@ -23,7 +24,7 @@ namespace Cherry
 			return m_Instance->GetMousePressedImpl(mousecode); 
 		};
 		
-		static std::vector<float> GetMousePos() 
+		static Vector2f GetMousePos() 
 		{
 			return m_Instance->GetMousePosImpl();
 		};
@@ -45,7 +46,7 @@ namespace Cherry
 		virtual bool GetKeyPressedImpl(Key keycode) { return false; };
 		virtual bool GetMousePressedImpl(MouseButton mousecode) { return false; };
 
-		virtual std::vector<float> GetMousePosImpl() { return std::vector<float>(); };
+		virtual Vector2f GetMousePosImpl() { return Vector2f(); };
 		virtual float GetMouseXImpl() { return 0.0; };
 		virtual float GetMouseYImpl() { return 0.0; };
 

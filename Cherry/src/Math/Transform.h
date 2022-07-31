@@ -18,6 +18,16 @@ namespace Cherry
 		void Scale(Vector2f scalar);
 		void Scale(float scalar);
 
+		void SetTranslation(Vector2f translation);
+		void SetRotation(float rotation);
+		void SetScale(Vector2f scalar);
+		void SetScale(float scalar);
+
 		void operator=(Matrix4x4f mat);
+
+	private:
+		Vector2f m_Translation;
+		float m_Rotation;
+		Vector2f m_Scale;
 	};
 }

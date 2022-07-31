@@ -5,7 +5,7 @@ namespace Cherry
 	enum class EventType
 	{
 		Unknown = 0,
-		GameStartEvent, GameShutdownEvent, GameErrorEvent, GameWarningEvent,
+		GameErrorEvent, GameWarningEvent,
 		WindowOpenEvent, WindowResizeEvent, WindowCloseEvent,
 		WindowFocusEvent, WindowUnfocusEvent,
 		MouseMoveEvent, MouseClickEvent, MouseReleaseEvent, MouseScrollEvent,

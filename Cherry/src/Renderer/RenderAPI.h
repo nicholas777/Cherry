@@ -13,6 +13,13 @@ namespace Cherry
 		{
 			None = 0, OpenGL
 		};
+	public:
+
+		virtual ~RenderAPI() = default;
+
+		virtual void Init() = 0;
+
+		virtual void SetViewport(int x, int y, int width, int height) = 0;
 
 		virtual void SetClearColor(Vector4f color) = 0;
 		virtual void Clear() = 0;

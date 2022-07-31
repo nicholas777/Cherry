@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Renderer/Texture.h"
+#include <glad/glad.h>
 
 namespace Cherry
 {
@@ -14,8 +15,11 @@ namespace Cherry
 		virtual uint32_t GetHeight() override { return m_Height; }
 
 		virtual void Bind() override;
+		virtual void Bind(int unit) override;
 	private:
 		uint32_t m_Width, m_Height;
 		uint32_t m_TextureID;
+
+		GLenum m_Format;
 	};
 }

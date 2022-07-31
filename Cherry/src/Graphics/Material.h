@@ -2,6 +2,9 @@
 
 #include "core/Core.h"
 #include "Renderer/Shader.h"
+#include "Renderer/Texture.h"
+#include "core/Pointer.h"
+#include "Renderer/ShaderLibrary.h"
 
 namespace Cherry
 {
@@ -9,9 +12,14 @@ namespace Cherry
 	{
 	public:
 		Material() {}
-		Material(Shader* s)
-			: m_Shader(s)
+		Material(const std::string& s)
+			: m_Shader(ShaderLibrary::Get(s))
 		{
+		}
+
+		~Material()
+		{
+			
 		}
 
 		void Set(std::string name, float value);
@@ -27,10 +35,14 @@ namespace Cherry
 		void Set(std::string name, Matrix3x3f value);
 		void Set(std::string name, Matrix4x4f value);
 
+		void AddTexture(Texture* tex);
+
 		void Bind();
 
-		inline Shader* GetShader() { return m_Shader; };
+		inline Shader* GetShader() { return m_Shader.Get(); };
 	private:
-		Shader* m_Shader;
+		Shared<Shader> m_Shader;
+
+		std::vector<Texture*> m_Textures;
 	};
 }

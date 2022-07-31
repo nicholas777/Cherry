@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Buffers.h"
+#include "core/Pointer.h"
+
 #include <vector>
 
 namespace Cherry
@@ -8,6 +10,9 @@ namespace Cherry
 	class CHERRY_API VertexArray
 	{
 	public:
+
+		virtual ~VertexArray() = default;
+
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 

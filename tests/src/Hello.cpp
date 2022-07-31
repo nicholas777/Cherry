@@ -1,7 +1,4 @@
 #include <Cherry.h>
-#include <vector>
-#include <Math/Vector.h>
-#include <Math/Algorithm.h>
 
 using namespace Cherry;
 
@@ -15,43 +12,24 @@ public:
 
 	virtual void OnAttach() override
 	{
-		float aspect = 600 / 400;
-		m_Shader = Shader::Create("assets/Shader.glsl");
-
-		m_Mesh = Mesh(
-			{
-				{ Vector2f(-0.5f, -0.5f), Vector2f(0.0f, 0.0f) },
-				{ Vector2f( 0.5f, -0.5f), Vector2f(1.0f, 0.0f) },
-				{ Vector2f( 0.5f,  0.5f), Vector2f(1.0f, 1.0f) },
-				{ Vector2f(-0.5f,  0.5f), Vector2f(0.0f, 1.0f) },
-			},
-			{
-				0, 1, 2,
-				0, 2, 3
-			},
-			new Material(m_Shader)
-		);
-
-		m_Matrix = TransformationMatrix(0, 0);
-
+		
 		m_Camera = new Camera({ 0.2, 0.2 }, -1.1, 1.1, 0.8, -0.8, 10, 0, { 0, 1, 0 });
-		m_Controller = CameraController(m_Camera, 0.5);
-
-		m_Texture = Texture::Create("assets/Smile.png");
+		m_Controller = new CameraController(m_Camera.Get(), 0.5);
+		
 	}
 
-	virtual void OnUpdate(Timestep delta) override
+	virtual void OnUpdate(const Timestep& delta) override
 	{
-		m_Controller.Update(delta.GetSeconds());
+		m_Controller->Update(delta.GetSeconds());
 
 		{
 			RenderCommand::Clear();
 
-			Renderer::Begin(*m_Camera);
+			Renderer2D::Begin(m_Camera.Get());
 
-			Renderer::Submit(m_Mesh, m_Matrix);
 
-			Renderer::End();
+
+			Renderer2D::End();
 		}
 	}
 
@@ -61,12 +39,11 @@ public:
 	}
 
 private:
-	Mesh m_Mesh;
-	Shader* m_Shader;
-	TransformationMatrix m_Matrix;
-	Camera* m_Camera;
-	CameraController m_Controller;
-	Texture* m_Texture;
+	Scoped<Mesh> m_Mesh;
+	Scoped<TransformationMatrix> m_Matrix;
+	Scoped<Camera> m_Camera;
+	Scoped<CameraController> m_Controller;
+	Scoped<Texture> m_Texture;
 };
 
 class Tests : public Application

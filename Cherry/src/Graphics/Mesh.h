@@ -17,11 +17,13 @@ namespace Cherry
 		Mesh() {};
 		Mesh(VertexList vertices, std::vector<uint32_t> indices, Material* material);
 
-		inline VertexArray* GetVAO() { return Vao; }
+		void Bind();
+
+		inline VertexArray* GetVAO() { return m_Vao.Get(); }
 		inline Material* GetMaterial() { return m_Material; }
 
 	private:
-		VertexArray* Vao;
+		Scoped<VertexArray> m_Vao;
 		Material* m_Material;
 
 		float* GenerateRawData(VertexList vertices, int size);

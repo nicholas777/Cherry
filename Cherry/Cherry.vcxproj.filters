@@ -111,7 +111,7 @@
     <ClInclude Include="src\Renderer\RenderCommand.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Renderer.h">
+    <ClInclude Include="src\Renderer\Renderer3D.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\RenderingContext.h">
@@ -163,6 +163,8 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\core\Pointer.h" />
+    <ClInclude Include="src\Renderer\ShaderLibrary.h" />
+    <ClInclude Include="src\Renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Events\Event.cpp">
@@ -213,7 +215,7 @@
     <ClCompile Include="src\Renderer\RenderCommand.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Renderer.cpp">
+    <ClCompile Include="src\Renderer\Renderer3D.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\RenderingContext.cpp">
@@ -244,5 +246,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Material.cpp" />
+    <ClCompile Include="src\Renderer\ShaderLibrary.cpp" />
+    <ClCompile Include="src\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

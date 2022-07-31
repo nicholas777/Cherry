@@ -6,6 +6,7 @@
 #include "core/Application.h"
 #include "core/KeyCodes.h"
 #include "core/MouseButtonCodes.h"
+#include "Math/Vector.h"
 
 namespace Cherry
 {
@@ -13,22 +14,20 @@ namespace Cherry
 	{
 	protected:
 
-		GLFWwindow* window;
-
 		virtual bool GetKeyPressedImpl(Key keycode) override
 		{
-			return glfwGetKey(window, static_cast<int32_t>(keycode)) == GLFW_PRESS;
+			return glfwGetKey(m_Window, static_cast<int32_t>(keycode)) == GLFW_PRESS;
 		};
 
 		virtual bool GetMousePressedImpl(MouseButton mousecode) override
 		{ 
-			return glfwGetMouseButton(window, static_cast<int32_t>(mousecode)) == GLFW_PRESS;
+			return glfwGetMouseButton(m_Window, static_cast<int32_t>(mousecode)) == GLFW_PRESS;
 		};
 
-		virtual std::vector<float> GetMousePosImpl() override
+		virtual Vector2f GetMousePosImpl() override
 		{ 
 			double x, y;
-			glfwGetCursorPos(window, &x, &y);
+			glfwGetCursorPos(m_Window, &x, &y);
 			return { (float)x, (float)y };
 		};
 
@@ -45,9 +44,11 @@ namespace Cherry
 	private:
 		WindowsInput* Initialize()
 		{
-			window = static_cast<GLFWwindow*>(Application::GetApplication().GetWindow()->GetNativeWindow());
+			m_Window = static_cast<GLFWwindow*>(Application::GetApplication().GetWindow()->GetNativeWindow());
 			return this;
 		}
+
+		GLFWwindow* m_Window;
 
 		friend void Cherry::Input::Init();
 	};

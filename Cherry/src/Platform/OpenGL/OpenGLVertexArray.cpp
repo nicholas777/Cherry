@@ -7,8 +7,12 @@ namespace Cherry
 {
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
-		m_ID = 0;
 		glGenVertexArrays(1, &m_ID);
+	}
+
+	OpenGLVertexArray::~OpenGLVertexArray()
+	{
+		glDeleteVertexArrays(1, &m_ID);
 	}
 
 	void OpenGLVertexArray::Bind()

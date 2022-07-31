@@ -22,7 +22,7 @@ namespace Cherry
 		m_VP = m_ProjectionMatrix * m_ViewMatrix;
 	}
 
-	void Camera::GenViewMatrix(Vector2f pos, Vector3f up)
+	/*void Camera::GenViewMatrix(Vector2f pos, Vector3f up)
 	{
 		Vector3f f(Algorithm::normalize(Vector3f(pos.x, pos.y, -1) - Vector3f(pos.x, pos.y, 0)));
 		Vector3f s(Algorithm::normalize(Algorithm::cross(f, up)));
@@ -40,12 +40,14 @@ namespace Cherry
 		m_ViewMatrix[3][0] = -Algorithm::dot(s, Vector3f(pos));
 		m_ViewMatrix[3][1] = -Algorithm::dot(u, Vector3f(pos));
 		m_ViewMatrix[3][2] = Algorithm::dot(f, Vector3f(pos));
-	}
+	}*/
 
 	void Camera::Translate(float x, float y)
 	{
 		m_ViewMatrix.Translate(Vector2f(x, y));
 		m_VP = m_ProjectionMatrix * m_ViewMatrix;
+
+
 	}
 
 	void Camera::Rotate(float angle)

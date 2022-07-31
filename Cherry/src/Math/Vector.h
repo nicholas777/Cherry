@@ -7,14 +7,13 @@
 namespace Cherry
 {
 	template<typename T>
-	class CHERRY_API Vector2
+	class Vector2
 	{
 		typedef Vector2<T> type;
 
 	public: 
 		T x, y;
 
-		template <typename T>
 		Vector2(T x, T y)
 		{
 			this->x = x;
@@ -39,11 +38,11 @@ namespace Cherry
 
 		float& operator[](int index)
 		{
+			CH_ASSERT(!(index > 1 || index < 0), "specified index is either too large or too small");
+			
 			if (index == 0) return x;
-			if (index == 1) return y;
+			else return y;
 
-			CH_ERROR("Error in Vector::operator[]: specified index is either too large or too small");
-			return 0;
 		}
 
 		bool operator==(type other)
@@ -61,7 +60,6 @@ namespace Cherry
 			return type(x + other.x, y + other.y);
 		}
 
-		template <typename T>
 		type operator+(T other)
 		{
 			return type(x + other, y + other);
@@ -73,7 +71,6 @@ namespace Cherry
 			y += other.y;
 		}
 
-		template <typename T>
 		void operator+=(T other)
 		{
 			x += other;
@@ -85,7 +82,6 @@ namespace Cherry
 			return type(x - other.x, y - other.y);
 		}
 
-		template <typename T>
 		type operator-(T other)
 		{
 			return type(x - other, y - other);
@@ -97,14 +93,12 @@ namespace Cherry
 			y -= other.y;
 		}
 
-		template <typename T>
 		void operator-=(T other)
 		{
 			x -= other;
 			y -= other;
 		}
 
-		template <typename T>
 		type operator*(T other)
 		{
 			return type(x * other, y * other);
@@ -115,7 +109,6 @@ namespace Cherry
 			return type(x * other.x, y * other.y);
 		}
 
-		template <typename T>
 		void operator*=(T other)
 		{
 			x *= other;
@@ -127,8 +120,6 @@ namespace Cherry
 			x *= other.x;
 			y *= other.x;
 		}
-
-		template <typename T>
 		type operator/(T other)
 		{
 			return type(x / other, y / other);
@@ -153,7 +144,7 @@ namespace Cherry
 	};
 
 	template<typename T>
-	class CHERRY_API Vector3
+	class Vector3
 	{
 		typedef Vector3<T> type;
 
@@ -174,7 +165,7 @@ namespace Cherry
 			this->z = 0;
 		}
 
-		template <typename T>
+		
 		Vector3(Vector2<T> vec)
 		{
 			x = vec.x;
@@ -195,12 +186,11 @@ namespace Cherry
 
 		float& operator[](int index)
 		{
+			CH_ASSERT(!(index < 0 || index > 2), "specified index is either too large or too small");
+			
 			if (index == 0) return x;
 			if (index == 1) return y;
-			if (index == 2) return z;
-
-			CH_ERROR("Error in type::operator[]: specified index is either too large or too small");
-			return x;
+			else return z;
 		}
 
 		bool operator==(type other)
@@ -311,7 +301,7 @@ namespace Cherry
 	};
 
 	template<typename T>
-	class CHERRY_API Vector4
+	class Vector4
 	{
 		typedef Vector4<T> type;
 	public:
@@ -347,13 +337,12 @@ namespace Cherry
 
 		float& operator[](int index)
 		{
+			CH_ASSERT(!(index < 0 || index > 3), "specified index is either too large or too small");
+			
 			if (index == 0) return x;
 			if (index == 1) return y;
 			if (index == 2) return z;
-			if (index == 3) return w;
-
-			CH_ERROR("Error in type::operator[]: specified index is either too large or too small");
-			return x;
+			else return w;
 		}
 
 		bool operator==(type other)

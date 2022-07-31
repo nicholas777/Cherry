@@ -93,7 +93,7 @@ namespace Cherry
 	void OpenGLShader::SetInt(const std::string& name, int value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniform1i(location, value);
 	}
@@ -101,7 +101,7 @@ namespace Cherry
 	void OpenGLShader::SetInt2(const std::string& name, Vector2i value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniform1iv(location, 2, value.Data());
 	}
@@ -109,7 +109,7 @@ namespace Cherry
 	void OpenGLShader::SetInt3(const std::string& name, Vector3i value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniform1iv(location, 3, value.Data());
 	}
@@ -117,7 +117,7 @@ namespace Cherry
 	void OpenGLShader::SetInt4(const std::string& name, Vector4i value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniform1iv(location, 4, value.Data());
 	}
@@ -125,7 +125,7 @@ namespace Cherry
 	void OpenGLShader::SetFloat(const std::string& name, float value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniform1f(location, value);
 	}
@@ -133,7 +133,7 @@ namespace Cherry
 	void OpenGLShader::SetFloat2(const std::string& name, Vector2f value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniform2f(location, value.x, value.y);
 	}
@@ -141,7 +141,7 @@ namespace Cherry
 	void OpenGLShader::SetFloat3(const std::string& name, Vector3f value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniform3f(location, value.x, value.y, value.z);
 	}
@@ -149,7 +149,7 @@ namespace Cherry
 	void OpenGLShader::SetFloat4(const std::string& name, Vector4f value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniform4f(location, value.x, value.y, value.z, value.w);
 	}
@@ -157,7 +157,7 @@ namespace Cherry
 	void OpenGLShader::SetMat3(const std::string& name, Matrix3x3f value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniformMatrix3fv(location, 1, GL_FALSE, value.ToArray());
 	}
@@ -165,7 +165,7 @@ namespace Cherry
 	void OpenGLShader::SetMat4(const std::string& name, Matrix4x4f value)
 	{
 		int location = glGetUniformLocation(m_ShaderProgram, name.c_str());
-		CH_ASSERT( location == -1, "invalid uniform");
+		CH_ASSERT( location != -1, "invalid uniform");
 
 		glUniformMatrix4fv(location, 1, GL_FALSE, value.ToArray());
 	}

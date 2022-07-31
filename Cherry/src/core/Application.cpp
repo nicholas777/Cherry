@@ -6,79 +6,94 @@
 #include "Events/Input.h"
 #include "KeyCodes.h"
 #include "Timestep.h"
-#include "Platform/OpenGL/OpenGLTexture.h"
+#include "Pointer.h"
+#include "Renderer/Renderer2D.h"
 
-Cherry::Application* Cherry::Application::s_Application;
-
-Cherry::Application::Application()
+namespace Cherry
 {
-	Cherry::Log::Init();
-	Cherry::EventListener::InitEventListenerSystem();
+	Application* Application::s_Application;
 
-	Configuration = ApplicationConfig();
-	m_LayerStack = new LayerStack;
-
-	s_Application = this;
-}
-
-Cherry::Application::~Application()
-{
-	delete m_Window;
-	delete m_LayerStack;
-}
-
-void Cherry::Application::Run()
-{
-	IsRunning = true;
-
-	m_Window = Window::Create({ Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.IsVSync });
-
-	Input::Init();
-
-	for (auto layer : *m_LayerStack)
+	Application::Application()
 	{
-		layer->OnAttach();
+		EventListener::InitEventListenerSystem();
+
+		Configuration = ApplicationConfig();
+		m_LayerStack = new LayerStack;
+
+		s_Application = this;
 	}
 
-	Timestep DeltaTime;
-
-	while (IsRunning)
+	Application::~Application()
 	{
-		float time = m_Window->GetTime();
-		DeltaTime = Timestep(time - m_LastFrame);
-		m_LastFrame = time;
-
-		m_Window->OnUpdate();
-
-		for (Layer* layer : *m_LayerStack)
-			layer->OnUpdate(DeltaTime);
-	}
-}
-
-void Cherry::Application::OnEvent(Event* e)
-{
-	for (auto listener : *Cherry::EventListener::EventListeners[e->Type])
-	{
-		listener->OnEvent(*e);
+		delete m_Window;
+		delete m_LayerStack;
 	}
 
-	for (auto it = (*m_LayerStack).end(); it != (*m_LayerStack).begin();)
+	void Application::Run()
 	{
-		(**--it).OnEvent(e);
+		m_Running = true;
 
-		if (e->handled)
-			break;
+		Log::Init(Configuration.Name);
+
+		m_Window = Window::Create({ Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.IsVSync });
+		Renderer2D::Init();
+
+		Input::Init();
+
+		for (auto layer : *m_LayerStack)
+		{
+			layer->OnAttach();
+		}
+
+		Timestep DeltaTime;
+
+		while (m_Running)
+		{
+			float time = m_Window->GetTime();
+			DeltaTime = Timestep(time - m_LastFrame);
+			m_LastFrame = time;
+
+			m_Window->OnUpdate();
+
+			for (Layer* layer : *m_LayerStack)
+				layer->OnUpdate(DeltaTime);
+		}
 	}
 
-	delete e;
-}
+	void Application::OnEvent(Event* e)
+	{
+		for (auto listener : EventListener::EventListeners[e->Type])
+		{
+			listener->OnEvent(*e);
+		}
 
-Cherry::Application& Cherry::Application::GetApplication()
-{
-	return *s_Application;
-}
+		for (auto it = (*m_LayerStack).end(); it != (*m_LayerStack).begin();)
+		{
+			(**--it).OnEvent(e);
 
-Cherry::Window* Cherry::Application::GetWindow()
-{
-	return m_Window;
+			if (e->handled)
+				break;
+		}
+
+		delete e;
+	}
+	void Application::OnWindowResize(int width, int height)
+	{
+		RenderCommand::SetViewport(0, 0, width, height);
+	}
+
+	void Application::OnWindowClose()
+	{
+		m_Running = false;
+	}
+
+	Window* Application::GetWindow()
+	{
+		return m_Window;
+	}
+
+	Application& Application::GetApplication()
+	{
+		return *s_Application;
+	}
 }

@@ -4,17 +4,18 @@
 #include <memory>
 
 // Custom smart pointers
-
+// TODO: Change pointers to Scoped and Shared
 namespace Cherry
 {
 	template <typename T>
-	class CHERRY_API Scoped
+	class Scoped
 	{
+		typedef T value_type;
 	public:
 		Scoped()
 			: _Value(nullptr) {}
 
-		explicit Scoped(T*&& v)
+		Scoped(T*&& v)
 			: _Value(v) {};
 
 		Scoped(std::nullptr_t)
@@ -31,6 +32,11 @@ namespace Cherry
 		~Scoped()
 		{
 			delete _Value;
+		}
+
+		T* Get()
+		{
+			return _Value;
 		}
 
 		void Reset(T*&& other)
@@ -83,13 +89,13 @@ namespace Cherry
 	};
 
 	template <typename T>
-	class CHERRY_API Shared
+	class Shared
 	{
 	public:
 		Shared()
 			: _Value(nullptr) {}
 
-		explicit Shared(T*&& v)
+		Shared(T*&& v)
 		{
 			_Value = new PtrValue<T>(v);
 		};
@@ -119,6 +125,11 @@ namespace Cherry
 				delete _Value;
 			else
 				_Value->RepCount--;
+		}
+
+		T* Get()
+		{
+			return _Value->ptr;
 		}
 
 		void Reset(T*&& other)

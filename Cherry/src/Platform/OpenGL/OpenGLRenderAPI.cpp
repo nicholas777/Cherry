@@ -5,6 +5,17 @@
 
 namespace Cherry
 {
+	void OpenGLRenderAPI::Init()
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
+	void OpenGLRenderAPI::SetViewport(int x, int y, int width, int height)
+	{
+		glViewport(x, y, width, height);
+	}
+
 	void OpenGLRenderAPI::SetClearColor(Vector4f color)
 	{
 		glClearColor(color.x, color.y, color.z, color.w);
@@ -17,7 +28,6 @@ namespace Cherry
 
 	void OpenGLRenderAPI::DrawElements(VertexArray* vao)
 	{
-		vao->Bind();
 		glDrawElements(GL_TRIANGLES, vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 }

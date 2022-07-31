@@ -60,7 +60,7 @@
 #endif
 
 #if CH_ENABLE_ASSERTS == 1
-	#define CH_ASSERT(condition, error) { if(!condition) { CH_ERROR(error); __debugbreak(); } }
+	#define CH_ASSERT(condition, error) { if(!(condition)) { CH_ERROR(error); __debugbreak(); } }
 #else
 	#define CH_ASSERT(condition, error)
 #endif

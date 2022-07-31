@@ -1,7 +1,8 @@
 #pragma once
 
 #include "EventType.h"
-#include "../core/Core.h"
+#include "core/Core.h"
+#include "core/Log.h"
 
 namespace Cherry
 {
@@ -11,34 +12,17 @@ namespace Cherry
 		Event(EventType type, EventCategory category, const char* name)
 			: Type(type), Category(category), Name(name) {};
 	public:
+
 		EventType Type;
 		EventCategory Category;
-		const char* Name;
+		std::string Name;
 		bool handled = false;
 
 		EventType GetType() const { return Type; };
 		EventCategory GetCategory() const { return Category; };
-		const char* GetName() const { return Name; };
+		std::string GetName() const { return Name; };
 
 		virtual std::string ToString() const { return Name; };
-	};
-
-	struct CHERRY_API GameStartEvent : public Event
-	{
-		GameStartEvent()
-			: Event(EventType::GameStartEvent, EventCategory::GameEvent, "GameStartEvent") {};
-
-		std::string ToString() const override { return Name; };
-	};
-
-	struct CHERRY_API GameShutdownEvent : public Event
-	{
-		GameShutdownEvent()
-			: Event(EventType::GameShutdownEvent,
-					EventCategory::GameEvent,
-					"GameShutdownEvent") {};
-
-		std::string ToString() const override { return Name; };
 	};
 
 	struct CHERRY_API GameErrorEvent : public Event

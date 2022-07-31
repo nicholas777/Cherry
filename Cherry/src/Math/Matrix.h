@@ -6,7 +6,7 @@
 namespace Cherry
 {
 	template<typename T>
-	class CHERRY_API Matrix2x2
+	class Matrix2x2
 	{
 		typedef Vector2<T> vec_type;
 		typedef Matrix2x2<T> type;
@@ -14,7 +14,7 @@ namespace Cherry
 	protected:
 		vec_type columns[2];
 	public:
-
+		
 		Matrix2x2()
 		{
 			columns[0] = vec_type();
@@ -175,7 +175,7 @@ namespace Cherry
 	};
 
 	template<typename T>
-	class CHERRY_API Matrix3x3
+	class Matrix3x3
 	{
 		typedef Matrix3x3<T> type;
 		typedef Vector3<T> vec_type;
@@ -388,7 +388,7 @@ namespace Cherry
 	};
 
 	template<typename T>
-	class CHERRY_API Matrix4x4
+	class Matrix4x4
 	{
 		typedef Matrix4x4<T> type;
 		typedef Vector4<T> vec_type;

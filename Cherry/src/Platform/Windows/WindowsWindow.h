@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 #include "core/Window.h"
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "Renderer/RenderingContext.h"
 
 namespace Cherry
 {
@@ -18,6 +18,7 @@ namespace Cherry
 		virtual float GetTime() override;
 
 		virtual void OnUpdate() override;
+		virtual void OnResize(int, int) override;
 
 		virtual void SetVSync(bool vsync) override;
 		virtual bool IsVSync() const override { return m_Data.VSync; };
@@ -26,6 +27,16 @@ namespace Cherry
 	private:
 		GLFWwindow* m_Window;
 		WindowData m_Data;
-		OpenGLContext* m_Context;
+		RenderingContext* m_Context;
+
+		static void ErrorCallback(int error, const char* msg);
+		static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void MouseMoveCallback(GLFWwindow* window, double xpos, double ypos);
+		static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+		static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+		static void WindowResizeCallback(GLFWwindow* window, int width, int height);
+		static void WindowCloseCallback(GLFWwindow* window);
+		static void WindowFocusCallback(GLFWwindow* window, int focused);
+
 	};
 }

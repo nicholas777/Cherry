@@ -14,15 +14,7 @@ namespace Cherry
 		{
 			for (EventType type : types)
 			{
-				if (EventListeners.count(type) > 0)
-				{
-					EventListeners[type]->push_back(this);
-				}
-				else
-				{
-					EventListeners[type] = new std::vector<EventListener*>();
-					EventListeners[type]->push_back(this);
-				}
+				EventListeners[type].push_back(this);
 			}
 		};
 
@@ -31,6 +23,6 @@ namespace Cherry
 		virtual void OnEvent(Event e) = 0;
 
 		static void InitEventListenerSystem();
-		static std::unordered_map<EventType, std::vector<EventListener*>*> EventListeners;
+		static std::unordered_map<EventType, std::vector<EventListener*>> EventListeners;
 	};
 }

@@ -4,17 +4,17 @@
 #include "Events/EventListener.h"
 #include "Events/Event.h"
 #include "core/Application.h"
-
+#include "Renderer/RenderCommand.h"
 
 namespace Cherry
 {
 	static bool GLFWInit = false;
 
-	static void ErrorCallback(int error, const char* msg) {
+	void WindowsWindow::ErrorCallback(int error, const char* msg) {
 		Application::GetApplication().OnEvent(new GameErrorEvent((std::string("GLFW ERROR: ") + std::string(msg)).c_str()));
 	}
 
-	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	void WindowsWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		switch (action)
 		{
@@ -30,12 +30,12 @@ namespace Cherry
 		}
 	}
 
-	static void MouseMoveCallback(GLFWwindow* window, double xpos, double ypos)
+	void WindowsWindow::MouseMoveCallback(GLFWwindow* window, double xpos, double ypos)
 	{
 		Application::GetApplication().OnEvent(new MouseMoveEvent(int(xpos), int(ypos)));
 	}
 
-	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+	void WindowsWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	{
 		switch (action)
 		{
@@ -48,24 +48,25 @@ namespace Cherry
 		}
 	}
 
-	void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+	void WindowsWindow::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		Application::GetApplication().OnEvent(new MouseScrollEvent(yoffset));
 	}
 
-	void WindowCloseCallback(GLFWwindow* window)
+	void WindowsWindow::WindowCloseCallback(GLFWwindow* window)
 	{
-		Application::GetApplication().OnEvent(new WindowCloseEvent());
-		Application::GetApplication().IsRunning = false;
+		Application::GetApplication().OnEvent(new WindowCloseEvent);
+		Application::GetApplication().OnWindowClose();
 		CH_CORE_INFO("window closing");
 	}
 
-	void WindowResizeCallback(GLFWwindow* window, int width, int height)
+	void WindowsWindow::WindowResizeCallback(GLFWwindow* window, int width, int height)
 	{
 		Application::GetApplication().OnEvent(new WindowResizeEvent(width, height));
+		Application::GetApplication().OnWindowResize(width, height);
 	}
 	
-	void WindowFocusCallback(GLFWwindow* window, int focused)
+	void WindowsWindow::WindowFocusCallback(GLFWwindow* window, int focused)
 	{
 		if (focused)
 		{
@@ -86,13 +87,13 @@ namespace Cherry
 			int result = glfwInit();
 			CH_ASSERT(result, "Couldn't initialize GLFW");
 
-			glfwSetErrorCallback(ErrorCallback);
+			glfwSetErrorCallback(WindowsWindow::ErrorCallback);
 
 			GLFWInit = true;
 		}
 
 		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		m_Context = new OpenGLContext(m_Window);
+		m_Context = RenderingContext::Create(m_Window);
 		m_Context->Init();
 
 		Application::GetApplication().OnEvent(new WindowOpenEvent());
@@ -110,7 +111,7 @@ namespace Cherry
 		glfwSetWindowCloseCallback(m_Window, WindowCloseCallback);
 		glfwSetWindowFocusCallback(m_Window, WindowFocusCallback);
 	}
-
+	
 	WindowsWindow::~WindowsWindow()
 	{
 		delete m_Window;
@@ -125,6 +126,14 @@ namespace Cherry
 	{
 		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
+	}
+
+	void WindowsWindow::OnResize(int width, int height)
+	{
+		m_Data.Width = width;
+		m_Data.Height = height;
+
+		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
 	void WindowsWindow::SetVSync(bool vsync)
