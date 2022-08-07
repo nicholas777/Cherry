@@ -7,21 +7,21 @@
 
 namespace Cherry
 {
-	Shader* Shader::Create(std::string vertexSrc, std::string fragmentSrc)
+	Scoped<Shader> Shader::Create(std::string vertexSrc, std::string fragmentSrc)
 	{
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None: CH_ASSERT(false, "API::None is not supported"); return nullptr;
-			case RenderAPI::API::OpenGL: return new OpenGLShader(vertexSrc, fragmentSrc);
+			case RenderAPI::API::OpenGL: return Scoped<Shader>(new OpenGLShader(vertexSrc, fragmentSrc));
 		}
 	}
 
-	Shader* Shader::Create(std::string file)
+	Scoped<Shader> Shader::Create(std::string file)
 	{
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None: CH_ASSERT(false, "API::None is not supported"); return nullptr;
-			case RenderAPI::API::OpenGL: return new OpenGLShader(file);
+			case RenderAPI::API::OpenGL: return Scoped<Shader>(new OpenGLShader(file));
 		}
 	}
 

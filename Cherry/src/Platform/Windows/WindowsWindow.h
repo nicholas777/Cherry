@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "core/Window.h"
 #include "Renderer/RenderingContext.h"
+#include "core/Pointer.h"
 
 namespace Cherry
 {
@@ -27,7 +28,7 @@ namespace Cherry
 	private:
 		GLFWwindow* m_Window;
 		WindowData m_Data;
-		RenderingContext* m_Context;
+		Scoped<RenderingContext> m_Context;
 
 		static void ErrorCallback(int error, const char* msg);
 		static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

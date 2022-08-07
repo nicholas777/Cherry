@@ -12,6 +12,13 @@ namespace Cherry
 {
 	class CHERRY_API WindowsInput : public Input
 	{
+	public:
+		WindowsInput()
+		{
+			m_Window = static_cast<GLFWwindow*>(Application::GetApplication()
+				.GetWindow()
+				->GetNativeWindow());
+		}
 	protected:
 
 		virtual bool GetKeyPressedImpl(Key keycode) override
@@ -45,7 +52,6 @@ namespace Cherry
 		WindowsInput* Initialize()
 		{
 			m_Window = static_cast<GLFWwindow*>(Application::GetApplication().GetWindow()->GetNativeWindow());
-			return this;
 		}
 
 		GLFWwindow* m_Window;
@@ -56,7 +62,7 @@ namespace Cherry
 #ifdef CH_PLATFORM_WINDOWS
 	void Cherry::Input::Init()
 	{
-		m_Instance = (new WindowsInput())->Initialize();
+		m_Instance = new WindowsInput();
 	}
 #endif
 }

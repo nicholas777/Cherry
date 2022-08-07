@@ -5,12 +5,12 @@
 
 namespace Cherry
 {
-	Texture* Texture::Create(std::string path)
+	Scoped<Texture> Texture::Create(std::string path)
 	{
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None: CH_ASSERT(false, "RenderAPI::API::None is not supported") return nullptr;
-			case RenderAPI::API::OpenGL: return new OpenGLTexture(path);
+			case RenderAPI::API::OpenGL: return Scoped<Texture>(new OpenGLTexture(path));
 		}
 	}
 }

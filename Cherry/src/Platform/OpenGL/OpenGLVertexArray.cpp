@@ -45,6 +45,6 @@ namespace Cherry
 
 	IndexBuffer* OpenGLVertexArray::GetIndexBuffer()
 	{
-		return m_IndexBuffer;
+		return m_IndexBuffer.Get();
 	}
 }

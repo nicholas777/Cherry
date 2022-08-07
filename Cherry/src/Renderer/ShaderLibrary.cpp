@@ -3,7 +3,7 @@
 
 namespace Cherry
 {
-	std::unordered_map<std::string, Shared<Shader>> ShaderLibrary::m_Shaders = std::unordered_map<std::string, Shared<Shader>>();
+	std::unordered_map<std::string, Scoped<Shader>> ShaderLibrary::m_Shaders = std::unordered_map<std::string, Scoped<Shader>>();
 
 	void ShaderLibrary::Set(const std::string& name, const std::string& shaderPath)
 	{
@@ -21,7 +21,7 @@ namespace Cherry
 		m_Shaders.erase(name);
 	}
 
-	Shared<Shader> ShaderLibrary::Get(const std::string& name)
+	Scoped<Shader>& ShaderLibrary::Get(const std::string& name)
 	{
 		CH_ASSERT(m_Shaders.find(name) != m_Shaders.end(), "Shader not found");
 		return m_Shaders[name];

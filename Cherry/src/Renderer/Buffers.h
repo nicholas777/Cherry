@@ -2,6 +2,7 @@
 
 #include "core/Core.h"
 #include "core/Log.h"
+#include "core/Pointer.h"
 
 #include <cstdint>
 #include <vector>
@@ -134,7 +135,7 @@ namespace Cherry
 		virtual BufferLayout& GetLayout() = 0;
 		virtual void SetLayout(BufferLayout newLayout) = 0;
 
-		static VertexBuffer* Create(float* data, uint32_t size, BufferLayout layout);
+		static Scoped<VertexBuffer> Create(float* data, uint32_t size, BufferLayout layout);
 	};
 	
 	class CHERRY_API IndexBuffer
@@ -146,6 +147,6 @@ namespace Cherry
 		virtual void Unbind() = 0;
 		virtual uint32_t GetCount() = 0;
 
-		static IndexBuffer* Create(uint32_t* data, uint32_t size);
+		static Scoped<IndexBuffer> Create(uint32_t* data, uint32_t size);
 	};
 }

@@ -24,7 +24,7 @@ namespace Cherry
 		virtual IndexBuffer* GetIndexBuffer() override;
 	private:
 		uint32_t m_ID;
-		std::vector<VertexBuffer*> m_VertexBuffers;
-		IndexBuffer* m_IndexBuffer;
+		std::vector<Scoped<VertexBuffer>> m_VertexBuffers;
+		Scoped<IndexBuffer> m_IndexBuffer;
 	};
 }

@@ -7,7 +7,7 @@
 
 namespace Cherry
 {
-	RenderingContext* RenderingContext::Create(void* window)
+	Scoped<RenderingContext> RenderingContext::Create(void* window)
 	{
 		switch (RenderAPI::GetAPI())
 		{
@@ -15,9 +15,7 @@ namespace Cherry
 			CH_ASSERT(false, "API::None is not currently supported");
 			return nullptr;
 		case RenderAPI::API::OpenGL:
-			return new OpenGLContext(static_cast<GLFWwindow*>(window));
+			return Scoped<RenderingContext>(new OpenGLContext(static_cast<GLFWwindow*>(window)));
 		}
 	}
 }
-
-

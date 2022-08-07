@@ -2,6 +2,7 @@
 
 #include "core/Core.h"
 #include "core/Log.h"
+#include "core/Pointer.h"
 
 namespace Cherry
 {
@@ -17,6 +18,6 @@ namespace Cherry
 		virtual void Bind() = 0;
 		virtual void Bind(int unit) = 0;
 
-		static Texture* Create(std::string path);
+		static Scoped<Texture> Create(std::string path);
 	};
 }

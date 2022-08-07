@@ -2,6 +2,7 @@
 
 #include "Math/Vector.h"
 #include "Math/Matrix.h"
+#include "core/Pointer.h"
 #include <string>
 
 namespace Cherry
@@ -26,7 +27,7 @@ namespace Cherry
 		virtual void SetMat3(const std::string& name, Matrix3x3f value) = 0;
 		virtual void SetMat4(const std::string& name, Matrix4x4f value) = 0;
 
-		static Shader* Create(std::string vertex, std::string fragment);
-		static Shader* Create(std::string file);
+		static Scoped<Shader> Create(std::string vertex, std::string fragment);
+		static Scoped<Shader> Create(std::string file);
 	};
 }

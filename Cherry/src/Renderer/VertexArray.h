@@ -22,6 +22,6 @@ namespace Cherry
 		virtual std::vector<VertexBuffer*>& GetVertexBuffers() = 0;
 		virtual IndexBuffer* GetIndexBuffer() = 0;
 
-		static VertexArray* Create();
+		static Scoped<VertexArray> Create();
 	};
 }
