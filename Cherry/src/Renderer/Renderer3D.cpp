@@ -23,10 +23,10 @@ namespace Cherry
 	void Renderer3D::Submit(Mesh* m, Matrix4x4f* transform)
 	{
 		m->Bind();
-		m->GetMaterial()->Set("VPMatrix", m_SceneData->VP);
-		m->GetMaterial()->Set("ModelMatrix", *transform);
+		//m->GetMaterial()->Set("VPMatrix", m_SceneData->VP);
+		//m->GetMaterial()->Set("ModelMatrix", *transform);
 
-		RenderCommand::DrawElements(m);
+		RenderCommand::DrawElements(m->GetVAO());
 	}
 
 }

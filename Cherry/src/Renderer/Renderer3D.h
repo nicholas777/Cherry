@@ -3,7 +3,7 @@
 #include "RenderCommand.h"
 #include "Graphics/Camera.h"
 #include "core/Pointer.h"
-#include "ShaderLibrary.h"
+#include "utils/ShaderLibrary.h"
 #include "Graphics/Mesh.h"
 
 namespace Cherry

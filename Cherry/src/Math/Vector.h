@@ -7,6 +7,12 @@
 namespace Cherry
 {
 	template<typename T>
+	class Vector3;
+
+	template<typename T>
+	class Vector4;
+
+	template<typename T>
 	class Vector2
 	{
 		typedef Vector2<T> type;
@@ -14,7 +20,7 @@ namespace Cherry
 	public: 
 		T x, y;
 
-		Vector2(T x, T y)
+		Vector2(const T& x, T y)
 		{
 			this->x = x;
 			this->y = y;
@@ -25,8 +31,27 @@ namespace Cherry
 			this->x = 0;
 			this->y = 0;
 		}
+
+		Vector2(const T& value)
+		{
+			x = value;
+			y = value;
+		}
+
+ 		Vector2(const Vector3<T>& value)
+		{
+			x = value.x;
+			y = value.y;
+			z = value.z;
+		}
+
+		Vector2(const Vector4<T>& value)
+		{
+			x = value.x;
+			y = value.y;
+		}
 		
-		T* Data()
+		T* Data() const
 		{
 			T* arr = new T[2];
 
@@ -36,7 +61,7 @@ namespace Cherry
 			return arr;
 		}
 
-		float& operator[](int index)
+		const float& operator[](int index) const
 		{
 			CH_ASSERT(!(index > 1 || index < 0), "specified index is either too large or too small");
 			
@@ -45,98 +70,99 @@ namespace Cherry
 
 		}
 
-		bool operator==(type other)
+		bool operator==(const type& other) const
 		{
 			return x == other.x && y == other.y;
 		}
 
-		bool operator!=(type other)
+		bool operator!=(const type& other) const
 		{
 			return !(x == other.x && y == other.y);
 		}
 
-		type operator+(type other)
+		type operator+(const type& other) const
 		{
 			return type(x + other.x, y + other.y);
 		}
 
-		type operator+(T other)
+		type operator+(const T& other) const
 		{
 			return type(x + other, y + other);
 		}
 
-		void operator+=(type other)
+		void operator+=(const type& other)
 		{
 			x += other.x;
 			y += other.y;
 		}
 
-		void operator+=(T other)
+		void operator+=(const T& other)
 		{
 			x += other;
 			y += other;
 		}
 
-		type operator-(type other)
+		type operator-(const type& other) const
 		{
 			return type(x - other.x, y - other.y);
 		}
 
-		type operator-(T other)
+		type operator-(const T& other) const
 		{
 			return type(x - other, y - other);
 		}
 
-		void operator-=(type other)
+		void operator-=(const type& other)
 		{
 			x -= other.x;
 			y -= other.y;
 		}
 
-		void operator-=(T other)
+		void operator-=(const T& other)
 		{
 			x -= other;
 			y -= other;
 		}
 
-		type operator*(T other)
+		type operator*(const T& other) const
 		{
 			return type(x * other, y * other);
 		}
 
-		type operator*(type other)
+		type operator*(const type& other) const
 		{
 			return type(x * other.x, y * other.y);
 		}
 
-		void operator*=(T other)
+		void operator*=(const T& other)
 		{
 			x *= other;
 			y *= other;
 		}
 
-		void operator*=(type other)
+		void operator*=(const type& other)
 		{
 			x *= other.x;
 			y *= other.x;
 		}
-		type operator/(T other)
+
+		type operator/(const T& other) const
 		{
 			return type(x / other, y / other);
 		}
 
-		type operator/(type other)
+		type operator/(const type& other) const
 		{
 			return type(x / other.x, y / other.y);
 		}
 
-		void operator/=(T other)
+		void operator/=(const T& other)
 		{
 			x /= other;
 			y /= other;
 		}
 
-		void operator/=(type other)
+		void operator/=(const type& other)
 		{
 			x /= other.x;
 			y /= other.y;
@@ -151,11 +177,25 @@ namespace Cherry
 	public:
 		float x, y, z;
 
-		Vector3(T x, T y, T z)
+		Vector3(const T& x, const T& y, const T& z)
 		{
 			this->x = x;
 			this->y = y;
 			this->z = z;
+		}
+
+		Vector3(const Vector2<T>& vec, const T& z)
+		{
+			this->x = vec.x;
+			this->y = vec.y;
+			this->z = z;
+		}
+
+		Vector3(const T& x, const Vector2<T>& vec)
+		{
+			this->x = x;
+			this->y = vec.x;
+			this->z = vec.y;
 		}
 
 		Vector3()
@@ -165,15 +205,21 @@ namespace Cherry
 			this->z = 0;
 		}
 
-		
-		Vector3(Vector2<T> vec)
+		Vector3(const T& value)
 		{
-			x = vec.x;
-			y = vec.y;
-			z = 0;
+			x = value;
+			y = value;
+			z = value;
 		}
 
-		T* Data()
+		Vector3(const Vector4<T>& value)
+		{
+			x = value.x;
+			y = value.y;
+			z = value.z;
+		}
+
+		T* Data() const
 		{
 			T* arr = new T[3];
 
@@ -184,7 +230,7 @@ namespace Cherry
 			return arr;
 		}
 
-		float& operator[](int index)
+		const float& operator[](int index) const
 		{
 			CH_ASSERT(!(index < 0 || index > 2), "specified index is either too large or too small");
 			
@@ -193,106 +239,106 @@ namespace Cherry
 			else return z;
 		}
 
-		bool operator==(type other)
+		bool operator==(const type& other) const
 		{
 			return x == other.x && y == other.y && z == other.z;
 		}
 
-		bool operator!=(type other)
+		bool operator!=(const type& other) const
 		{
-			return !(*(this) == other);
+			return !(*(const T&his) == other);
 		}
 
-		type operator+(T other)
+		type operator+(const T& other) const
 		{
 			return type(x + other, y + other, z + other);
 		}
 
-		type operator+(type other)
+		type operator+(const type& other) const
 		{
 			return type(x + other.x, y + other.y, z + other.z);
 		}
 
-		void operator+=(T other)
+		void operator+=(const T& other)
 		{
 			x += other;
 			y += other;
 			z += other;
 		}
 
-		void operator+=(type other)
+		void operator+=(const type& other)
 		{
 			x += other.x;
 			y += other.y;
 			z += other.z;
 		}
 
-		type operator-(T other)
+		type operator-(const T& other) const
 		{
 			return type(x - other, y - other, z - other);
 		}
 
-		type operator-(type other)
+		type operator-(const type& other) const
 		{
 			return type(x - other.x, y - other.y, z - other.z);
 		}
 
-		void operator-=(T other)
+		void operator-=(const T& other)
 		{
 			x -= other;
 			y -= other;
 			z -= other;
 		}
 
-		void operator-=(type other)
+		void operator-=(const type& other)
 		{
 			x -= other.x;
 			y -= other.y;
 			z -= other.z;
 		}
 
-		type operator*(T other)
+		type operator*(const T& other) const
 		{
 			return type(x * other, y * other, z * other);
 		}
 
-		type operator*(type other)
+		type operator*(const type& other) const
 		{
 			return type(x * other.x, y * other.y, z * other.z);
 		}
 
-		void operator*=(T other)
+		void operator*=(const T& other)
 		{
 			x *= other;
 			y *= other;
 			z *= other;
 		}
 
-		void operator*=(type other)
+		void operator*=(const type& other)
 		{
 			x *= other.x;
 			y *= other.y;
 			z *= other.z;
 		}
 
-		type operator/(T other)
+		type operator/(const T& other) const
 		{
 			return type(x / other, y / other, z / other);
 		}
 
-		type operator/(type other)
+		type operator/(const type& other) const
 		{
 			return type(x / other.x, y / other.y, z / other.z);
 		}
 
-		void operator/=(T other)
+		void operator/=(const T& other)
 		{
 			x /= other;
 			y /= other;
 			z /= other;
 		}
 
-		void operator/=(type other)
+		void operator/=(const type& other)
 		{
 			x /= other.x;
 			y /= other.y;
@@ -307,7 +353,7 @@ namespace Cherry
 	public:
 		float x, y, z, w;
 
-		Vector4(T x, T y, T z, T w)
+		Vector4(const T& x, T y, T z, T w)
 		{
 			this->x = x;
 			this->y = y;
@@ -323,7 +369,63 @@ namespace Cherry
 			this->w = 0;
 		}
 
-		T* Data()
+		Vector4(const Vector2<T>& vec, const T& z, const T& w)
+		{
+			this->x = vec.x;
+			this->y = vec.y;
+			this->z = z;
+			this->w = w;
+		}
+
+		Vector4(const Vector3<T>& vec, const T& w)
+		{
+			this->x = vec.x;
+			this->y = vec.y;
+			this->z = vec.z;
+			this->w = w;
+		}
+
+		Vector4(const T& x, const Vector2<T>& vec, const T& w)
+		{
+			this->x = x;
+			this->y = vec.x;
+			this->z = vec.y;
+			this->w = w;
+		}
+		
+		Vector4(const T& x, const Vector3<T>& vec)
+		{
+			this->x = x;
+			this->y = vec.x;
+			this->z = vec.y;
+			this->w = vec.z;
+		}
+
+		Vector4(const T& x, const T& y, const Vector2<T>& vec)
+		{
+			this->x = x;
+			this->y = y;
+			this->z = vec.x;
+			this->w = vec.y;
+		}
+
+		Vector4(const Vector2<T>& vec1, const Vector2<T>& vec2)
+		{
+			x = vec1.x;
+			y = vec1.y;
+			z = vec2.x;
+			w = vec2.y;
+		}
+
+		Vector4(const T& value)
+		{
+			x = value;
+			y = value;
+			z = value;
+			w = value;
+		}
+
+		T* Data() const
 		{
 			T* arr = new T[4];
 
@@ -338,6 +440,16 @@ namespace Cherry
 		float& operator[](int index)
 		{
 			CH_ASSERT(!(index < 0 || index > 3), "specified index is either too large or too small");
+
+			if (index == 0) return x;
+			if (index == 1) return y;
+			if (index == 2) return z;
+			else return w;
+		}
+
+		const float& operator[](int index) const
+		{
+			CH_ASSERT(!(index < 0 || index > 3), "specified index is either too large or too small");
 			
 			if (index == 0) return x;
 			if (index == 1) return y;
@@ -345,27 +457,27 @@ namespace Cherry
 			else return w;
 		}
 
-		bool operator==(type other)
+		bool operator==(const type& other) const
 		{
 			return x == other.x && y == other.y && z == other.z && w == other.w;
 		}
 
-		bool operator!=(type other)
+		bool operator!=(const type& other) const
 		{
-			return !(*(this) == other);
+			return !(*(const T&his) == other);
 		}
 
-		type operator+(T other)
+		type operator+(const T& other) const
 		{
 			return type(x + other, y + other, z + other, w + other);
 		}
 
-		type operator+(type other)
+		type operator+(const type& other) const
 		{
 			return type(x + other.x, y + other.y, z + other.z, w + other.w);
 		}
 
-		void operator+=(T other)
+		void operator+=(const T& other)
 		{
 			x += other;
 			y += other;
@@ -373,7 +485,7 @@ namespace Cherry
 			w += other;
 		}
 
-		void operator+=(type other)
+		void operator+=(const type& other)
 		{
 			x += other.x;
 			y += other.y;
@@ -381,17 +493,17 @@ namespace Cherry
 			w += other.w;
 		}
 
-		type operator-(T other)
+		type operator-(const T& other) const
 		{
 			return type(x - other, y - other, z - other, w - other);
 		}
 
-		type operator-(type other)
+		type operator-(const type& other) const
 		{
 			return type(x - other.x, y - other.y, z - other.z, w - other.w);
 		}
 
-		void operator-=(T other)
+		void operator-=(const T& other)
 		{
 			x -= other;
 			y -= other;
@@ -399,7 +511,7 @@ namespace Cherry
 			w -= other;
 		}
 
-		void operator-=(type other)
+		void operator-=(const type& other)
 		{
 			x -= other.x;
 			y -= other.y;
@@ -407,17 +519,17 @@ namespace Cherry
 			w -= other.w;
 		}
 
-		type operator*(T other)
+		type operator*(const T& other) const
 		{
 			return type(x * other, y * other, z * other, w * other);
 		}
 
-		type operator*(type other)
+		type operator*(const type& other) const
 		{
 			return type(x * other.x, y * other.y, z * other.z, w * other.w);
 		}
 
-		void operator*=(T other)
+		void operator*=(const T& other)
 		{
 			x *= other;
 			y *= other;
@@ -425,7 +537,7 @@ namespace Cherry
 			w *= other;
 		}
 
-		void operator*=(type other)
+		void operator*=(const type& other)
 		{
 			x *= other.x;
 			y *= other.y;
@@ -433,17 +545,17 @@ namespace Cherry
 			w *= other.w;
 		}
 
-		type operator/(T other)
+		type operator/(const T& other) const
 		{
 			return type(x / other, y / other, z / other, w / other);
 		}
 
-		type operator/(type other)
+		type operator/(const type& other) const
 		{
 			return type(x / other.x, y / other.y, z / other.z, w / other.w);
 		}
 
-		void operator/=(T other)
+		void operator/=(const T& other)
 		{
 			x /= other;
 			y /= other;
@@ -451,7 +563,7 @@ namespace Cherry
 			w /= other;
 		}
 
-		void operator/=(type other)
+		void operator/=(const type& other)
 		{
 			x /= other.x;
 			y /= other.y;

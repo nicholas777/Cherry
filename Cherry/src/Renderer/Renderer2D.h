@@ -15,15 +15,20 @@ namespace Cherry
 	{
 	public:
 		static void Init();
+		static void Shutdown();
 
 		static void Begin(Camera* cam);
 		static void End();
 
 		// Rectangle 
-		static void DrawRect(Matrix4x4f* transform, Vector4f color);
-		static void DrawRect(Matrix4x4f* transform, const Scoped<Texture*>& color);
+		static void DrawRect(const Vector2f& position, const Vector2f& size, const Scoped<Texture>& texture);
+		static void DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const Scoped<Texture>& texture);
+
+		static void DrawRect(const Vector2f& position, const Vector2f& size, const SubTexture& texture);
+		static void DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const SubTexture& texture);
 
 	private:
-
+		static void Flush();
+		static void NewBatch();
 	};
 }

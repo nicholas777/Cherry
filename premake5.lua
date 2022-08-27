@@ -15,7 +15,6 @@ workspace "Engine"
 include "Cherry/vendor/GLFW"
 include "Cherry/vendor/GLAD"
 
--- NOT TO BE MODIFIED
 project "Cherry"
 	location "Cherry"
 	kind "SharedLib"
@@ -75,6 +74,49 @@ project "Cherry"
 		defines "CH_DIST_MODE"
 		optimize "On" 
 
+project "Blossom"
+	location "Blossom"
+	kind "ConsoleApp"
+	language "C++"
+
+	targetdir (outputDir .. outputPath .. "/%{prj.name}")
+	objdir (outputDir .. "/int/" .. outputPath .. "/%{prj.name}")
+
+	files {
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs {
+		"Cherry/src",
+		"Cherry/vendor/spdlog/include"
+	}
+
+	filter "system:windows"
+		cppdialect "C++17"
+		staticruntime "Off"
+		systemversion "latest"
+
+		defines {
+			"CH_PLATFORM_WINDOWS",
+		}
+
+		links {
+			"Chrrye"
+		}
+
+	filter "configurations:debug"
+		defines "CH_DEBUG_MODE"
+		symbols "On"
+
+	filter "configurations:release"
+		defines "CH_RELEASE_MODE"
+		optimize "On"
+
+	filter "configurations:dist"
+		defines "CH_DIST_MODE"
+		optimize "On" 
+
 project "Tests"
 	location "tests"
 	kind "ConsoleApp"
@@ -103,7 +145,7 @@ project "Tests"
 		}
 
 		links {
-			"Cherry"
+			"Chrrye"
 		}
 
 	filter "configurations:debug"

@@ -11,11 +11,11 @@ namespace Cherry
 		TransformationMatrix() { SetIdentity(); };
 
 		TransformationMatrix(float x, float y);
-		TransformationMatrix(Vector2f pos);
+		TransformationMatrix(const Vector2f& pos);
 
-		void Translate(Vector2f translation);
+		void Translate(const Vector2f& translation);
 		void Rotate(float rotation);
-		void Scale(Vector2f scalar);
+		void Scale(const Vector2f& scalar);
 		void Scale(float scalar);
 
 		void SetTranslation(Vector2f translation);
@@ -24,6 +24,7 @@ namespace Cherry
 		void SetScale(float scalar);
 
 		void operator=(Matrix4x4f mat);
+		Vector4f operator*(Vector4f vec);
 
 	private:
 		Vector2f m_Translation;

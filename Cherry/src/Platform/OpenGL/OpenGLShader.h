@@ -16,16 +16,17 @@ namespace Cherry
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
-		virtual void SetInt(const std::string& name, int value) override;
-		virtual void SetInt2(const std::string& name, Vector2i value) override;
-		virtual void SetInt3(const std::string& name, Vector3i value) override;
-		virtual void SetInt4(const std::string& name, Vector4i value) override;
-		virtual void SetFloat(const std::string& name, float value) override;
-		virtual void SetFloat2(const std::string& name, Vector2f value) override;
-		virtual void SetFloat3(const std::string& name, Vector3f value) override;
-		virtual void SetFloat4(const std::string& name, Vector4f value) override;
-		virtual void SetMat3(const std::string& name, Matrix3x3f value) override;
-		virtual void SetMat4(const std::string& name, Matrix4x4f value) override;
+		virtual void SetInt(const std::string& name, const int& value) override;
+		virtual void SetInt2(const std::string& name, const Vector2i& value) override;
+		virtual void SetInt3(const std::string& name, const Vector3i& value) override;
+		virtual void SetInt4(const std::string& name, const Vector4i& value) override;
+		virtual void SetIntArray(const std::string& name, int* data, uint32_t size) override;
+		virtual void SetFloat(const std::string& name, const float& value) override;
+		virtual void SetFloat2(const std::string& name, const Vector2f& value) override;
+		virtual void SetFloat3(const std::string& name, const Vector3f& value) override;
+		virtual void SetFloat4(const std::string& name, const Vector4f& value) override;
+		virtual void SetMat3(const std::string& name, const Matrix3x3f& value) override;
+		virtual void SetMat4(const std::string& name, const Matrix4x4f& value) override;
 
 	private:
 		unsigned int m_ShaderProgram;

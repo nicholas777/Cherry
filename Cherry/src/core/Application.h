@@ -28,7 +28,7 @@ namespace Cherry
 
 	public:
 		Application();
-		~Application();
+		virtual ~Application();
 
 		LayerStack& GetLayerStack() { return *m_LayerStack; };
 		void PushLayer(Layer* layer) { m_LayerStack->PushLayer(layer); };

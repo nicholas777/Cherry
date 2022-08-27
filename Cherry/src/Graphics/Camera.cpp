@@ -16,8 +16,7 @@ namespace Cherry
 			Vector4f(0, 0, 0, 1)
 		);
 
-		m_ViewMatrix.SetIdentity();
-		m_ViewMatrix.Translate(pos);
+		m_ViewMatrix = TransformationMatrix(pos);
 
 		m_VP = m_ProjectionMatrix * m_ViewMatrix;
 	}

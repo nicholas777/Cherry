@@ -37,15 +37,14 @@ namespace Cherry
 		BufferLayout layout = GenLayout(vertices.HasUVs(), vertices.HasColors());
 
 		m_Vao = VertexArray::Create();
-		m_Vao->AddVertexBuffer(dataRaw, vertices.size() / 4, layout);
-		m_Vao->SetIndexBuffer(indices.data(), indices.size());
+		//m_Vao->AddVertexBuffer(dataRaw, vertices.size() / 4, layout);
+		//m_Vao->SetIndexBuffer(indices.data(), indices.size());
 
 		m_Material = material;
 	}
 
 	void Mesh::Bind()
 	{
-		m_Material->Bind();
 		m_Vao->Bind();
 	}
 

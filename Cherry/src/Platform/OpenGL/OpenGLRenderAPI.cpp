@@ -26,8 +26,9 @@ namespace Cherry
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
-	void OpenGLRenderAPI::DrawElements(VertexArray* vao)
+	void OpenGLRenderAPI::DrawElements(VertexArray* vao, uint32_t indexCount)
 	{
-		glDrawElements(GL_TRIANGLES, vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		uint32_t indices = indexCount ? indexCount : vao->GetIndexBuffer()->GetCount();
+		glDrawElements(GL_TRIANGLES, indices, GL_UNSIGNED_INT, nullptr);
 	}
 }

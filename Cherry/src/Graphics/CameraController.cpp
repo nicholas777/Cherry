@@ -28,10 +28,10 @@ namespace Cherry
 		{
 			x += m_Force;
 		}
-
+		
 		if (!(x == 0 && y == 0))
 		{
-			m_Camera->Translate(x * delta, y * delta);
+			m_Camera->Translate(-(x * delta), -(y * delta));
 		}
 		
 	}

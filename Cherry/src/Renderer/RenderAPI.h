@@ -24,7 +24,7 @@ namespace Cherry
 		virtual void SetClearColor(Vector4f color) = 0;
 		virtual void Clear() = 0;
 
-		virtual void DrawElements(VertexArray* vao) = 0;
+		virtual void DrawElements(VertexArray* vao, uint32_t indexCount) = 0;
 
 		static API GetAPI() { return s_API; }
 

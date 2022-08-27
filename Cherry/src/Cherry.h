@@ -21,7 +21,8 @@
 #include "Renderer/Renderer2D.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
-#include "Renderer/ShaderLibrary.h"
+#include "Renderer/Utils/TextureAtlas.h"
+#include "Renderer/utils/ShaderLibrary.h"
 
 #include "Graphics/Mesh.h"
 #include "Graphics/Camera.h"

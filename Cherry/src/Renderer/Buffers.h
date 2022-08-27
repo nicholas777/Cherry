@@ -132,10 +132,14 @@ namespace Cherry
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 
+		virtual void InsertData(void* data, uint32_t count, uint32_t index) = 0;
+
 		virtual BufferLayout& GetLayout() = 0;
 		virtual void SetLayout(BufferLayout newLayout) = 0;
 
-		static Scoped<VertexBuffer> Create(float* data, uint32_t size, BufferLayout layout);
+		static Scoped<VertexBuffer> Create(uint32_t count);
+		static Scoped<VertexBuffer> Create(float* data, uint32_t count);
+		static Scoped<VertexBuffer> Create(float* data, uint32_t count, BufferLayout layout);
 	};
 	
 	class CHERRY_API IndexBuffer

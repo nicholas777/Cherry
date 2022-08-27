@@ -13,10 +13,15 @@ namespace Cherry
 		typedef T value_type;
 	public:
 		Scoped()
-			: _Value(nullptr) {}
-
+			: _Value(nullptr) 
+		{
+			
+		}
+		
 		Scoped(T*&& v)
-			: _Value(v) {};
+			: _Value(v) 
+		{
+		};
 
 		Scoped(std::nullptr_t)
 			: _Value(nullptr) {}
@@ -34,12 +39,12 @@ namespace Cherry
 			delete _Value;
 		}
 
-		T* Get()
+		T* Get() const
 		{
 			return _Value;
 		}
 
-		void Reset(T*&& other)
+		void Reset(T*&& other = nullptr)
 		{
 			delete _Value;
 			_Value = other;
@@ -55,11 +60,9 @@ namespace Cherry
 
 		void operator=(const Scoped&) = delete;
 
-		void operator=(Scoped&& right)
+		void operator=(Scoped&& right) noexcept
 		{
-			delete _Value;
 			_Value = right._Value;
-
 			right._Value = nullptr;
 		};
 
@@ -69,14 +72,29 @@ namespace Cherry
 			_Value = nullptr;
 		}
 
-		T* operator->()
+		T* operator->() const
 		{
 			return _Value;
 		}
 
-		T operator*()
+		T operator*() const
 		{
 			return *_Value;
+		}
+
+		operator bool()
+		{
+			return _Value != nullptr;
+		}
+
+		bool operator==(Scoped<T> right)
+		{
+			return _Value == right._Value;
+		}
+
+		bool operator!=(Scoped<T> right)
+		{
+			return _Value != right._Value;
 		}
 
 		template <typename T, typename... Args>
@@ -127,7 +145,7 @@ namespace Cherry
 				_Value->RepCount--;
 		}
 
-		T* Get()
+		T* Get() const
 		{
 			return _Value->ptr;
 		}
@@ -146,6 +164,13 @@ namespace Cherry
 		void Free()
 		{
 			delete _Value;
+		}
+
+		int GetRepCount() {
+			if (_Value)
+				return _Value->RepCount;
+
+			return -1;
 		}
 
 		bool IsAlive()
@@ -194,6 +219,21 @@ namespace Cherry
 			return *_Value->ptr;
 		}
 
+		operator bool()
+		{
+			return _Value->ptr != nullptr;
+		}
+
+		bool operator==(Scoped<T> right)
+		{
+			return _Value == right._Value;
+		}
+
+		bool operator!=(Scoped<T> right)
+		{
+			return _Value != right._Value;
+		}
+
 		template <typename T, typename... Args>
 		static Shared<T> Create(Args&&... args)
 		{
@@ -205,7 +245,7 @@ namespace Cherry
 		{
 			T* ptr;
 			int RepCount;
-
+			
 			PtrValue(T* value)
 				: ptr(value), RepCount(1) {};
 		};

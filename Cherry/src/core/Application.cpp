@@ -25,6 +25,8 @@ namespace Cherry
 
 	Application::~Application()
 	{
+		Renderer2D::Shutdown();
+
 		delete m_Window;
 		delete m_LayerStack;
 	}
@@ -37,6 +39,7 @@ namespace Cherry
 
 		m_Window = Window::Create({ Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.IsVSync });
 		Renderer2D::Init();
+		RenderCommand::Init();
 
 		Input::Init();
 

@@ -25,17 +25,17 @@ namespace Cherry
 		glBindVertexArray(0);
 	}
 	
-	void OpenGLVertexArray::AddVertexBuffer(float* data, uint32_t size, BufferLayout layout)
+	void OpenGLVertexArray::AddVertexBuffer(VertexBuffer* buffer)
 	{
 		glBindVertexArray(m_ID);
-		m_VertexBuffers.push_back(VertexBuffer::Create(data, size, layout));
+		m_VertexBuffers.push_back(buffer);
 
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(uint32_t* data, uint32_t size)
+	void OpenGLVertexArray::SetIndexBuffer(IndexBuffer* buffer)
 	{
 		glBindVertexArray(m_ID);
-		m_IndexBuffer = IndexBuffer::Create(data, size);
+		m_IndexBuffer = buffer;
 	}
 
 	std::vector<VertexBuffer*>& OpenGLVertexArray::GetVertexBuffers()
@@ -45,6 +45,6 @@ namespace Cherry
 
 	IndexBuffer* OpenGLVertexArray::GetIndexBuffer()
 	{
-		return m_IndexBuffer.Get();
+		return m_IndexBuffer;
 	}
 }

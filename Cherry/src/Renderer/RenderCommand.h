@@ -28,9 +28,9 @@ namespace Cherry
 			s_RenderAPI->Clear();
 		}
 
-		inline static void DrawElements(Mesh* m)
+		inline static void DrawElements(VertexArray* vao, uint32_t indexCount = 0)
 		{
-			s_RenderAPI->DrawElements(m->GetVAO());
+			s_RenderAPI->DrawElements(vao, indexCount);
 		}
 
 	private:

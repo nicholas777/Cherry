@@ -35,7 +35,7 @@ namespace Cherry
 			columns[1] = m1;
 		}
 
-		float* ToArray()
+		float* ToArray() const
 		{
 			float* value = new float[4];
 
@@ -62,54 +62,50 @@ namespace Cherry
 			columns[1].y = 1;
 		}
 
-		vec_type GetRow(int index)
+		vec_type GetRow(int index) const
 		{
 			return vec_type(columns[0][index], columns[1][inde]);
 		}
 
-		vec_type GetColumn(int index)
+		vec_type GetColumn(int index) const
 		{
 			return columns[index];
 		}
 
-		bool operator==(type other)
+		bool operator==(const type& other) const
 		{
 			return columns[0] == other[0] && columns[1] == other[1];
 		}
 
-		bool operator!=(type other)
+		bool operator!=(const type& other) const
 		{
 			return !(columns[0] == other[0] && columns[1] == other[1]);
 		}
 		
-		vec_type& operator[](int index)
+		vec_type& operator[](int index) const
 		{
-			if (index == 0) return columns[0];
-			if (index == 1) return columns[1];
-
-			CH_ERROR("In type::operator[]: Index out of bounds");
-			return vec_type();
+			return columns[index];
 		}
 
 		// Addition
 
-		type operator+(T num)
+		type operator+(const T& num) const
 		{
 			return type(columns[0] + num, columns[1] + num);
 		}
 
-		type operator+(type mat)
+		type operator+(const type& mat) const
 		{
 			return type(columns[0] + mat[0], columns[1] + mat[1]);
 		}
 
-		void operator+=(T num)
+		void operator+=(const T& num)
 		{
 			columns[0] += num;
 			columns[1] += num;
 		}
 
-		void operator+=(type mat)
+		void operator+=(const type& mat)
 		{
 			columns[0] += mat[0];
 			columns[1] += mat[1];
@@ -117,23 +113,23 @@ namespace Cherry
 
 		// Subtraction
 
-		type operator-(T num)
+		type operator-(const T& num) const
 		{
 			return type(columns[0] - num, columns[1] - num);
 		}
 
-		type operator-(type mat)
+		type operator-(const type& mat) const
 		{
 			return type(columns[0] - mat[0], columns[1] - mat[1]);
 		}
 
-		void operator-=(T num)
+		void operator-=(const T& num)
 		{
 			columns[0] -= num;
 			columns[1] -= num;
 		}
 
-		void operator-=(type mat)
+		void operator-=(const type& mat)
 		{
 			columns[0] -= mat[0];
 			columns[1] -= mat[1];
@@ -141,17 +137,17 @@ namespace Cherry
 
 		// Multiplication
 
-		type operator*(T num)
+		type operator*(const T& num) const
 		{
 			return type(columns[0] * num, columns[1] * num);
 		}
 
-		vec_type operator*(vec_type vec)
+		vec_type operator*(vec_type vec) const
 		{
 			return columns[0] * vec[0] + columns[1] * vec[1];
 		}
 
-		type operator*(type Mat)
+		type operator*(const type& Mat) const
 		{
 			return type(
 				columns	[0][0] * Mat[0][0] + columns[1][0] * Mat[0][1],
@@ -160,13 +156,13 @@ namespace Cherry
 				columns[0][1] * Mat[1][0] + columns[1][1] * Mat[1][1]);
 		}
 
-		void operator*=(T other)
+		void operator*=(const T& other)
 		{
 			columns[0] *= other;
 			columns[1] *= other;
 		}
 
-		void operator*=(type other)
+		void operator*=(const type& other)
 		{
 			type mat = *this * other;
 			columns[0] = mat[0];
@@ -207,7 +203,7 @@ namespace Cherry
 			columns[2] = m2;
 		}
 
-		float* ToArray()
+		float* ToArray() const
 		{
 			float* value = new float[9];
 
@@ -249,92 +245,92 @@ namespace Cherry
 			columns[2].z = 1;
 		}
 		
-		vec_type GetRow(int index)
+		vec_type GetRow(int index) const
 		{
 			return vec_type(columns[0][index], columns[1][index], columns[2][index]);
 		}
 
-		vec_type GetColumn(int index)
+		vec_type GetColumn(int index) const
 		{
 			return columns[index];
 		}
 
-		vec_type& operator[](int index)
+		vec_type& operator[](int index) const
 		{
 			return columns[index];
 		}
 
-		bool operator==(type other)
+		bool operator==(const type& other) const
 		{
 			return columns[0] == other[0] && columns[1] == other[1] && columns[2] == other[2];
 		}
 
-		bool operator!=(type other)
+		bool operator!=(const type& other) const
 		{
 			return !(columns[0] == other[0] && columns[1] == other[1] && columns[2] == other[2]);
 		}
 
 		// Addition
 
-		type operator+(T num)
+		type operator+(const T& num) const
 		{
 			return type(columns[0] + num, columns[1] + num, columns[2] + num);
 		}
 
-		type operator+(type mat)
+		type operator+(const type& mat) const
 		{
 			return type(columns[0] + mat[0], columns[1] + mat[1], columns[2] + mat[2]);
 		}
 
-		void operator+=(T other)
+		void operator+=(const T& other)
 		{
 			columns[0] += other;
 			columns[1] += other;
 			columns[2] += other;
 		}
 
-		void operator+=(type other)
+		void operator+=(const type& other)
 		{
 			columns[0] += other[0];
 			columns[1] += other[1];
 			columns[2] += other[2];
 		}
 
-		type operator-(T other)
+		type operator-(const T& other) const
 		{
 			return type(columns[0] - other, columns[1] - other, columns[2] - other);
 		}
 
-		type operator-(type other)
+		type operator-(const type& other) const
 		{
 			return type(columns[0] - other[0], columns[1] - other[1], columns[2] - other[2]);
 		}
 
-		void operator-=(T other)
+		void operator-=(const T& other)
 		{
 			columns[0] -= other;
 			columns[1] -= other;
 			columns[2] -= other;
 		}
 
-		void operator-=(type other)
+		void operator-=(const type& other)
 		{
 			columns[0] -= other[0];
 			columns[1] -= other[1];
 			columns[2] -= other[2];
 		}
 
-		type operator*(T other)
+		type operator*(const T& other) const
 		{
 			return type(columns[0] * other, columns[1] * other, columns[2] * other);
 		}
 
-		vec_type operator*(vec_type vec)
+		vec_type operator*(vec_type vec) const
 		{
 			return columns[0] * vec[0] + columns[1] * vec[1] + columns[2] * vec[2];
 		}
 
-		type operator*(type other)
+		type operator*(const type& other) const
 		{
 			T SrcA00 = m1[0][0];
 			T SrcA01 = m1[0][1];
@@ -371,14 +367,14 @@ namespace Cherry
 			return Result;
 		}
 
-		void operator*=(T other)
+		void operator*=(const T& other)
 		{
 			columns[0] *= other;
 			columns[1] *= other;
 			columns[2] *= other;
 		}
 
-		void operator*=(type other)
+		void operator*=(const type& other)
 		{
 			type mat = *this * other;
 			columns[0] *= mat[0];
@@ -416,7 +412,7 @@ namespace Cherry
 			columns[3] = vec_type(m03, m13, m23, m33);
 		}
 
-		Matrix4x4(vec_type m0, vec_type m1, vec_type m2, vec_type m3)
+		Matrix4x4(const vec_type& m0, const vec_type& m1, const vec_type& m2, const vec_type& m3)
 		{
 			columns[0] = m0;
 			columns[1] = m1;
@@ -424,7 +420,7 @@ namespace Cherry
 			columns[3] = m3;
 		}
 
-		float* ToArray()
+		float* ToArray() const
 		{
 			float* value = new float[16];
 
@@ -486,17 +482,32 @@ namespace Cherry
 			return vec_type(columns[0][index], columns[1][index], columns[2][index], columns[3][index]);
 		}
 
-		vec_type GetColumn(int index)
+		const vec_type GetRow(int index) const
+		{
+			return vec_type(columns[0][index], columns[1][index], columns[2][index], columns[3][index]);
+		}
+
+		vec_type& GetColumn(int index)
 		{
 			return columns[index];
 		}
 
+		const vec_type& GetColumn(int index) const
+		{
+			return columns[index];
+		}
+		
 		vec_type& operator[](int index)
 		{
 			return columns[index];
 		}
 
-		bool operator==(type other)
+		const vec_type& operator[](int index) const
+		{
+			return columns[index];
+		}
+
+		bool operator==(const type& other) const
 		{
 			return columns[0] == other[0]
 				&& columns[1] == other[1]
@@ -504,7 +515,7 @@ namespace Cherry
 				&& columns[3] == other[3];
 		}
 
-		bool operator!=(type other)
+		bool operator!=(const type& other) const
 		{
 			return !(columns[0] == other[0]
 				&& columns[1] == other[1]
@@ -512,17 +523,17 @@ namespace Cherry
 				&& columns[3] == other[3]);
 		}
 
-		type operator+(T other)
+		type operator+(const T& other) const
 		{
 			return type(columns[0] + other, columns[1] + other, columns[2] + other, columns[3] + other);
 		}
 
-		type operator+(type other)
+		type operator+(const type& other) const
 		{
 			return type(columns[0] + other[0], columns[1] + other[1], columns[2] + other[2], columns[3] + other[3]);
 		}
 
-		void operator+=(T other)
+		void operator+=(const T& other)
 		{
 			columns[0] += other;
 			columns[1] += other;
@@ -530,7 +541,7 @@ namespace Cherry
 			columns[3] += other;
 		}
 
-		void operator+=(type other)
+		void operator+=(const type& other)
 		{
 			columns[0] += other[0];
 			columns[1] += other[1];
@@ -538,17 +549,17 @@ namespace Cherry
 			columns[3] += other[3];
 		}
 
-		type operator-(T other)
+		type operator-(const T& other) const
 		{
 			return type(columns[0] - other, columns[1] - other, columns[2] - other, columns[3] - other);
 		}
 
-		type operator-(type other)
+		type operator-(const type& other) const
 		{
 			return type(columns[0] - other[0], columns[1] - other[1], columns[2] - other[2], columns[3] - other[3]);
 		}
 
-		void operator-=(type other)
+		void operator-=(const type& other)
 		{
 			columns[0] -= other[0];
 			columns[1] -= other[1];
@@ -556,7 +567,7 @@ namespace Cherry
 			columns[3] -= other[3];
 		}
 
-		void operator-=(T other)
+		void operator-=(const T& other)
 		{
 			columns[0] -= other;
 			columns[1] -= other;
@@ -564,12 +575,12 @@ namespace Cherry
 			columns[3] -= other;
 		}
 
-		type operator*(T other)
+		type operator*(const T& other) const
 		{
 			return type(columns[0] * other, columns[1] * other, columns[2] * other, columns[3] * other);
 		}
 
-		vec_type operator*(vec_type other)
+		vec_type operator*(const vec_type& other) const
 		{
 			return columns[0] * other[0]
 				+  columns[1] * other[1]
@@ -577,7 +588,7 @@ namespace Cherry
 				+  columns[3] * other[3];
 		}
 
-		type operator*(type other)
+		type operator*(const type& other) const
 		{
 			type Result;
 			Result[0] = columns[0] * other[0][0] + columns[1] * other[0][1] + columns[2] * other[0][2] + columns[3] * other[0][3];
@@ -587,7 +598,7 @@ namespace Cherry
 			return Result;
 		}
 
-		void operator*=(T other)
+		void operator*=(const T& other)
 		{
 			columns[0] *= other;
 			columns[1] *= other;
@@ -595,7 +606,7 @@ namespace Cherry
 			columns[3] *= other;
 		}
 
-		void operator*=(type other)
+		void operator*=(const type& other)
 		{
 			type mat = *this * other;
 

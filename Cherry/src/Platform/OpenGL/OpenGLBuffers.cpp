@@ -23,15 +23,41 @@ namespace Cherry
 		}
 	}
 
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t count)
+	{
+		glGenBuffers(1, &m_BufferID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_BufferID);
+		glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+
+		m_Size = count;
+
+		m_Inserts = 0;
+	}
+
+	OpenGLVertexBuffer::OpenGLVertexBuffer(float* data, uint32_t size)
+	{
+		glGenBuffers(1, &m_BufferID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_BufferID);
+		glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), data, GL_STATIC_DRAW);
+
+		m_Size = size;
+
+		m_Inserts = 0;
+	}
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* data, uint32_t size, BufferLayout layout)
 	{
 		glGenBuffers(1, &m_BufferID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_BufferID);
 		glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), data, GL_STATIC_DRAW);
 
+		m_Size = size * 4;
+
 		m_Layout = layout;
 
 		GenVertexAttribPointers();
+
+		m_Inserts = 0;
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -47,6 +73,12 @@ namespace Cherry
 	void OpenGLVertexBuffer::Unbind()
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void OpenGLVertexBuffer::InsertData(void* data, uint32_t size, uint32_t index)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_BufferID);
+		glBufferSubData(GL_ARRAY_BUFFER, index, size, data);
 	}
 
 	BufferLayout& OpenGLVertexBuffer::GetLayout()

@@ -4,16 +4,16 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
 #include "core/Pointer.h"
-#include "Renderer/ShaderLibrary.h"
 
 namespace Cherry
 {
+	
 	class CHERRY_API Material
 	{
 	public:
-		Material() {}
+		/*Material() {}
 		Material(const std::string& s)
-			: m_Shader(ShaderLibrary::Get(s))
+			: m_Shader(ShaderLibrary::Get(s).Get())
 		{
 		}
 
@@ -43,6 +43,7 @@ namespace Cherry
 	private:
 		Shared<Shader> m_Shader;
 
-		std::vector<Texture*> m_Textures;
+		std::vector<Texture*> m_Textures;*/
 	};
+	
 }

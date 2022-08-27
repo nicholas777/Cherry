@@ -15,6 +15,6 @@ namespace Cherry
 		virtual void SetClearColor(Vector4f color) override;
 		virtual void Clear() override;
 
-		virtual void DrawElements(VertexArray* vao) override;
+		virtual void DrawElements(VertexArray* vao, uint32_t indexCount) override;
 	};
 }
