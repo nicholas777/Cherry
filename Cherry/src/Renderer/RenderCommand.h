@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Graphics/Mesh.h"
 #include "RenderAPI.h"
+#include "VertexArray.h"
+#include "Math/Vector.h"
 
 namespace Cherry
 {
@@ -28,7 +29,7 @@ namespace Cherry
 			s_RenderAPI->Clear();
 		}
 
-		inline static void DrawElements(VertexArray* vao, uint32_t indexCount = 0)
+		inline static void DrawElements(VertexArray* vao, uint32_t indexCount = -1)
 		{
 			s_RenderAPI->DrawElements(vao, indexCount);
 		}

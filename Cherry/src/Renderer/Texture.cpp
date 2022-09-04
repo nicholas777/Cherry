@@ -18,8 +18,27 @@ namespace Cherry
 	{
 		switch (RenderAPI::GetAPI())
 		{
-		case RenderAPI::API::None: CH_ASSERT(false, "RenderAPI::API::None is not supported") return nullptr;
-		case RenderAPI::API::OpenGL: return Scoped<Texture>(new OpenGLTexture(width, height));
+			case RenderAPI::API::None: CH_ASSERT(false, "RenderAPI::API::None is not supported") return nullptr;
+			case RenderAPI::API::OpenGL: return Scoped<Texture>(new OpenGLTexture(width, height));
 		}
 	}
+
+	Scoped<Texture> Texture::Create(std::string path, TextureParams params)
+	{
+		switch (RenderAPI::GetAPI())
+		{
+			case RenderAPI::API::None: CH_ASSERT(false, "RenderAPI::API::None is not supported") return nullptr;
+			case RenderAPI::API::OpenGL: return Scoped<Texture>(new OpenGLTexture(path, params));
+		}
+	}
+
+	Scoped<Texture> Texture::Create(uint32_t width, uint32_t height, TextureParams params)
+	{
+		switch (RenderAPI::GetAPI())
+		{
+		case RenderAPI::API::None: CH_ASSERT(false, "RenderAPI::API::None is not supported") return nullptr;
+		case RenderAPI::API::OpenGL: return Scoped<Texture>(new OpenGLTexture(width, height, params));
+		}
+	}
+
 }

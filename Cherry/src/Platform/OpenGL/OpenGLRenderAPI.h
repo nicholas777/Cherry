@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Renderer/RenderAPI.h"
+#include "Renderer/VertexArray.h"
 #include <glad/glad.h>
 
 namespace Cherry

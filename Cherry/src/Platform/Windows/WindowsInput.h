@@ -16,7 +16,7 @@ namespace Cherry
 		WindowsInput()
 		{
 			m_Window = static_cast<GLFWwindow*>(Application::GetApplication()
-				.GetWindow()
+				 .GetWindow()
 				->GetNativeWindow());
 		}
 	protected:

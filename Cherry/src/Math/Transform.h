@@ -8,7 +8,8 @@ namespace Cherry
 	class CHERRY_API TransformationMatrix : public Matrix4x4f
 	{
 	public:
-		TransformationMatrix() { SetIdentity(); };
+		TransformationMatrix()
+		: m_Translation(0.0f, 0.0f), m_Rotation(0.0f), m_Scale(1.0f, 1.0f) { SetIdentity(); };
 
 		TransformationMatrix(float x, float y);
 		TransformationMatrix(const Vector2f& pos);

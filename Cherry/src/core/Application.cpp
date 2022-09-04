@@ -48,6 +48,8 @@ namespace Cherry
 			layer->OnAttach();
 		}
 
+		RenderCommand::Init();
+
 		Timestep DeltaTime;
 
 		while (m_Running)
@@ -68,6 +70,9 @@ namespace Cherry
 		for (auto listener : EventListener::EventListeners[e->Type])
 		{
 			listener->OnEvent(*e);
+
+			if (e->handled)
+				break;
 		}
 
 		for (auto it = (*m_LayerStack).end(); it != (*m_LayerStack).begin();)
@@ -80,6 +85,7 @@ namespace Cherry
 
 		delete e;
 	}
+	                                          
 	void Application::OnWindowResize(int width, int height)
 	{
 		RenderCommand::SetViewport(0, 0, width, height);
@@ -90,13 +96,13 @@ namespace Cherry
 		m_Running = false;
 	}
 
-	Window* Application::GetWindow()
-	{
-		return m_Window;
-	}
-
 	Application& Application::GetApplication()
 	{
 		return *s_Application;
+	}
+
+	Window* Application::GetWindow()
+	{
+		return m_Window;
 	}
 }

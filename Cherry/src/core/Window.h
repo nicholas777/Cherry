@@ -32,6 +32,7 @@ namespace Cherry
 		virtual void OnResize(int, int) = 0;
 
 		virtual void* GetNativeWindow() = 0;
+		virtual WindowData GetData() = 0;
 
 		static Window* Create(WindowData data = WindowData());
 	};

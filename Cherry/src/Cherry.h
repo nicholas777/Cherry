@@ -21,11 +21,17 @@
 #include "Renderer/Renderer2D.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
+
+#include "Graphics/UI/UIComponent.h"
+#include "Graphics/UI/Label.h"
+#include "Graphics/UI/Button.h"
+
 #include "Renderer/Utils/TextureAtlas.h"
 #include "Renderer/utils/ShaderLibrary.h"
+#include "Renderer/Utils/Font.h"
+#include "Renderer/Utils/Scene.h"
 
-#include "Graphics/Mesh.h"
-#include "Graphics/Camera.h"
+#include "Graphics/Cameras/Camera.h"
 
 #include "Math/Vector.h"
 #include "Math/Matrix.h"
@@ -33,8 +39,8 @@
 #include "Math/Algorithm.h"
 
 #include "core/Application.h"
-#include "core/EntryPoint.h"
-
 #include "core/Timestep.h"
 
-#include "Graphics/CameraController.h"
+#include "Graphics/Cameras/CameraController.h"
+
+#include "Utils/ColorUtils.h"

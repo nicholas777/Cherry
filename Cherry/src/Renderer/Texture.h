@@ -7,6 +7,46 @@
 
 namespace Cherry
 {
+	enum class CHERRY_API TextureWrap
+	{
+		Unknown = 0,
+		Repeat, MirroredRepeat, ClampToEdge, ClampToBorder
+	};
+
+	enum class CHERRY_API TextureFilter
+	{
+		Unknown = 0,
+		Nearest, Linear
+	};
+
+	enum class CHERRY_API TextureFormat
+	{
+		Unknown = 0,
+		RGBA, RGB,
+		Luminance, LuminanceWithAlpha,
+		Auto
+	};
+
+	// TODO: Mipmapping
+	struct CHERRY_API TextureParams
+	{
+		TextureWrap wrap = TextureWrap::Repeat;
+		Vector4f borderColor;
+
+		TextureFilter minFilter = TextureFilter::Nearest;
+		TextureFilter magFilter = TextureFilter::Linear;
+
+
+		TextureFormat format = TextureFormat::RGBA;
+
+		TextureParams() {}
+
+		TextureParams(TextureWrap twrap, TextureFilter filterMin, TextureFilter filterMag, TextureFormat tformat)
+			: wrap(twrap), minFilter(filterMin), magFilter(filterMag), format(tformat)
+		{
+		}
+	};
+
 	class CHERRY_API Texture
 	{
 	public:
@@ -16,18 +56,24 @@ namespace Cherry
 		virtual uint32_t GetWidth() = 0;
 		virtual uint32_t GetHeight() = 0;
 
-		virtual void SetData(void* data, uint32_t size) = 0;
+		virtual void SetData(void* data) = 0;
 
 		virtual void Bind(int unit = 0) = 0;
 
 		static Scoped<Texture> Create(std::string path);
 		static Scoped<Texture> Create(uint32_t width, uint32_t height);
+
+		static Scoped<Texture> Create(std::string path, TextureParams params);
+		static Scoped<Texture> Create(uint32_t width, uint32_t height, TextureParams params);
 	};
 
 	struct CHERRY_API SubTexture
 	{
 		Texture* texture;
 		Vector2f textureCoords[4];
+
+		SubTexture()
+			: texture(nullptr) {};
 
 		SubTexture(Texture* tex, const Vector2f& vec1, const Vector2f& vec2, const Vector2f& vec3, const Vector2f& vec4)
 		{

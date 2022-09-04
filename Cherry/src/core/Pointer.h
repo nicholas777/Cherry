@@ -21,7 +21,14 @@ namespace Cherry
 		Scoped(T*&& v)
 			: _Value(v) 
 		{
+			
 		};
+
+		Scoped(T*& other)
+		{
+			_Value = other;
+			other = nullptr;
+		}
 
 		Scoped(std::nullptr_t)
 			: _Value(nullptr) {}
@@ -44,10 +51,18 @@ namespace Cherry
 			return _Value;
 		}
 
+		void Reset(T*& other = nullptr)
+		{
+			delete _Value;
+			_Value = other;
+			other = nullptr;
+		}
+
 		void Reset(T*&& other = nullptr)
 		{
 			delete _Value;
 			_Value = other;
+			other = nullptr;
 		}
 
 		void Free()

@@ -6,6 +6,7 @@ namespace Cherry
 	struct RectVertex
 	{
 		Vector2f pos;
+		Vector4f color;
 		Vector2f texCoord;
 		float texSlot;
 	};
@@ -57,6 +58,7 @@ namespace Cherry
 
 		s_Data->BatchVBO->SetLayout({
 			{ "position", ShaderDataType::Float2 },
+			{ "color", ShaderDataType::Float4 },
 			{ "UV", ShaderDataType::Float2 },
 			{ "TextureSlot", ShaderDataType::Float }
 		});
@@ -83,7 +85,7 @@ namespace Cherry
 		s_Data->BatchVAO->SetIndexBuffer(s_Data->BatchIndexBuffer.Get());
 		delete[] indices;
 
-		s_Data->TextureShader = Shader::Create("assets/TextureShader.glsl");
+		s_Data->TextureShader = Shader::Create("assets/BatchShader.glsl");
 
 		int Samplers[16] = {
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
@@ -93,8 +95,9 @@ namespace Cherry
 		s_Data->TextureShader->SetIntArray("u_Samplers", Samplers, 16);
 
 		uint32_t textureData = 0xffffffff;
+
 		s_Data->WhiteTexture = Texture::Create(1, 1);
-		s_Data->WhiteTexture->SetData(&textureData, sizeof(textureData));
+		s_Data->WhiteTexture->SetData(&textureData);
 
 		s_Data->TextureSlots[0] = s_Data->WhiteTexture.Get();
 	}
@@ -108,6 +111,16 @@ namespace Cherry
 	{
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetMat4("VPMatrix", cam->CalcVP());
+		NewBatch();
+	}
+
+	void Renderer2D::Begin()
+	{
+		Matrix4x4f mat = Matrix4x4f();
+		mat.SetIdentity();
+
+		s_Data->TextureShader->Bind();
+		s_Data->TextureShader->SetMat4("VPMatrix", mat);
 		NewBatch();
 	}
 
@@ -153,21 +166,25 @@ namespace Cherry
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
 		s_Data->RectPtr->texCoord = { 0.0f, 0.0f };
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
 		s_Data->RectPtr->texCoord = { 1.0f, 0.0f };
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
 		s_Data->RectPtr->texCoord = { 1.0f, 1.0f };
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 		
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
 		s_Data->RectPtr->texCoord = { 0.0f, 1.0f };
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
@@ -213,21 +230,25 @@ namespace Cherry
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
 		s_Data->RectPtr->texCoord = { 0.0f, 0.0f };
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
 		s_Data->RectPtr->texCoord = { 1.0f, 0.0f };
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
 		s_Data->RectPtr->texCoord = { 1.0f, 1.0f };
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
 		s_Data->RectPtr->texCoord = { 0.0f, 1.0f };
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
@@ -271,21 +292,25 @@ namespace Cherry
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
 		s_Data->RectPtr->texCoord = texture.textureCoords[0];
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
 		s_Data->RectPtr->texCoord = texture.textureCoords[1];
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
 		s_Data->RectPtr->texCoord = texture.textureCoords[2];
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
 		s_Data->RectPtr->texCoord = texture.textureCoords[3];
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
@@ -330,21 +355,152 @@ namespace Cherry
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
 		s_Data->RectPtr->texCoord = texture.textureCoords[0];
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
 		s_Data->RectPtr->texCoord = texture.textureCoords[1];
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
 		s_Data->RectPtr->texCoord = texture.textureCoords[2];
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
 		s_Data->RectPtr->texCoord = texture.textureCoords[3];
+		s_Data->RectPtr->color = { 1, 1, 1, 1 };
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->IndexCount += 6;
+	}
+
+	void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size, const Vector4f& color)
+	{
+		TransformationMatrix transform(position);
+		transform.Scale(size);
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
+		s_Data->RectPtr->texCoord = { 0, 0 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = 0;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
+		s_Data->RectPtr->texCoord = { 1, 0 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = 0;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
+		s_Data->RectPtr->texCoord = { 1, 1 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = 0;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
+		s_Data->RectPtr->texCoord = { 0, 1 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = 0;
+		s_Data->RectPtr++;
+
+		s_Data->IndexCount += 6;
+	}
+
+	void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const Vector4f& color)
+	{
+		TransformationMatrix transform(position);
+		transform.Scale(size);
+		transform.Rotate(rotation);
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
+		s_Data->RectPtr->texCoord = { 0, 0 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = 0;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
+		s_Data->RectPtr->texCoord = { 1, 0 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = 0;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
+		s_Data->RectPtr->texCoord = { 1, 1 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = 0;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
+		s_Data->RectPtr->texCoord = { 0, 1 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = 0;
+		s_Data->RectPtr++;
+
+		s_Data->IndexCount += 6;
+	}
+
+	void Renderer2D::DrawChar(const Vector2f& coord1, const Vector2f& coord2, const Vector2f& position, const Vector2f& size, const SubTexture& texture, const Vector4f& color)
+	{
+		if (s_Data->IndexCount >= s_Data->MaxIndices)
+		{
+			Flush();
+			NewBatch();
+		}
+
+		float textureIndex = 0;
+
+		for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
+		{
+			if (texture.texture == s_Data->TextureSlots[i])
+			{
+				textureIndex = i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0)
+		{
+			if (s_Data->TextureSlotIndex >= RendererData::MaxTextureSlots)
+			{
+				Flush();
+				NewBatch();
+			}
+			
+			textureIndex = s_Data->TextureSlotIndex;
+			s_Data->TextureSlots[textureIndex] = texture.texture;
+			s_Data->TextureSlotIndex++;
+		}
+
+		TransformationMatrix transform(position);
+		transform.Scale(size);
+
+		s_Data->RectPtr->pos = transform * Vector4f(coord1.x, coord1.y, 0.0, 1.0);
+		s_Data->RectPtr->texCoord = texture.textureCoords[0];
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * Vector4f(coord1.x, coord2.y, 0.0, 1.0);
+		s_Data->RectPtr->texCoord = texture.textureCoords[1];
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * Vector4f(coord2.x, coord2.y, 0.0, 1.0);
+		s_Data->RectPtr->texCoord = texture.textureCoords[2];
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * Vector4f(coord2.x, coord1.y, 0.0, 1.0);
+		s_Data->RectPtr->texCoord = texture.textureCoords[3];
+		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 

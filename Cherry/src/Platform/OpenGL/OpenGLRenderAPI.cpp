@@ -28,7 +28,7 @@ namespace Cherry
 
 	void OpenGLRenderAPI::DrawElements(VertexArray* vao, uint32_t indexCount)
 	{
-		uint32_t indices = indexCount ? indexCount : vao->GetIndexBuffer()->GetCount();
+		uint32_t indices = indexCount != -1 ? indexCount : vao->GetIndexBuffer()->GetCount();
 		glDrawElements(GL_TRIANGLES, indices, GL_UNSIGNED_INT, nullptr);
 	}
 }

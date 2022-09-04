@@ -175,7 +175,7 @@ namespace Cherry
 		typedef Vector3<T> type;
 
 	public:
-		float x, y, z;
+		T x, y, z;
 
 		Vector3(const T& x, const T& y, const T& z)
 		{
@@ -351,7 +351,7 @@ namespace Cherry
 	{
 		typedef Vector4<T> type;
 	public:
-		float x, y, z, w;
+		T x, y, z, w;
 
 		Vector4(const T& x, T y, T z, T w)
 		{

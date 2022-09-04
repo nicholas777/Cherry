@@ -1,0 +1,13 @@
+﻿  edtaa3func.c
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,55): warning C4101: 'pfrac': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,26): warning C4101: 'phiscaled': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,75): warning C4101: 'err1': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(67,15): warning C4101: 'p': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(67,17): warning C4101: 'q': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,46): warning C4101: 'errsign': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,21): warning C4101: 'phi': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,81): warning C4101: 'err': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,69): warning C4101: 'err0': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,62): warning C4101: 'qfrac': unreferenced local variable
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,37): warning C4101: 'ascaled': unreferenced local variable
+  FreetypeGL.vcxproj -> C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\bin\debug\FreetypeGL.lib

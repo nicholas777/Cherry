@@ -1,8 +1,7 @@
 #pragma once
 
+#include "VertexArray.h"
 #include "Math/Vector.h"
-
-#include "Graphics/Mesh.h"
 
 namespace Cherry
 {

@@ -24,6 +24,7 @@ namespace Cherry
 		virtual void SetVSync(bool vsync) override;
 		virtual bool IsVSync() const override { return m_Data.VSync; };
 
+		virtual WindowData GetData() override { return m_Data; }
 		virtual void* GetNativeWindow() override { return m_Window; };
 	private:
 		GLFWwindow* m_Window;

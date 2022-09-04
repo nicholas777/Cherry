@@ -11,8 +11,8 @@
 namespace Cherry
 {
 
-	// Application class, contains a representation 
-	// of the Game
+
+
 	
 	class CHERRY_API Application
 	{

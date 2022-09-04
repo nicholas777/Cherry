@@ -3,8 +3,9 @@ outputPath = "%{cfg.platform}.%{cfg.buildcfg}.%{cfg.architecture}"
 
 appName = "Tests"
 
-workspace "Engine"
+workspace "Cherry"
 	architecture "x64"
+	startproject "Blossom"
 
 	configurations {
 		"debug",
@@ -12,8 +13,10 @@ workspace "Engine"
 		"dist"
 	}
 
-include "Cherry/vendor/GLFW"
-include "Cherry/vendor/GLAD"
+	include "Cherry/vendor/GLFW"
+	include "Cherry/vendor/GLAD"
+	include "Cherry/vendor/Freetype"
+	include "Cherry/vendor/FreetypeGL"
 
 project "Cherry"
 	location "Cherry"
@@ -38,12 +41,16 @@ project "Cherry"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/GLFW/include",
 		"%{prj.name}/vendor/GLAD/include",
+		"%{prj.name}/vendor/Freetype/include",
+		"%{prj.name}/vendor/FreetypeGL",
 		"%{prj.name}/vendor/stb_image"
 	}
 
 	links {
 		"GLFW",
 		"GLAD",
+		"Freetype",
+		"FreetypeGL",
 		"opengl32.lib"
 	}
 
@@ -59,7 +66,7 @@ project "Cherry"
 		}
 		
 		postbuildcommands {
-			("{copy} %{cfg.buildtarget.relpath} ../bin/" .. outputPath .. "/" .. appName)
+			("{copy} %{cfg.buildtarget.relpath} ../bin/" .. outputPath .. "/Blossom")
 		}
 
 	filter "configurations:debug"
@@ -89,7 +96,10 @@ project "Blossom"
 
 	includedirs {
 		"Cherry/src",
-		"Cherry/vendor/spdlog/include"
+		"Cherry/vendor/spdlog/include",
+		"Cherry/vendor/FreetypeGL",
+		"Cherry/vendor/GLAD/include",
+		"Blossom/src"
 	}
 
 	filter "system:windows"
@@ -102,7 +112,7 @@ project "Blossom"
 		}
 
 		links {
-			"Chrrye"
+			"Cherry"
 		}
 
 	filter "configurations:debug"
@@ -145,7 +155,7 @@ project "Tests"
 		}
 
 		links {
-			"Chrrye"
+			"Cherry"
 		}
 
 	filter "configurations:debug"
