@@ -1,0 +1,14 @@
+Major goals
+
+-Entity-Component system (EnTT)
+-Blossom Editor
+-Scripting
+-Serialization
+-Vulkan
+-DirectX
+-Custom ECS
+
+
+-Framebuffers
+-PostFX
+-Sound System

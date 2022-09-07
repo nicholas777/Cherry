@@ -6,6 +6,9 @@
 #include "core/Application.h"
 #include "Renderer/RenderCommand.h"
 
+#include "core/KeyCodes.h"
+#include "core/MouseButtonCodes.h"
+
 namespace Cherry
 {
 	static bool GLFWInit = false;
@@ -19,13 +22,13 @@ namespace Cherry
 		switch (action)
 		{
 		case GLFW_PRESS:
-			Application::GetApplication().OnEvent(new KeyPressEvent(key, false));
+			Application::GetApplication().OnEvent(new KeyPressEvent(static_cast<Key>(key), false));
 			break;
 		case GLFW_RELEASE:
-			Application::GetApplication().OnEvent(new KeyReleaseEvent(key));
+			Application::GetApplication().OnEvent(new KeyReleaseEvent(static_cast<Key>(key)));
 			break;
 		case GLFW_REPEAT:
-			Application::GetApplication().OnEvent(new KeyPressEvent(key, true));
+			Application::GetApplication().OnEvent(new KeyPressEvent(static_cast<Key>(key), true));
 			break;
 		}
 	}
@@ -40,10 +43,10 @@ namespace Cherry
 		switch (action)
 		{
 		case GLFW_PRESS:
-			Application::GetApplication().OnEvent(new MouseClickEvent(button));
+			Application::GetApplication().OnEvent(new MouseClickEvent(static_cast<MouseButton>(button)));
 			break;
 		case GLFW_RELEASE:
-			Application::GetApplication().OnEvent(new MouseReleaseEvent(button));
+			Application::GetApplication().OnEvent(new MouseReleaseEvent(static_cast<MouseButton>(button)));
 			break;
 		}
 	}

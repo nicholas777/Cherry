@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Cherry.h"
-
-#include "Graphics/UI/UIComponent.h"
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace Cherry
 {
@@ -18,7 +17,11 @@ namespace Cherry
 	private:
 		Scoped<Texture> m_SmileTexture;
 
-		Scoped<Font> m_Font;
+		Shared<Font> m_Font;
+
+		Scoped<SceneHierarchyPanel> m_SceneHierarchyPanel;
+
+		Scoped<Scene> m_Scene;
 
 		Scoped<Camera> m_EditorCamera;
 		Scoped<Camera> m_LevelEditorCamera;

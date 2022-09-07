@@ -13,9 +13,9 @@ namespace Cherry
 
 	struct RendererData
 	{
-		const uint32_t MaxRects			= 8000;
-		const uint32_t MaxVertices		= MaxRects * 4;
-		const uint32_t MaxIndices		= MaxRects * 6;
+		const uint32_t MaxRects					= 10000;
+		const uint32_t MaxVertices				= MaxRects * 4;
+		const uint32_t MaxIndices				= MaxRects * 6;
 		static const uint32_t MaxTextureSlots	= 16;
 
 		Scoped<Shader> TextureShader;
@@ -46,10 +46,10 @@ namespace Cherry
 		s_Data->RectBase = new RectVertex[s_Data->MaxVertices];
 		s_Data->RectPtr = s_Data->RectBase;
 
-		s_Data->RectVertices[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-		s_Data->RectVertices[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
-		s_Data->RectVertices[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
-		s_Data->RectVertices[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+		s_Data->RectVertices[0] = { -1.0f, -1.0f, 0.0f, 1.0f };
+		s_Data->RectVertices[1] = {  1.0f, -1.0f, 0.0f, 1.0f };
+		s_Data->RectVertices[2] = {  1.0f,  1.0f, 0.0f, 1.0f };
+		s_Data->RectVertices[3] = { -1.0f,  1.0f, 0.0f, 1.0f };
 
 		s_Data->BatchVAO = VertexArray::Create();
 		s_Data->BatchVAO->Bind();
@@ -382,6 +382,12 @@ namespace Cherry
 
 	void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size, const Vector4f& color)
 	{
+		if (s_Data->IndexCount >= s_Data->MaxIndices)
+		{
+			Flush();
+			NewBatch();
+		}
+
 		TransformationMatrix transform(position);
 		transform.Scale(size);
 
@@ -407,6 +413,161 @@ namespace Cherry
 		s_Data->RectPtr->texCoord = { 0, 1 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = 0;
+		s_Data->RectPtr++;
+
+		s_Data->IndexCount += 6;
+	}
+
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture)
+	{
+		if (s_Data->IndexCount >= s_Data->MaxIndices)
+		{
+			Flush();
+			NewBatch();
+		}
+
+		float textureIndex = 0;
+
+		for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
+		{
+			if (texture.Get() == s_Data->TextureSlots[i])
+			{
+				textureIndex = i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0)
+		{
+			if (s_Data->TextureSlotIndex >= RendererData::MaxTextureSlots)
+			{
+				Flush();
+				NewBatch();
+			}
+
+			textureIndex = s_Data->TextureSlotIndex;
+			s_Data->TextureSlots[textureIndex] = texture.Get();
+			s_Data->TextureSlotIndex++;
+		}
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
+		s_Data->RectPtr->texCoord = { 0, 0 };
+		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
+		s_Data->RectPtr->texCoord = { 1, 0 };
+		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
+		s_Data->RectPtr->texCoord = { 1, 1 };
+		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
+		s_Data->RectPtr->texCoord = { 0, 1 };
+		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->IndexCount += 6;
+	}
+
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture)
+	{
+		if (s_Data->IndexCount >= s_Data->MaxIndices)
+		{
+			Flush();
+			NewBatch();
+		}
+
+		float textureIndex = 0;
+
+		for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
+		{
+			if (texture.texture == s_Data->TextureSlots[i])
+			{
+				textureIndex = i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0)
+		{
+			if (s_Data->TextureSlotIndex >= RendererData::MaxTextureSlots)
+			{
+				Flush();
+				NewBatch();
+			}
+
+			textureIndex = s_Data->TextureSlotIndex;
+			s_Data->TextureSlots[textureIndex] = texture.texture;
+			s_Data->TextureSlotIndex++;
+		}
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
+		s_Data->RectPtr->texCoord = { 0, 0 };
+		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
+		s_Data->RectPtr->texCoord = { 1, 0 };
+		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
+		s_Data->RectPtr->texCoord = { 1, 1 };
+		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
+		s_Data->RectPtr->texCoord = { 0, 1 };
+		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->IndexCount += 6;
+	}
+
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Vector4f& color)
+	{
+		if (s_Data->IndexCount >= s_Data->MaxIndices)
+		{
+			Flush();
+			NewBatch();
+		}
+
+		float textureIndex = 0;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
+		s_Data->RectPtr->texCoord = { 0, 0 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
+		s_Data->RectPtr->texCoord = { 1, 0 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
+		s_Data->RectPtr->texCoord = { 1, 1 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr++;
+
+		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
+		s_Data->RectPtr->texCoord = { 0, 1 };
+		s_Data->RectPtr->color = color;
+		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->IndexCount += 6;

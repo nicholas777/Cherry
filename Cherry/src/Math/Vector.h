@@ -20,7 +20,7 @@ namespace Cherry
 	public: 
 		T x, y;
 
-		Vector2(const T& x, T y)
+		constexpr Vector2(const T& x, const T& y)
 		{
 			this->x = x;
 			this->y = y;
@@ -177,7 +177,7 @@ namespace Cherry
 	public:
 		T x, y, z;
 
-		Vector3(const T& x, const T& y, const T& z)
+		constexpr Vector3(const T& x, const T& y, const T& z)
 		{
 			this->x = x;
 			this->y = y;
@@ -353,7 +353,7 @@ namespace Cherry
 	public:
 		T x, y, z, w;
 
-		Vector4(const T& x, T y, T z, T w)
+		Vector4(const T& x, const T& y, const T& z, const T& w)
 		{
 			this->x = x;
 			this->y = y;

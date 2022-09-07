@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Cherry.h"
-#include "Graphics/UI/UIComponent.h"
-#include "Graphics/UI/Label.h"
-#include "Graphics/UI/Button.h"
 
 namespace Cherry
 {
@@ -12,15 +9,24 @@ namespace Cherry
 
 	};
 
-	class SceneHierarchyPanel : public UI, public EventListener
+	class SceneHierarchyPanel : public UI /*, public EventListener*/
 	{
 	public:
-		SceneHierarchyPanel();
+		SceneHierarchyPanel(Shared<Font> font);
+		~SceneHierarchyPanel();
 
 		virtual void OnUpdate() override;
-		virtual void OnEvent(Event e) override;
+
+		inline static void ButtonClickHandler(const MouseClickEvent& e)
+		{
+			CH_INFO("Button Clicked!");
+		};
+
 	private:
-		std::vector<SceneObject*> m_Objects;
+		Scoped<Button> m_Button;
+		Vector4f m_Color;
+
+		// std::vector<SceneObject*> m_Objects;
 	};
 
 }

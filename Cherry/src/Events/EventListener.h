@@ -20,7 +20,7 @@ namespace Cherry
 
 	public:
 		EventListener() {};
-		virtual void OnEvent(Event e) = 0;
+		virtual void OnEvent(Event& e) = 0;
 
 		static void InitEventListenerSystem();
 		static std::unordered_map<EventType, std::vector<EventListener*>> EventListeners;

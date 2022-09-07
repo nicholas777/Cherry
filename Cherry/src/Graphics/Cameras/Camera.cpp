@@ -9,6 +9,12 @@ namespace Cherry
 	
 	Camera::Camera(Vector2f pos, float left, float right, float top, float bottom, float farPlane, float nearPlane)
 	{
+		if (bottom > top)
+		{
+			CH_ASSERT(false, "Bottom cannot be larger than top");
+			CH_ERROR("Bottom cannot be larger than top");
+		}
+
 		m_ProjectionMatrix = Matrix4x4f(
 			Vector4f(2.0f / (right - left), 0, 0, -((right + left) / (right - left))),
 			Vector4f(0, 2 / (top - bottom), 0, -((top + bottom) / (top - bottom))),

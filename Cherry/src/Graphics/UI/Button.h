@@ -5,20 +5,23 @@
 #include "Events/EventListener.h"
 #include "UIComponent.h"
 #include "Label.h"
+#include "core/MouseButtonCodes.h"
+#include "Events/Input.h"
+#include "Renderer/Renderer2D.h"
 
 namespace Cherry
 {
 	class CHERRY_API Button : public UIElement, public EventListener
 	{
 	public:
-		using EventHandler = std::function<void(Event)>;
+		using ClickEventHandler = std::function<void(const MouseClickEvent&)>;
 
-		Button(Label* label, Vector2f pos, Vector2f size, Vector4f color, const EventHandler& handler);
+		Button(Label* label, Vector2f pos, Vector2f size, Vector4f color, const ClickEventHandler& handler);
 
-		virtual void OnEvent(Event e) override;
+		virtual void OnEvent(Event& e) override;
 		virtual void OnUpdate() override;
 	private:
-		EventHandler m_Handler;
+		ClickEventHandler m_Handler;
 		Scoped<Label> m_Label;
 
 		Vector2f m_Position, m_Size;

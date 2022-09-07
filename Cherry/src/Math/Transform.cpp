@@ -58,8 +58,6 @@ namespace Cherry
 	void TransformationMatrix::Scale(const Vector2f& scalar)
 	{
 		columns[0].x *= scalar.x;
-		columns[0].y *= scalar.x;
-		columns[1].x *= scalar.y;
 		columns[1].y *= scalar.y;
 
 		m_Scale += scalar;
@@ -68,8 +66,6 @@ namespace Cherry
 	void TransformationMatrix::Scale(float scalar)
 	{
 		columns[0].x *= scalar;
-		columns[0].y *= scalar;
-		columns[1].x *= scalar;
 		columns[1].y *= scalar;
 
 		m_Scale += scalar;
@@ -151,5 +147,47 @@ namespace Cherry
 			+ columns[2] * vec[2]
 			+ columns[3] * vec[3];
 	}
-	;
+	
+	void CHERRY_API Translate(Matrix4x4f* mat, float x, float y)
+	{
+		(*mat)[3].x += x;
+		(*mat)[3].y += y;
+	}
+
+	void CHERRY_API Rotate(Matrix4x4f* mat, float rot)
+	{
+		float rotInRadians = rot * 0.0174533;
+		float rotCos = cos(rotInRadians);
+		float rotSin = sin(rotInRadians);
+
+		float val00 = rotCos * (*mat)[0].x +
+					  -rotSin * (*mat)[1].x;
+
+		float val01 = rotCos * (*mat)[0].y +
+					  -rotSin * (*mat)[1].y;
+
+		float val10 = rotSin * (*mat)[0].x +
+					  rotCos * (*mat)[1].x;
+
+		float val11 = rotSin * (*mat)[0].y +
+					  rotCos * (*mat)[1].y;
+
+		(*mat)[0].x = val00;
+		(*mat)[0].y = val01;
+		(*mat)[1].x = val10;
+		(*mat)[1].y = val11;
+	}
+
+	void CHERRY_API Scale(Matrix4x4f* mat, float scale)
+	{
+		(*mat)[0].x *= scale;
+		(*mat)[1].y *= scale;
+	}
+
+	void CHERRY_API Scale(Matrix4x4f* mat, float scaleX, float scaleY)
+	{
+		(*mat)[0].x *= scaleX;
+		(*mat)[1].y *= scaleY;
+	}
+
 }

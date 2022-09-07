@@ -29,7 +29,10 @@
 #include "Renderer/Utils/TextureAtlas.h"
 #include "Renderer/utils/ShaderLibrary.h"
 #include "Renderer/Utils/Font.h"
-#include "Renderer/Utils/Scene.h"
+
+#include "Scene/Component.h"
+#include "Scene/Entity.h"
+#include "Scene/Scene.h"
 
 #include "Graphics/Cameras/Camera.h"
 

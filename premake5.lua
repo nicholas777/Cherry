@@ -33,7 +33,8 @@ project "Cherry"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/stb_image/**.h",
-		"%{prj.name}/vendor/stb_image/**.cpp"
+		"%{prj.name}/vendor/stb_image/**.cpp",
+		"%{prj.name}/vendor/EnTT/entt.hpp"
 	}
 
 	includedirs {
@@ -43,7 +44,8 @@ project "Cherry"
 		"%{prj.name}/vendor/GLAD/include",
 		"%{prj.name}/vendor/Freetype/include",
 		"%{prj.name}/vendor/FreetypeGL",
-		"%{prj.name}/vendor/stb_image"
+		"%{prj.name}/vendor/stb_image",
+		"&{prj.name}/vendor/EnTT"
 	}
 
 	links {
@@ -99,6 +101,7 @@ project "Blossom"
 		"Cherry/vendor/spdlog/include",
 		"Cherry/vendor/FreetypeGL",
 		"Cherry/vendor/GLAD/include",
+		"Cherry/vendor/EnTT",
 		"Blossom/src"
 	}
 

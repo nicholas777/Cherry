@@ -9,7 +9,7 @@
 
 namespace Cherry
 {
-#if 0
+
 	struct Character
 	{
 		SubTexture texture;
@@ -19,7 +19,7 @@ namespace Cherry
 
 		Character() {}
 	};
-#endif
+
 	
 	class CHERRY_API Font
 	{
@@ -29,6 +29,8 @@ namespace Cherry
 
 		inline uint32_t GetFontSize() { return m_FontSize; }
 
+		float GetWidth(std::string string);
+
 		void RenderText(const Vector2f& pos, const std::string& text);
 		void RenderText(const Vector2f& pos, const std::string& text, const Vector4f& color, const Vector2f& scale);
 
@@ -37,7 +39,7 @@ namespace Cherry
 		texture_font_t* m_FtFont;
 
 		Scoped<Texture> m_Texture;
-		std::unordered_map<char, SubTexture> m_SubTextures;
+		std::unordered_map<char, Character> m_Characters;
 
 		uint32_t m_FontSize;
 

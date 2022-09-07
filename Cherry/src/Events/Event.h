@@ -3,6 +3,8 @@
 #include "EventType.h"
 #include "core/Core.h"
 #include "core/Log.h"
+#include "core/MouseButtonCodes.h"
+#include "core/KeyCodes.h"
 
 namespace Cherry
 {
@@ -129,12 +131,12 @@ namespace Cherry
 
 	struct CHERRY_API MouseClickEvent : public Event
 	{
-		MouseClickEvent(int button)
+		MouseClickEvent(MouseButton button)
 			: Event(EventType::MouseClickEvent,
 					EventCategory::MouseEvent,
 					"MouseClickEvent"), Button(button) {};
 
-		int Button;
+		MouseButton Button;
 
 		std::string ToString() const override
 		{
@@ -144,12 +146,12 @@ namespace Cherry
 
 	struct CHERRY_API MouseReleaseEvent : public Event
 	{
-		MouseReleaseEvent(int button)
+		MouseReleaseEvent(MouseButton button)
 			: Event(EventType::MouseReleaseEvent,
 				EventCategory::MouseEvent,
 				"MouseReleaseEvent"), Button(button) {};
 
-		int Button;
+		MouseButton Button;
 
 		std::string ToString() const override
 		{
@@ -176,34 +178,34 @@ namespace Cherry
 
 	struct CHERRY_API KeyPressEvent : public Event
 	{
-		KeyPressEvent(int key, bool repeat)
+		KeyPressEvent(Key key, bool repeat)
 			: Event(EventType::KeyPressEvent,
 				EventCategory::KeyboardEvent,
-				"KeyPressEvent"), Key(key), Repeat(repeat) {};
+				"KeyPressEvent"), Keycode(key), Repeat(repeat) {};
 
-		int Key;
+		Key Keycode;
 		bool Repeat;
 
 		std::string ToString() const override
 		{
 			return Name + std::string(": key=")
-				+ std::to_string(Key);
+				+ std::to_string(Keycode);
 		};
 	};
 
 	struct CHERRY_API KeyReleaseEvent : public Event
 	{
-		KeyReleaseEvent(int key)
+		KeyReleaseEvent(Key key)
 			: Event(EventType::KeyReleaseEvent,
 				EventCategory::KeyboardEvent,
-				"KeyReleaseEvent"), Key(key) {};
+				"KeyReleaseEvent"), Keycode(key) {};
 
-		int Key;
+		Key Keycode;
 
 		std::string ToString() const override
 		{
 			return Name + std::string(": key=")
-				+ std::to_string(Key);
+				+ std::to_string(Keycode);
 		};
 	};
 }

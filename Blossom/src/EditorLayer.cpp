@@ -8,6 +8,21 @@ namespace Cherry
 
 	void EditorLayer::OnAttach()
 	{
+		
+		
+		float aspect = WINDOW_WIDTH / WINDOW_HEIGHT;
+		
+		m_EditorCamera = new Camera({0, 0}, -aspect, aspect, 1, -1, -1, 1);
+		m_LevelEditorCamera = new Camera({ 0, 0 }, -aspect, aspect, 1, -1, -1, 1);
+		m_LevelEditorCameraController = new CameraController(m_LevelEditorCamera.Get(), -0.002f);
+		
+		m_Font = new Font("assets/Goldfish.ttf", 24);
+		m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Font);
+
+		m_Scene = new Scene;
+
+		Entity e = m_Scene->CreateEntity();
+
 		TextureParams params;
 		params.format = TextureFormat::Auto;
 		params.minFilter = TextureFilter::Linear;
@@ -15,16 +30,9 @@ namespace Cherry
 		params.wrap = TextureWrap::Repeat;
 
 		m_SmileTexture = Texture::Create("assets/Smile.png", params);
-		float height = Application::GetApplication().GetWindow()->GetHeight();
-		float width =  Application::GetApplication().GetWindow()->GetWidth();
-		
-		float aspect = width / height;
-		
-		m_EditorCamera = new Camera({0, 0}, -aspect, aspect, 1, -1, -1, 1);
-		m_LevelEditorCamera = new Camera({ 0, 0 }, -aspect, aspect, 1, -1, -1, 1);
-		m_LevelEditorCameraController = new CameraController(m_LevelEditorCamera.Get(), -0.002f);
-		
-		m_Font = new Font("assets/Goldfish.ttf", 24);
+		e.AddComponent<SpriteComponent>();
+		e.GetComponent<SpriteComponent>().SpriteTexture = m_SmileTexture.Get();
+		e.AddComponent<TransformComponent>(Matrix4x4f(1.0f));
 
 		RenderCommand::SetClearColor({1, 0, 0, 1});
 	}
@@ -35,11 +43,11 @@ namespace Cherry
 
 		m_LevelEditorCameraController->Update(delta.GetMilliseconds());
 		Renderer2D::Begin(m_LevelEditorCamera.Get());
-		Renderer2D::DrawRect({ 0, 0 }, { 1, 1 }, m_SmileTexture);
-		m_Font->RenderText({ 0, 0 }, "Gröt");
+		m_Scene->OnUpdate(delta);
 		Renderer2D::End();
 
 		Renderer2D::Begin(m_EditorCamera.Get());
+		m_SceneHierarchyPanel->OnUpdate();
 		Renderer2D::End();
 	}
 

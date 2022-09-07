@@ -11,9 +11,9 @@
 namespace Cherry
 {
 
+	#define WINDOW_WIDTH (float)Application::GetApplication().GetWindow()->GetWidth()
+	#define WINDOW_HEIGHT (float)Application::GetApplication().GetWindow()->GetHeight()
 
-
-	
 	class CHERRY_API Application
 	{
 	public:

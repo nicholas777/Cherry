@@ -5,6 +5,7 @@
 #include "Math/Vector.h"
 #include "Renderer/Utils/Font.h"
 #include "UIComponent.h"
+#include <core/Application.h>
 
 namespace Cherry
 {
@@ -18,6 +19,9 @@ namespace Cherry
 		inline Vector4f GetColor()      { return m_Color; };
 		inline Vector2f GetScale()      { return m_Scale; };
 		inline Vector2f GetPosition()   { return m_Pos;   };
+
+		inline float GetWidth()  { return m_Font->GetWidth(m_Text) * m_Scale.x; };
+		inline float GetHeight() { return m_FontSize * m_Scale.y / Application::GetApplication().GetWindow()->GetHeight(); };
 
 		inline uint32_t GetFontSize()   { return m_FontSize; };
 

@@ -35,7 +35,8 @@ namespace Cherry
 		{ 
 			double x, y;
 			glfwGetCursorPos(m_Window, &x, &y);
-			return { (float)x, (float)y };
+
+			return { (float)x / WINDOW_WIDTH * 2 - 1, -((float)y / WINDOW_HEIGHT * 2 - 1) };
 		};
 
 		virtual float GetMouseXImpl() override

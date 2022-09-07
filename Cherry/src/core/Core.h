@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO: Clean up dependencies and add copyright stuff
+
 #ifdef CH_PLATFORM_WINDOWS
 	#ifdef CH_BUILD_DLL
 		#define CHERRY_API __declspec(dllexport)
@@ -7,9 +9,6 @@
 		#define CHERRY_API __declspec(dllimport)
 	#endif
 #endif
-
-//TODO: proper config for rendering apis
-#define CH_PLATFORM_OPENGL 1
 
 #ifdef CH_DEBUG_MODE
 	#define CH_TRACE(...) Cherry::Log::GetClientLogger()->trace(__VA_ARGS__)

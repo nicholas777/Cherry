@@ -35,6 +35,12 @@ namespace Cherry
 			columns[1] = m1;
 		}
 
+		Matrix2x2(float value)
+		{
+			columns[0] = vec_type(value, 0);
+			columns[1] = vec_type(0, value);
+		}
+
 		float* ToArray() const
 		{
 			float* value = new float[4];
@@ -201,6 +207,13 @@ namespace Cherry
 			columns[0] = m0;
 			columns[1] = m1;
 			columns[2] = m2;
+		}
+
+		Matrix3x3(float value)
+		{
+			columns[0] = vec_type(value, 0,     0,   );
+			columns[1] = vec_type(0,     value, 0,   );
+			columns[2] = vec_type(0,     0,     value);
 		}
 
 		float* ToArray() const
@@ -418,6 +431,14 @@ namespace Cherry
 			columns[1] = m1;
 			columns[2] = m2;
 			columns[3] = m3;
+		}
+
+		Matrix4x4(float value)
+		{
+			columns[0] = vec_type(value, 0,     0,     0    );
+			columns[1] = vec_type(0,     value, 0,     0    );
+			columns[2] = vec_type(0,     0,     value, 0    );
+			columns[3] = vec_type(0,     0,     0,     value);
 		}
 
 		float* ToArray() const
