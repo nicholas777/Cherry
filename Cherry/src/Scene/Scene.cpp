@@ -12,11 +12,15 @@ namespace Cherry
 
 	Scene::~Scene()
 	{
+		
 	}
 
-	Entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
-		return Entity(m_Registry.create(), this);
+		Entity entity = Entity(m_Registry.create(), this);
+		entity.AddComponent<NameComponent>(name);
+
+		return entity;
 	}
 
 	void Scene::OnUpdate(const Timestep& delta)

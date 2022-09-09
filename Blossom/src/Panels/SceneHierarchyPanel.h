@@ -4,27 +4,26 @@
 
 namespace Cherry
 {
-	class SceneObject : public UIElement
-	{
 
-	};
-
-	class SceneHierarchyPanel : public UI /*, public EventListener*/
+	class SceneHierarchyPanel : public UI, public EventListener
 	{
 	public:
-		SceneHierarchyPanel(Shared<Font> font);
+		SceneHierarchyPanel() = default;
+		SceneHierarchyPanel(Vector2f pos, Vector2f size, Shared<Font> font, Shared<Scene> scene);
 		~SceneHierarchyPanel();
 
-		virtual void OnUpdate() override;
+		void SetScene(Shared<Scene> scene);
 
-		inline static void ButtonClickHandler(const MouseClickEvent& e)
-		{
-			CH_INFO("Button Clicked!");
-		};
+		virtual void OnUpdate() override;
+		virtual void OnEvent(Event& event) override;
 
 	private:
-		Scoped<Button> m_Button;
 		Vector4f m_Color;
+		Shared<Font> m_Font;
+
+		Shared<Scene> m_Scene;
+
+		float m_LineSize;
 
 		// std::vector<SceneObject*> m_Objects;
 	};

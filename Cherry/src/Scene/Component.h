@@ -7,6 +7,17 @@
 
 namespace Cherry
 {
+	struct CHERRY_API NameComponent
+	{
+		std::string Name;
+
+		NameComponent() = default;
+		NameComponent(const NameComponent&) = default;
+
+		NameComponent(const std::string& name)
+			: Name(name) {}
+	};
+
 	struct CHERRY_API TransformComponent
 	{
 		Matrix4x4f Transform = Matrix4x4f(1.0f);

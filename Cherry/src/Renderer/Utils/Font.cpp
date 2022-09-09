@@ -91,10 +91,11 @@ namespace Cherry
                 x += kerning / 1200.0f;
             }
 
+            // TODO: Font scaling at runtime
             Vector2f coord1 = { x + c.bearing.x, pos.y + c.bearing.y };
             Vector2f coord2 = { coord1.x + c.size.x, coord1.y - c.size.y };
 
-            Renderer2D::DrawChar(coord1, coord2, pos, { 3, 3 }, c.texture);
+            Renderer2D::DrawChar(coord1, coord2, c.texture);
             x += c.advance;
         }
     }
@@ -116,7 +117,8 @@ namespace Cherry
             Vector2f coord1 = { x + c.bearing.x, pos.y + c.bearing.y };
             Vector2f coord2 = { coord1.x + c.size.x, coord1.y - c.size.y };
 
-            Renderer2D::DrawChar(coord1, coord2, pos, scale, c.texture, color);
+            // TODO: Fix this font issue too
+            // Renderer2D::DrawChar(coord1, coord2, pos, scale, c.texture, color);
             x += c.advance;
         }
     }

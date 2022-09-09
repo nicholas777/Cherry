@@ -35,7 +35,7 @@ namespace Cherry
 		static void DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const SubTexture& texture);
 		
 		
-		static void DrawChar(const Vector2f& coord1, const Vector2f& coord2, const Vector2f& position, const Vector2f& size, const SubTexture& texture, const Vector4f& color = { 1, 1, 1, 1 });
+		static void DrawChar(const Vector2f& coord1, const Vector2f& coord2, const SubTexture& texture, const Vector4f& color = { 1, 1, 1, 1 });
 
 	private:
 		static void Flush();

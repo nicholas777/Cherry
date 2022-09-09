@@ -606,7 +606,7 @@ namespace Cherry
 		s_Data->IndexCount += 6;
 	}
 
-	void Renderer2D::DrawChar(const Vector2f& coord1, const Vector2f& coord2, const Vector2f& position, const Vector2f& size, const SubTexture& texture, const Vector4f& color)
+	void Renderer2D::DrawChar(const Vector2f& coord1, const Vector2f& coord2, const SubTexture& texture, const Vector4f& color)
 	{
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
@@ -638,28 +638,25 @@ namespace Cherry
 			s_Data->TextureSlotIndex++;
 		}
 
-		TransformationMatrix transform(position);
-		transform.Scale(size);
-
-		s_Data->RectPtr->pos = transform * Vector4f(coord1.x, coord1.y, 0.0, 1.0);
+		s_Data->RectPtr->pos = Vector4f(coord1.x, coord1.y, 0.0, 1.0);
 		s_Data->RectPtr->texCoord = texture.textureCoords[0];
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
-		s_Data->RectPtr->pos = transform * Vector4f(coord1.x, coord2.y, 0.0, 1.0);
+		s_Data->RectPtr->pos = Vector4f(coord1.x, coord2.y, 0.0, 1.0);
 		s_Data->RectPtr->texCoord = texture.textureCoords[1];
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
-		s_Data->RectPtr->pos = transform * Vector4f(coord2.x, coord2.y, 0.0, 1.0);
+		s_Data->RectPtr->pos = Vector4f(coord2.x, coord2.y, 0.0, 1.0);
 		s_Data->RectPtr->texCoord = texture.textureCoords[2];
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
-		s_Data->RectPtr->pos = transform * Vector4f(coord2.x, coord1.y, 0.0, 1.0);
+		s_Data->RectPtr->pos = Vector4f(coord2.x, coord1.y, 0.0, 1.0);
 		s_Data->RectPtr->texCoord = texture.textureCoords[3];
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;

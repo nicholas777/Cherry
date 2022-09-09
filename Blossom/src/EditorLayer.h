@@ -14,14 +14,16 @@ namespace Cherry
 		virtual void OnAttach() override;
 		virtual void OnUpdate(const Timestep& delta) override;
 
+		static void SelectEntity(Entity entity);
+
 	private:
 		Scoped<Texture> m_SmileTexture;
 
 		Shared<Font> m_Font;
 
-		Scoped<SceneHierarchyPanel> m_SceneHierarchyPanel;
+		static Scoped<SceneHierarchyPanel> m_SceneHierarchyPanel;
 
-		Scoped<Scene> m_Scene;
+		Shared<Scene> m_Scene;
 
 		Scoped<Camera> m_EditorCamera;
 		Scoped<Camera> m_LevelEditorCamera;

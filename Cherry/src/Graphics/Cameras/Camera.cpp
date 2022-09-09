@@ -6,7 +6,7 @@
 
 namespace Cherry
 {
-	
+	// TODO: Multiple cameras, way of setting the projection matrix to pre-defined values, extending the CameraController class, Integrating cameras into the ECS, resizing the camera viewport and clarify that Camera is an orthographic one.
 	Camera::Camera(Vector2f pos, float left, float right, float top, float bottom, float farPlane, float nearPlane)
 	{
 		if (bottom > top)

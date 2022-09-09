@@ -20,15 +20,15 @@ namespace Cherry
 		Scene();
 		~Scene();
 
-		Entity CreateEntity();
+		Entity CreateEntity(const std::string& name);
 
 		void OnUpdate(const Timestep& delta);
 	private:
 		entt::registry m_Registry;
 
-		// TODO: Multiple cameras, way of setting the projection matrix to pre-defined values, extending the CameraController class and clarify that Camera is an orthographic one.
 		Scoped<Camera> m_Camera;
 
 		friend class Entity;
+		friend class SceneHierarchyPanel;
 	};
 }
