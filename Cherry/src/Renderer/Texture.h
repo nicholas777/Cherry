@@ -9,7 +9,7 @@ namespace Cherry
 {
 	enum class TextureWrap
 	{
-		Unknown = 0,
+		None = 0,
 		Repeat, MirroredRepeat, ClampToEdge, ClampToBorder
 	};
 
@@ -24,6 +24,7 @@ namespace Cherry
 		Unknown = 0,
 		RGBA, RGB,
 		Luminance, LuminanceWithAlpha,
+		Depth24Stencil8,
 		Auto
 	};
 
@@ -57,6 +58,7 @@ namespace Cherry
 		virtual uint32_t GetHeight() = 0;
 
 		virtual void SetData(void* data) = 0;
+		virtual uint32_t GetTextureID() = 0;
 
 		virtual void Bind(int unit = 0) = 0;
 

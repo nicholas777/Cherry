@@ -52,6 +52,8 @@ namespace Cherry
 			return GL_RED;
 		case TextureFormat::LuminanceWithAlpha:
 			return GL_RG;
+		case TextureFormat::Depth24Stencil8:
+			return GL_DEPTH_STENCIL;
 		default:
 			CH_ASSERT(false, "Unknown Texture format");
 		}
@@ -179,16 +181,28 @@ namespace Cherry
 			m_InternalFormat = GL_RGBA8;
 		else if (params.format == TextureFormat::RGB)
 			m_InternalFormat = GL_RGB8;
+		else if (params.format == TextureFormat::Depth24Stencil8)
+			m_InternalFormat = GL_DEPTH24_STENCIL8;
 		else
 			m_InternalFormat = m_Format;
 
 		glGenTextures(1, &m_TextureID);
 		glBindTexture(GL_TEXTURE_2D, m_TextureID);
 
+		glTexImage2D(GL_TEXTURE_2D, 0, 
+			m_InternalFormat, 
+			width, height, 0,
+			m_Format, 
+			m_Format == GL_DEPTH_STENCIL ? GL_UNSIGNED_INT_24_8 : GL_UNSIGNED_BYTE, nullptr);
+
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, ToGLFormat(params.minFilter));
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, ToGLFormat(params.magFilter));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ToGLFormat(params.wrap));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ToGLFormat(params.wrap));
+		
+		if (params.wrap != TextureWrap::None)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ToGLFormat(params.wrap));
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ToGLFormat(params.wrap));
+		}
 	}
 
 	OpenGLTexture::~OpenGLTexture()
@@ -199,7 +213,7 @@ namespace Cherry
 	void OpenGLTexture::SetData(void* data)
 	{
 		glBindTexture(GL_TEXTURE_2D, m_TextureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_Format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_Format, m_Format == GL_DEPTH_STENCIL ? GL_UNSIGNED_INT_24_8 : GL_UNSIGNED_BYTE, data);
 	}
 
 	void OpenGLTexture::Bind(int unit)

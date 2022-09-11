@@ -20,6 +20,8 @@ namespace Cherry
 		virtual uint32_t GetWidth() override { return m_Width; }
 		virtual uint32_t GetHeight() override { return m_Height; }
 
+		virtual uint32_t GetTextureID() override { return m_TextureID; };
+
 		virtual void SetData(void* data) override;
 
 		virtual void Bind(int unit = 0) override;

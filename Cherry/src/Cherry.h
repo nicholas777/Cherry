@@ -21,6 +21,9 @@
 #include "Renderer/Renderer2D.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
+#include "Renderer/VertexArray.h"
+#include "Renderer/Buffers.h"
+#include "Renderer/Framebuffer.h"
 
 #include "Graphics/UI/UIComponent.h"
 #include "Graphics/UI/Label.h"

@@ -13,6 +13,12 @@ namespace Cherry
 	{
 		m_Scene = new Scene;
 
+		FramebufferData data;
+		data.width = WINDOW_WIDTH;
+		data.height = WINDOW_HEIGHT;
+
+		m_Framebuffer = Framebuffer::Create(data);
+
 		Entity e = m_Scene->CreateEntity("Smiley");
 
 		TextureParams params;
@@ -42,12 +48,14 @@ namespace Cherry
 
 	void EditorLayer::OnUpdate(const Timestep& delta)
 	{
+		m_Framebuffer->Bind();
 		RenderCommand::Clear();
 
 		m_LevelEditorCameraController->Update(delta.GetMilliseconds());
 		Renderer2D::Begin(m_LevelEditorCamera.Get());
 		m_Scene->OnUpdate(delta);
 		Renderer2D::End();
+		m_Framebuffer->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -95,6 +103,20 @@ namespace Cherry
 		m_SceneHierarchyPanel->OnUpdate();
 		m_PropertiesPanel->OnUpdate();
 
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+		ImGui::Begin("Scene Viewport");
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		
+		if (m_ViewportPanelSize != Vector2f(viewportSize.x, viewportSize.y))
+		{
+			m_ViewportPanelSize = { viewportSize.x, viewportSize.y };
+			m_Framebuffer->Resize(m_ViewportPanelSize);
+		}
+
+		uint32_t textureID = m_Framebuffer->GetColorAttachment();
+		ImGui::Image((void*)textureID, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+
+        ImGui::End();
         ImGui::End();
 	}
 
