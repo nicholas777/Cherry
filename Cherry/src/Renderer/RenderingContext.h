@@ -5,7 +5,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API RenderingContext
+	class RenderingContext
 	{
 	public:
 

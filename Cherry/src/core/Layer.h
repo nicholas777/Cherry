@@ -8,7 +8,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API Layer
+	class Layer
 	{
 	public:
 
@@ -30,7 +30,8 @@ namespace Cherry
 		virtual void OnAttach() {};
 		virtual void OnDetach() {};
 		virtual void OnUpdate(const Timestep& delta) {};
-		virtual void OnEvent(Event* e) {};
+		virtual void OnImGuiRender() {};
+		virtual void OnEvent(Event& e) {};
 
 	private:
 		std::string m_Name;

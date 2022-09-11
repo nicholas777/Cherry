@@ -9,7 +9,7 @@
 namespace Cherry
 {
 
-	class CHERRY_API Input
+	class Input
 	{
 		
 	public:

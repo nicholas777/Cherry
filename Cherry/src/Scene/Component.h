@@ -7,7 +7,7 @@
 
 namespace Cherry
 {
-	struct CHERRY_API NameComponent
+	struct NameComponent
 	{
 		std::string Name;
 
@@ -18,22 +18,30 @@ namespace Cherry
 			: Name(name) {}
 	};
 
-	struct CHERRY_API TransformComponent
+	struct TransformComponent
 	{
-		Matrix4x4f Transform = Matrix4x4f(1.0f);
+		Vector2f Translation = Vector2f(0.0f);
+		float Rotation = 0.0f;
+		Vector2f Scale = Vector2f(1.0f);
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const Matrix4x4f& mat)
-			: Transform(mat) {}
+		TransformComponent(const Vector2f& pos, float rot, const Vector2f scale)
+			: Translation(pos), Rotation(rot), Scale(scale) {}
 
-		operator Matrix4x4f() const
+		Matrix4x4f GetMatrix()
 		{
-			return Transform;
+			Matrix4x4f mat = Matrix4x4f::Identity();
+
+			Translate(&mat, Translation.x, Translation.y);
+			Rotate(&mat, Rotation);
+			Cherry::Scale(&mat, Scale.x, Scale.y);
+
+			return mat;
 		}
 	};
 
-	struct CHERRY_API SpriteComponent
+	struct SpriteComponent
 	{
 		Vector4f Color = { 1, 1, 1, 1 };
 		Shared<Texture> SpriteTexture;

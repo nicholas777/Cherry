@@ -5,7 +5,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API Camera
+	class Camera
 	{
 	public:
 		Camera() {}

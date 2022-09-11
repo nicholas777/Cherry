@@ -5,7 +5,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API UIElement
+	class UIElement
 	{
 	public:
 		virtual ~UIElement() = default;
@@ -14,7 +14,7 @@ namespace Cherry
 		bool IsVisible = true;
 	};
 
-	class CHERRY_API UI
+	class UI
 	{
 	public:
 		UI(Vector2f pos, Vector2f size);

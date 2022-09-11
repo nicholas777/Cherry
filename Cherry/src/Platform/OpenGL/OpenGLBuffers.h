@@ -6,7 +6,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API OpenGLVertexBuffer : public VertexBuffer
+	class OpenGLVertexBuffer : public VertexBuffer
 	{
 	public:
 		OpenGLVertexBuffer(uint32_t size);
@@ -32,7 +32,7 @@ namespace Cherry
 		void GenVertexAttribPointers();
 	};
 
-	class CHERRY_API OpenGLIndexBuffer : public IndexBuffer
+	class OpenGLIndexBuffer : public IndexBuffer
 	{
 	public:
 		OpenGLIndexBuffer(uint32_t* data, uint32_t size);

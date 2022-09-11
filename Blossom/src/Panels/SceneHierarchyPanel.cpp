@@ -7,21 +7,18 @@
 
 namespace Cherry
 {
-    SceneHierarchyPanel::SceneHierarchyPanel(Vector2f pos, Vector2f size, Shared<Font> font, Shared<Scene> scene)
-        : UI({ pos }, size), m_Scene(scene), m_Font(font),
-          EventListener({ EventType::MouseClickEvent })
+    SceneHierarchyPanel::SceneHierarchyPanel(Shared<Scene> scene)
+        : m_Scene(scene)
     {
-        m_Color = Vector4f(0.2f, 0.2f, 0.2f, 1.0f);
-        m_LineSize = m_Font->GetFontSize() / WINDOW_HEIGHT;
 
-        Entity e1 = m_Scene->CreateEntity("Entity");
-        Entity e2 = m_Scene->CreateEntity("Entity");
-        Entity e3 = m_Scene->CreateEntity("Entity");
-        Entity e4 = m_Scene->CreateEntity("Entity");
-        Entity e5 = m_Scene->CreateEntity("Entity");
-        Entity e6 = m_Scene->CreateEntity("Entity");
-        Entity e7 = m_Scene->CreateEntity("Entity");
-        Entity e8 = m_Scene->CreateEntity("Entity");
+        Entity e1 = m_Scene->CreateEntity("Entity1");
+        Entity e2 = m_Scene->CreateEntity("Entity2");
+        Entity e3 = m_Scene->CreateEntity("Entity3");
+        Entity e4 = m_Scene->CreateEntity("Entity4");
+        Entity e5 = m_Scene->CreateEntity("Entity5");
+        Entity e6 = m_Scene->CreateEntity("Entity6");
+        Entity e7 = m_Scene->CreateEntity("Entity7");
+        Entity e8 = m_Scene->CreateEntity("Entity8");
     }
 
     SceneHierarchyPanel::~SceneHierarchyPanel()
@@ -36,44 +33,26 @@ namespace Cherry
 
     void SceneHierarchyPanel::OnUpdate()
     {
-        float index = 0.0f;
-        Renderer2D::DrawRect(m_Position, m_Size, m_Color);
-        m_Font->RenderText({ m_Position.x - m_Size.x * 0.8f, m_Position.y + m_Size.y * 0.9f }, "Scene Hierarchy");
+        ImGui::Begin("Scene Hierarchy");
 
-        for (int i = 0; i < m_Scene->m_Registry.size(); i++)
+        for (uint32_t i = 0; i < m_Scene->m_Registry.size(); i++)
         {
+            Entity entity = Entity(m_Scene->m_Registry.data()[i], m_Scene.Get());
             auto& name = m_Scene->m_Registry.get<NameComponent>(m_Scene->m_Registry.data()[i]); 
-            m_Font->RenderText({ m_Position.x - m_Size.x * 0.8f, m_Position.y + m_Size.y * 0.7f - index }, name.Name);
-            index += m_LineSize;
-        }
+            
+            ImGuiTreeNodeFlags flags = (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0 ) | ImGuiTreeNodeFlags_OpenOnArrow;
+            bool opened = ImGui::TreeNodeEx((void*)i, flags, name.Name.c_str());
 
-    }
-
-    void SceneHierarchyPanel::OnEvent(Event& event)
-    {
-        MouseClickEvent& clickEvent = static_cast<MouseClickEvent&>(event);
-
-        if (clickEvent.Button == MouseButton::ButtonLeft)
-        {
-            Vector2f mousePos = Input::GetMousePos();
-            if (mousePos.x >= m_Position.x &&
-                mousePos.x <= m_Position.x + m_Size.x * 2 &&
-                mousePos.y <= m_Position.y + m_Size.y - m_LineSize &&
-                mousePos.y >= m_Position.y + m_Size.y * 0.7f - m_LineSize * (m_Scene->m_Registry.size() + 1))
+            if (ImGui::IsItemClicked())
             {
-                float a = m_Position.y + m_Size.y - m_LineSize;
-
-                int entityNumber = floor(10 * abs(a - (a - (mousePos.y - a)))) - 1;
-                
-                CH_ASSERT(m_Scene->m_Registry.size() >= entityNumber, "error: wierd shit is happening");
-                
-                Entity e = Entity(m_Scene->m_Registry.data()[entityNumber], m_Scene.Get());
-                CH_INFO(e.GetComponent<NameComponent>().Name);
-
-                EditorLayer::SelectEntity(e);
-
-                event.handled = true;
+                EditorLayer::SelectEntity(entity);
+                m_SelectedEntity = entity;
             }
+
+            if (opened)
+                ImGui::TreePop();
         }
+
+        ImGui::End();
     }
 }

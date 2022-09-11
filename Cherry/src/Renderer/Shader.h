@@ -7,7 +7,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API Shader
+	class Shader
 	{
 	public:
 

@@ -6,7 +6,7 @@
 namespace Cherry
 {
 	// TODO: Replace TransformationMatrix class with functions
-	class CHERRY_API TransformationMatrix : public Matrix4x4f
+	class TransformationMatrix : public Matrix4x4f
 	{
 	public:
 		TransformationMatrix()
@@ -34,8 +34,8 @@ namespace Cherry
 		Vector2f m_Scale;
 	};
 
-	void CHERRY_API Translate(Matrix4x4f* mat, float x, float y);
-	void CHERRY_API Rotate(Matrix4x4f* mat, float rot);
-	void CHERRY_API Scale(Matrix4x4f* mat, float scale);
-	void CHERRY_API Scale(Matrix4x4f* mat, float scaleX, float scaleY);
+	void Translate(Matrix4x4f* mat, float x, float y);
+	void Rotate(Matrix4x4f* mat, float rot);
+	void Scale(Matrix4x4f* mat, float scale);
+	void Scale(Matrix4x4f* mat, float scaleX, float scaleY);
 }

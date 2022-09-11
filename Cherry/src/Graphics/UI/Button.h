@@ -11,7 +11,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API Button : public UIElement, public EventListener
+	class Button : public UIElement, public EventListener
 	{
 	public:
 		using ClickEventHandler = std::function<void(const MouseClickEvent&)>;

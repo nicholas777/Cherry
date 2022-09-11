@@ -7,7 +7,7 @@
 namespace Cherry
 {
 
-	class CHERRY_API EventListener
+	class EventListener
 	{
 	protected:
 		EventListener(std::vector<EventType> types)

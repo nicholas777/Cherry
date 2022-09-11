@@ -11,7 +11,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API Renderer2D
+	class Renderer2D
 	{
 	public:
 		static void Init();

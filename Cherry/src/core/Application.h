@@ -7,21 +7,21 @@
 #include "Log.h"
 #include "Window.h"
 #include "Renderer/RenderAPI.h"
+#include "ImGui/ImGuiRenderer.h"
 
 namespace Cherry
 {
-
 	#define WINDOW_WIDTH (float)Application::GetApplication().GetWindow()->GetWidth()
 	#define WINDOW_HEIGHT (float)Application::GetApplication().GetWindow()->GetHeight()
 
-	class CHERRY_API Application
+	class Application
 	{
 	public:
 		struct ApplicationConfig
 		{
-			int WindowWidth, WindowHeight;
+			int WindowWidth = 600, WindowHeight = 400;
 			std::string WindowTitle;
-			bool IsVSync;
+			bool IsVSync = true;
 
 			std::string Name = "App";
 		};
@@ -35,7 +35,7 @@ namespace Cherry
 		
 		void Run();
 
-		void OnEvent(Event* e);
+		void OnEvent(Event& e);
 		void OnWindowClose();
 		void OnWindowResize(int width, int height);
 
@@ -50,6 +50,8 @@ namespace Cherry
 		bool m_Running;
 		LayerStack* m_LayerStack;
 		Window* m_Window;
+
+		ImGuiRenderer* m_ImGuiRenderer;
 
 		float m_LastFrame = 0.0f;
 	};

@@ -7,6 +7,8 @@
 namespace Cherry
 {
 
+	// TODO: Editor configuration file
+
 	class BlossomEditor : public Application
 	{
 	public:

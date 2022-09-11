@@ -7,7 +7,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API VertexArray
+	class VertexArray
 	{
 	public:
 

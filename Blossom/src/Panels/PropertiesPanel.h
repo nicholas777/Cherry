@@ -7,6 +7,12 @@ namespace Cherry
 	class PropertiesPanel
 	{
 	public:
-		PropertiesPanel() = default;
+		PropertiesPanel();
+		
+		void SetEntity(const Entity& e);
+		void OnUpdate();
+
+	private:
+		Entity m_Current;
 	};
 }

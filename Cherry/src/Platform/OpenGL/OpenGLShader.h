@@ -6,7 +6,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API OpenGLShader : public Shader
+	class OpenGLShader : public Shader
 	{
 	public:
 		OpenGLShader(std::string vertexSrc, std::string fragmentSrc);

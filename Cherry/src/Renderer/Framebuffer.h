@@ -5,8 +5,7 @@
 
 namespace Cherry
 {
-	// TODO: Framebuffers
-	class CHERRY_API Framebuffer
+	class Framebuffer
 	{
 	public:
 		virtual ~Framebuffer() = default;

@@ -5,17 +5,16 @@
 namespace Cherry
 {
 
-	class SceneHierarchyPanel : public UI, public EventListener
+	class SceneHierarchyPanel
 	{
 	public:
 		SceneHierarchyPanel() = default;
-		SceneHierarchyPanel(Vector2f pos, Vector2f size, Shared<Font> font, Shared<Scene> scene);
+		SceneHierarchyPanel(Shared<Scene> scene);
 		~SceneHierarchyPanel();
 
 		void SetScene(Shared<Scene> scene);
 
-		virtual void OnUpdate() override;
-		virtual void OnEvent(Event& event) override;
+		void OnUpdate();
 
 	private:
 		Vector4f m_Color;
@@ -23,9 +22,9 @@ namespace Cherry
 
 		Shared<Scene> m_Scene;
 
-		float m_LineSize;
+		Entity m_SelectedEntity = Entity(entt::null, nullptr);
 
-		// std::vector<SceneObject*> m_Objects;
+		
 	};
 
 }

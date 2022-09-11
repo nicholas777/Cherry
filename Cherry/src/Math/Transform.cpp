@@ -148,13 +148,13 @@ namespace Cherry
 			+ columns[3] * vec[3];
 	}
 	
-	void CHERRY_API Translate(Matrix4x4f* mat, float x, float y)
+	void Translate(Matrix4x4f* mat, float x, float y)
 	{
 		(*mat)[3].x += x;
 		(*mat)[3].y += y;
 	}
 
-	void CHERRY_API Rotate(Matrix4x4f* mat, float rot)
+	void Rotate(Matrix4x4f* mat, float rot)
 	{
 		float rotInRadians = rot * 0.0174533;
 		float rotCos = cos(rotInRadians);
@@ -178,13 +178,13 @@ namespace Cherry
 		(*mat)[1].y = val11;
 	}
 
-	void CHERRY_API Scale(Matrix4x4f* mat, float scale)
+	void Scale(Matrix4x4f* mat, float scale)
 	{
 		(*mat)[0].x *= scale;
 		(*mat)[1].y *= scale;
 	}
 
-	void CHERRY_API Scale(Matrix4x4f* mat, float scaleX, float scaleY)
+	void Scale(Matrix4x4f* mat, float scaleX, float scaleY)
 	{
 		(*mat)[0].x *= scaleX;
 		(*mat)[1].y *= scaleY;

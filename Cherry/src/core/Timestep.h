@@ -5,7 +5,7 @@
 
 namespace Cherry
 {
-	struct CHERRY_API Timestep
+	struct Timestep
 	{
 		Timestep()
 			: m_Time(0.0f)

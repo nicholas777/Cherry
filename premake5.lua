@@ -17,10 +17,11 @@ workspace "Cherry"
 	include "Cherry/vendor/GLAD"
 	include "Cherry/vendor/Freetype"
 	include "Cherry/vendor/FreetypeGL"
+	include "Cherry/vendor/imgui"
 
 project "Cherry"
 	location "Cherry"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
 	
 	targetdir (outputDir .. outputPath .. "/%{prj.name}")
@@ -45,7 +46,8 @@ project "Cherry"
 		"%{prj.name}/vendor/Freetype/include",
 		"%{prj.name}/vendor/FreetypeGL",
 		"%{prj.name}/vendor/stb_image",
-		"&{prj.name}/vendor/EnTT"
+		"%{prj.name}/vendor/EnTT",
+		"%{prj.name}/vendor/imgui"
 	}
 
 	links {
@@ -53,6 +55,7 @@ project "Cherry"
 		"GLAD",
 		"Freetype",
 		"FreetypeGL",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -102,6 +105,7 @@ project "Blossom"
 		"Cherry/vendor/FreetypeGL",
 		"Cherry/vendor/GLAD/include",
 		"Cherry/vendor/EnTT",
+		"Cherry/vendor/imgui",
 		"Blossom/src"
 	}
 
@@ -115,7 +119,8 @@ project "Blossom"
 		}
 
 		links {
-			"Cherry"
+			"Cherry",
+			"ImGui"
 		}
 
 	filter "configurations:debug"

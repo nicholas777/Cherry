@@ -2,6 +2,7 @@
 
 #include "Cherry.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/PropertiesPanel.h"
 
 namespace Cherry
 {
@@ -14,7 +15,9 @@ namespace Cherry
 		virtual void OnAttach() override;
 		virtual void OnUpdate(const Timestep& delta) override;
 
-		static void SelectEntity(Entity entity);
+		virtual void OnImGuiRender() override;
+
+		static void SelectEntity(const Entity& entity);
 
 	private:
 		Scoped<Texture> m_SmileTexture;
@@ -22,6 +25,7 @@ namespace Cherry
 		Shared<Font> m_Font;
 
 		static Scoped<SceneHierarchyPanel> m_SceneHierarchyPanel;
+		static Scoped<PropertiesPanel> m_PropertiesPanel;
 
 		Shared<Scene> m_Scene;
 

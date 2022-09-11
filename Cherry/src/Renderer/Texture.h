@@ -7,19 +7,19 @@
 
 namespace Cherry
 {
-	enum class CHERRY_API TextureWrap
+	enum class TextureWrap
 	{
 		Unknown = 0,
 		Repeat, MirroredRepeat, ClampToEdge, ClampToBorder
 	};
 
-	enum class CHERRY_API TextureFilter
+	enum class TextureFilter
 	{
 		Unknown = 0,
 		Nearest, Linear
 	};
 
-	enum class CHERRY_API TextureFormat
+	enum class TextureFormat
 	{
 		Unknown = 0,
 		RGBA, RGB,
@@ -28,7 +28,7 @@ namespace Cherry
 	};
 
 	// TODO: Mipmapping
-	struct CHERRY_API TextureParams
+	struct TextureParams
 	{
 		TextureWrap wrap = TextureWrap::Repeat;
 		Vector4f borderColor;
@@ -47,7 +47,7 @@ namespace Cherry
 		}
 	};
 
-	class CHERRY_API Texture
+	class Texture
 	{
 	public:
 
@@ -67,7 +67,7 @@ namespace Cherry
 		static Scoped<Texture> Create(uint32_t width, uint32_t height, TextureParams params);
 	};
 
-	struct CHERRY_API SubTexture
+	struct SubTexture
 	{
 		Texture* texture;
 		Vector2f textureCoords[4];

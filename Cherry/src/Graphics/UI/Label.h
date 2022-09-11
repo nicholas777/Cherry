@@ -9,7 +9,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API Label : public UIElement
+	class Label : public UIElement
 	{
 	public:
 		Label(std::string filepath, std::string text, uint32_t fontSize, Vector2f position);

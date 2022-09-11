@@ -7,7 +7,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack() {};

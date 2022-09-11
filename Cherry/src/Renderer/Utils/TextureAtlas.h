@@ -5,10 +5,10 @@
 
 namespace Cherry
 {
-	class CHERRY_API TextureAtlas
+	class TextureAtlas
 	{
 	public:
-		TextureAtlas() {};
+		TextureAtlas() = default;
 		TextureAtlas(const std::string& filepath, uint32_t textureWidth, uint32_t textureHeight, uint32_t sheetWidth, uint32_t sheetHeight, uint32_t texturesX, uint32_t texturesY);
 
 		const SubTexture& GetSubTexture(uint32_t x, uint32_t y);

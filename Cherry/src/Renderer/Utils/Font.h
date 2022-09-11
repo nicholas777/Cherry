@@ -17,11 +17,11 @@ namespace Cherry
 		Vector2f size;
 		float advance;
 
-		Character() {}
+		Character() = default;
 	};
 
 	
-	class CHERRY_API Font
+	class Font
 	{
 	public:
 

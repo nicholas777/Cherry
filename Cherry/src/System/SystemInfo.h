@@ -4,12 +4,12 @@
 
 namespace Cherry
 {
-	struct CHERRY_API SystemInfo
+	struct SystemInfo
 	{
 
 	};
 
-	class CHERRY_API SystemInfoLoader
+	class SystemInfoLoader
 	{
 	public:
 		static void LoadSystemInfo()

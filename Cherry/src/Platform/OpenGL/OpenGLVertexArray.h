@@ -8,7 +8,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API OpenGLVertexArray : public VertexArray
+	class OpenGLVertexArray : public VertexArray
 	{
 	public:
 		OpenGLVertexArray();

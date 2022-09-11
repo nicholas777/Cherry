@@ -7,7 +7,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API Log
+	class Log
 	{
 	public:
 		static void Init(const std::string& AppName);

@@ -15,6 +15,7 @@ namespace Cherry
 		
 	}
 
+	// TODO: Events for creating and updating entities
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity = Entity(m_Registry.create(), this);
@@ -31,14 +32,13 @@ namespace Cherry
 		{
 			auto& [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
-			// TODO: Possible branch mispredictions here
 			if (sprite.SpriteTexture)
 			{
-				Renderer2D::DrawRect(transform.Transform, sprite.SpriteTexture);
+				Renderer2D::DrawRect(transform.GetMatrix(), sprite.SpriteTexture);
 			}
 			else
 			{
-				Renderer2D::DrawRect(transform.Transform, sprite.Color);
+				Renderer2D::DrawRect(transform.GetMatrix(), sprite.Color);
 			}
 		}
 	}

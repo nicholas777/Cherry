@@ -6,10 +6,10 @@
 
 namespace Cherry
 {
-	class CHERRY_API CameraController
+	class CameraController
 	{
 	public:
-		CameraController() {};
+		CameraController() = default;
 		CameraController(Camera* cam, float force);
 
 		void Update(float delta);

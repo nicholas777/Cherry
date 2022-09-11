@@ -5,7 +5,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API RenderAPI
+	class RenderAPI
 	{
 	public:
 		enum class API

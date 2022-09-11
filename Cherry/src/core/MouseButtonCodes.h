@@ -4,7 +4,7 @@
 
 namespace Cherry
 {
-	enum CHERRY_API MouseButton
+	enum MouseButton
 	{
 		Button1 = 0,
 		Button2 = 1,

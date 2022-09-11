@@ -11,7 +11,7 @@
 namespace Cherry
 {
 
-	enum class CHERRY_API ShaderDataType
+	enum class ShaderDataType
 	{
 		Unknows = 0,
 		Float,
@@ -60,7 +60,7 @@ namespace Cherry
 	}
 
 	// TODO: Fix copying
-	class CHERRY_API BufferElement
+	class BufferElement
 	{
 	public:
 		std::string Name;
@@ -102,7 +102,7 @@ namespace Cherry
 		}
 	};
 
-	class CHERRY_API BufferLayout
+	class BufferLayout
 	{
 	public:
 		BufferLayout() {}
@@ -124,7 +124,7 @@ namespace Cherry
 		std::vector<BufferElement> m_BufferElements;
 	};
 
-	class CHERRY_API VertexBuffer
+	class VertexBuffer
 	{
 	public:
 		virtual ~VertexBuffer() = default;
@@ -142,7 +142,7 @@ namespace Cherry
 		static Scoped<VertexBuffer> Create(float* data, uint32_t count, BufferLayout layout);
 	};
 	
-	class CHERRY_API IndexBuffer
+	class IndexBuffer
 	{
 	public:
 		virtual ~IndexBuffer() = default;

@@ -11,6 +11,7 @@
 
 namespace Cherry
 {
+	// TODO: Fix warnings
 	Application* Application::s_Application;
 
 	Application::Application()
@@ -19,6 +20,8 @@ namespace Cherry
 
 		Configuration = ApplicationConfig();
 		m_LayerStack = new LayerStack;
+
+		m_ImGuiRenderer = new ImGuiRenderer;
 
 		s_Application = this;
 	}
@@ -43,6 +46,8 @@ namespace Cherry
 
 		Input::Init();
 
+		m_ImGuiRenderer->OnInit();
+
 		for (auto layer : *m_LayerStack)
 		{
 			layer->OnAttach();
@@ -54,7 +59,7 @@ namespace Cherry
 
 		while (m_Running)
 		{
-			float time = m_Window->GetTime();
+			float time = (float)m_Window->GetTime();
 			DeltaTime = Timestep(time - m_LastFrame);
 			m_LastFrame = time;
 
@@ -62,16 +67,24 @@ namespace Cherry
 
 			for (Layer* layer : *m_LayerStack)
 				layer->OnUpdate(DeltaTime);
+
+			m_ImGuiRenderer->Begin();
+			for (Layer* layer : *m_LayerStack)
+				layer->OnImGuiRender();
+			m_ImGuiRenderer->End();
 		}
+
+		m_ImGuiRenderer->OnShutdown();
+		delete m_ImGuiRenderer;
 	}
 
-	void Application::OnEvent(Event* e)
+	void Application::OnEvent(Event& e)
 	{
-		for (auto listener : EventListener::EventListeners[e->Type])
+		for (auto listener : EventListener::EventListeners[e.Type])
 		{
-			listener->OnEvent(*e);
+			listener->OnEvent(e);
 
-			if (e->handled)
+			if (e.handled)
 				break;
 		}
 
@@ -79,11 +92,9 @@ namespace Cherry
 		{
 			(**--it).OnEvent(e);
 
-			if (e->handled)
+			if (e.handled)
 				break;
 		}
-
-		delete e;
 	}
 	                                          
 	void Application::OnWindowResize(int width, int height)

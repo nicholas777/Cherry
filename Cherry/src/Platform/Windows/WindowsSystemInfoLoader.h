@@ -5,7 +5,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API WindowsSystemInfoLoader : public SystemInfoLoader
+	class WindowsSystemInfoLoader : public SystemInfoLoader
 	{
 	protected:
 		virtual void LoadSystemInfoImpl() override;

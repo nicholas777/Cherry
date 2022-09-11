@@ -6,7 +6,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API OpenGLRenderAPI : public RenderAPI
+	class OpenGLRenderAPI : public RenderAPI
 	{
 	public:
 		virtual void Init() override;

@@ -5,7 +5,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API OpenGLTexture : public Texture
+	class OpenGLTexture : public Texture
 	{
 	public:
 		// TODO: Merge constructors into two

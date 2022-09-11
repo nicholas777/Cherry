@@ -16,7 +16,7 @@ namespace Cherry
 		virtual unsigned int GetWidth() const override { return m_Data.Width; };
 		virtual unsigned int GetHeight() const override { return m_Data.Height; };
 
-		virtual float GetTime() override;
+		virtual double GetTime() override;
 
 		virtual void OnUpdate() override;
 		virtual void OnResize(int, int) override;

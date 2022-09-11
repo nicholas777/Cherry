@@ -7,7 +7,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API OpenGLContext : public RenderingContext
+	class OpenGLContext : public RenderingContext
 	{
 	public:
 		OpenGLContext(GLFWwindow* window);

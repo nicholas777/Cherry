@@ -141,6 +141,8 @@ namespace Cherry
 				_Value->RepCount++;
 				return;
 			}
+
+			_Value = nullptr;
 		}
 
 		Shared(Shared&& shared)

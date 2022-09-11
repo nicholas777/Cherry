@@ -17,7 +17,7 @@ namespace Cherry
 			: Width(600), Height(400), Title("Game"), VSync(true) {};
 	};
 
-	class CHERRY_API Window
+	class Window
 	{
 	public:
 		virtual unsigned int GetWidth() const = 0;
@@ -26,7 +26,7 @@ namespace Cherry
 		virtual void SetVSync(bool vsync) = 0;
 		virtual bool IsVSync() const = 0;
 
-		virtual float GetTime() = 0;
+		virtual double GetTime() = 0;
 
 		virtual void OnUpdate() = 0;
 		virtual void OnResize(int, int) = 0;

@@ -10,7 +10,7 @@
 
 namespace Cherry
 {
-	class CHERRY_API WindowsInput : public Input
+	class WindowsInput : public Input
 	{
 	public:
 		WindowsInput()

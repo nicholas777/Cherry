@@ -5,10 +5,10 @@
 
 namespace Cherry
 {
-	class CHERRY_API ShaderLibrary
+	class ShaderLibrary
 	{
 	public:
-		static void Set(const const std::string& name, const const std::string& shaderPath);
+		static void Set(const std::string& name, const std::string& shaderPath);
 		static void Set(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 		static void Remove(const std::string& name);
 

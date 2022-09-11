@@ -14,7 +14,7 @@ namespace Cherry
 	static bool GLFWInit = false;
 
 	void WindowsWindow::ErrorCallback(int error, const char* msg) {
-		Application::GetApplication().OnEvent(new GameErrorEvent((std::string("GLFW ERROR: ") + std::string(msg)).c_str()));
+		Application::GetApplication().OnEvent(GameErrorEvent((std::string("GLFW ERROR: ") + std::string(msg)).c_str()));
 	}
 
 	void WindowsWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -22,20 +22,20 @@ namespace Cherry
 		switch (action)
 		{
 		case GLFW_PRESS:
-			Application::GetApplication().OnEvent(new KeyPressEvent(static_cast<Key>(key), false));
+			Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), false));
 			break;
 		case GLFW_RELEASE:
-			Application::GetApplication().OnEvent(new KeyReleaseEvent(static_cast<Key>(key)));
+			Application::GetApplication().OnEvent(KeyReleaseEvent(static_cast<Key>(key)));
 			break;
 		case GLFW_REPEAT:
-			Application::GetApplication().OnEvent(new KeyPressEvent(static_cast<Key>(key), true));
+			Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), true));
 			break;
 		}
 	}
 
 	void WindowsWindow::MouseMoveCallback(GLFWwindow* window, double xpos, double ypos)
 	{
-		Application::GetApplication().OnEvent(new MouseMoveEvent(int(xpos), int(ypos)));
+		Application::GetApplication().OnEvent(MouseMoveEvent(int(xpos), int(ypos)));
 	}
 
 	void WindowsWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -43,29 +43,29 @@ namespace Cherry
 		switch (action)
 		{
 		case GLFW_PRESS:
-			Application::GetApplication().OnEvent(new MouseClickEvent(static_cast<MouseButton>(button)));
+			Application::GetApplication().OnEvent(MouseClickEvent(static_cast<MouseButton>(button)));
 			break;
 		case GLFW_RELEASE:
-			Application::GetApplication().OnEvent(new MouseReleaseEvent(static_cast<MouseButton>(button)));
+			Application::GetApplication().OnEvent(MouseReleaseEvent(static_cast<MouseButton>(button)));
 			break;
 		}
 	}
 
 	void WindowsWindow::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 	{
-		Application::GetApplication().OnEvent(new MouseScrollEvent(yoffset));
+		Application::GetApplication().OnEvent(MouseScrollEvent((int)yoffset));
 	}
 
 	void WindowsWindow::WindowCloseCallback(GLFWwindow* window)
 	{
-		Application::GetApplication().OnEvent(new WindowCloseEvent);
+		Application::GetApplication().OnEvent(WindowCloseEvent());
 		Application::GetApplication().OnWindowClose();
 		CH_CORE_INFO("window closing");
 	}
 
 	void WindowsWindow::WindowResizeCallback(GLFWwindow* window, int width, int height)
 	{
-		Application::GetApplication().OnEvent(new WindowResizeEvent(width, height));
+		Application::GetApplication().OnEvent(WindowResizeEvent(width, height));
 		Application::GetApplication().OnWindowResize(width, height);
 	}
 	
@@ -73,11 +73,11 @@ namespace Cherry
 	{
 		if (focused)
 		{
-			Application::GetApplication().OnEvent(new WindowFocusEvent());
+			Application::GetApplication().OnEvent(WindowFocusEvent());
 		}
 		else
 		{
-			Application::GetApplication().OnEvent(new WindowUnfocusEvent());
+			Application::GetApplication().OnEvent(WindowUnfocusEvent());
 		}
 	}
 
@@ -99,7 +99,7 @@ namespace Cherry
 		m_Context = RenderingContext::Create(m_Window);
 		m_Context->Init();
 
-		Application::GetApplication().OnEvent(new WindowOpenEvent());
+		Application::GetApplication().OnEvent(WindowOpenEvent());
 
 		CH_ASSERT(m_Window, "GLFW window is null");
 		SetVSync(true);
@@ -120,7 +120,7 @@ namespace Cherry
 		delete m_Window;
 	}
 
-	float WindowsWindow::GetTime()
+	double WindowsWindow::GetTime()
 	{
 		return glfwGetTime();
 	}

@@ -14,7 +14,7 @@ namespace Cherry
 {
 	class Entity;
 
-	class CHERRY_API Scene
+	class Scene
 	{
 	public:
 		Scene();

@@ -8,7 +8,7 @@
 
 namespace Cherry
 {
-	struct CHERRY_API Event
+	struct Event
 	{
 	protected:
 		Event(EventType type, EventCategory category, const char* name)
@@ -27,7 +27,7 @@ namespace Cherry
 		virtual std::string ToString() const { return Name; };
 	};
 
-	struct CHERRY_API GameErrorEvent : public Event
+	struct GameErrorEvent : public Event
 	{
 		GameErrorEvent(const char* message)
 			: Event(EventType::GameErrorEvent,
@@ -39,7 +39,7 @@ namespace Cherry
 		std::string ToString() const override { return Name + std::string(": ") + Message; };
 	};
 
-	struct CHERRY_API GameWarningEvent : public Event
+	struct GameWarningEvent : public Event
 	{
 		GameWarningEvent(const char* message)
 			: Event(EventType::GameWarningEvent,
@@ -51,7 +51,7 @@ namespace Cherry
 		std::string ToString() const override { return Name + std::string(": ") + Message; };
 	};
 
-	struct CHERRY_API WindowOpenEvent : public Event
+	struct WindowOpenEvent : public Event
 	{
 		WindowOpenEvent()
 			: Event(EventType::WindowOpenEvent,
@@ -61,7 +61,7 @@ namespace Cherry
 		std::string ToString() const override { return Name; };
 	};
 
-	struct CHERRY_API WindowResizeEvent : public Event
+	struct WindowResizeEvent : public Event
 	{
 		WindowResizeEvent(int width, int height)
 			: Event(EventType::WindowResizeEvent,
@@ -77,7 +77,7 @@ namespace Cherry
 		std::string ToString() const override { return Name; };
 	};
 
-	struct CHERRY_API WindowCloseEvent : public Event
+	struct WindowCloseEvent : public Event
 	{
 		WindowCloseEvent()
 			: Event(EventType::WindowCloseEvent,
@@ -87,7 +87,7 @@ namespace Cherry
 		std::string ToString() const override { return Name; };
 	};
 
-	struct CHERRY_API WindowFocusEvent : public Event
+	struct WindowFocusEvent : public Event
 	{
 		WindowFocusEvent()
 			: Event(EventType::WindowFocusEvent,
@@ -97,7 +97,7 @@ namespace Cherry
 		std::string ToString() const override { return Name; };
 	};
 
-	struct CHERRY_API WindowUnfocusEvent : public Event
+	struct WindowUnfocusEvent : public Event
 	{
 		WindowUnfocusEvent()
 			: Event(EventType::WindowUnfocusEvent,
@@ -107,7 +107,7 @@ namespace Cherry
 		std::string ToString() const override { return Name; };
 	};
 
-	struct CHERRY_API MouseMoveEvent : public Event
+	struct MouseMoveEvent : public Event
 	{
 		MouseMoveEvent(int x, int y)
 			: Event(EventType::MouseMoveEvent,
@@ -129,7 +129,7 @@ namespace Cherry
 		};
 	};
 
-	struct CHERRY_API MouseClickEvent : public Event
+	struct MouseClickEvent : public Event
 	{
 		MouseClickEvent(MouseButton button)
 			: Event(EventType::MouseClickEvent,
@@ -144,7 +144,7 @@ namespace Cherry
 		};
 	};
 
-	struct CHERRY_API MouseReleaseEvent : public Event
+	struct MouseReleaseEvent : public Event
 	{
 		MouseReleaseEvent(MouseButton button)
 			: Event(EventType::MouseReleaseEvent,
@@ -160,7 +160,7 @@ namespace Cherry
 		};
 	};
 
-	struct CHERRY_API MouseScrollEvent : public Event
+	struct MouseScrollEvent : public Event
 	{
 		MouseScrollEvent(int offset)
 			: Event(EventType::MouseReleaseEvent,
@@ -176,7 +176,7 @@ namespace Cherry
 		};
 	};
 
-	struct CHERRY_API KeyPressEvent : public Event
+	struct KeyPressEvent : public Event
 	{
 		KeyPressEvent(Key key, bool repeat)
 			: Event(EventType::KeyPressEvent,
@@ -193,7 +193,7 @@ namespace Cherry
 		};
 	};
 
-	struct CHERRY_API KeyReleaseEvent : public Event
+	struct KeyReleaseEvent : public Event
 	{
 		KeyReleaseEvent(Key key)
 			: Event(EventType::KeyReleaseEvent,
