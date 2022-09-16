@@ -1,6 +1,0 @@
-[submodule "Cherry/vendor/GLFW"]
-	path = Cherry/vendor/GLFW
-	url = https://github.com/TheCherno/glfw
-[submodule "Cherry/vendor/spdlog"]
-	path = Cherry/vendor/spdlog
-	url = https://github.com/gabime/spdlog

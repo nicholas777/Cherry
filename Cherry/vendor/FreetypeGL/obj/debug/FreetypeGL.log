@@ -1,4 +1,5 @@
-﻿  edtaa3func.c
+﻿  distance-field.c
+  edtaa3func.c
 C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,55): warning C4101: 'pfrac': unreferenced local variable
 C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,26): warning C4101: 'phiscaled': unreferenced local variable
 C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,75): warning C4101: 'err1': unreferenced local variable
@@ -10,4 +11,27 @@ C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(
 C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,69): warning C4101: 'err0': unreferenced local variable
 C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,62): warning C4101: 'qfrac': unreferenced local variable
 C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\edtaa3func.c(68,37): warning C4101: 'ascaled': unreferenced local variable
+  ftgl-utils.c
+  texture-atlas.c
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(49,29): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(150,18): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(225,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(249,24): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(250,15): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(208,26): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(208,32): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(298,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(326,28): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-atlas.c(328,28): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  texture-font.c
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-font.c(269,1): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-font.c(410,22): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _strdup. See online help for details.
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-font.c(543,71): warning C4267: 'function': conversion from 'size_t' to 'FT_Long', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-font.c(945,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-font.c(991,58): warning C4267: 'function': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-font.c(991,65): warning C4267: 'function': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\texture-font.c(717,13): warning C4101: 'face': unreferenced local variable
+  utf8-utils.c
+  vector.c
+  Generating Code...
   FreetypeGL.vcxproj -> C:\Users\Nicholas\source\repos\gameEngine\Cherry\vendor\FreetypeGL\bin\debug\FreetypeGL.lib
