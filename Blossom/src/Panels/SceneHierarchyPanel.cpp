@@ -35,13 +35,14 @@ namespace Cherry
     {
         ImGui::Begin("Scene Hierarchy");
 
-        for (uint32_t i = 0; i < m_Scene->m_Registry.size(); i++)
+        m_Scene->m_Registry.each([&](auto EntityID)
         {
-            Entity entity = Entity(m_Scene->m_Registry.data()[i], m_Scene.Get());
-            auto& name = m_Scene->m_Registry.get<NameComponent>(m_Scene->m_Registry.data()[i]); 
-            
-            ImGuiTreeNodeFlags flags = (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0 ) | ImGuiTreeNodeFlags_OpenOnArrow;
-            bool opened = ImGui::TreeNodeEx((void*)i, flags, name.Name.c_str());
+            Entity entity = Entity(EntityID, m_Scene.Get());
+
+            auto& name = entity.GetComponent<NameComponent>();
+
+            ImGuiTreeNodeFlags flags = (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+            bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, name.Name.c_str());
 
             if (ImGui::IsItemClicked())
             {
@@ -49,8 +50,28 @@ namespace Cherry
                 m_SelectedEntity = entity;
             }
 
+            if (ImGui::BeginPopupContextItem())
+            {
+                if (ImGui::MenuItem("Delete Entity"))
+                {
+                    m_Scene->DeleteEntity(entity);
+                }
+
+                ImGui::EndPopup();
+            }
+
             if (opened)
                 ImGui::TreePop();
+        });
+        
+        if (ImGui::BeginPopupContextWindow("A", ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))
+        {
+            if (ImGui::MenuItem("Create Entity"))
+            {
+                m_Scene->CreateEntity("Entity");
+            }
+
+            ImGui::EndPopup();
         }
 
         ImGui::End();

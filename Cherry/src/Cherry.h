@@ -36,6 +36,7 @@
 #include "Scene/Component.h"
 #include "Scene/Entity.h"
 #include "Scene/Scene.h"
+#include "Scene/Script.h"
 
 #include "Graphics/Cameras/Camera.h"
 
@@ -43,6 +44,7 @@
 #include "Math/Matrix.h"
 #include "Math/Transform.h"
 #include "Math/Algorithm.h"
+#include "Math/Projection.h"
 
 #include "core/Application.h"
 #include "core/Timestep.h"

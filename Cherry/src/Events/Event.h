@@ -163,7 +163,7 @@ namespace Cherry
 	struct MouseScrollEvent : public Event
 	{
 		MouseScrollEvent(int offset)
-			: Event(EventType::MouseReleaseEvent,
+			: Event(EventType::MouseScrollEvent,
 				EventCategory::MouseEvent,
 				"MouseReleaseEvent"), Offset(offset) {};
 

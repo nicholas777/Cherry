@@ -107,10 +107,13 @@ namespace Cherry
 		delete s_Data;
 	}
 	
-	void Renderer2D::Begin(Camera* cam)
+	void Renderer2D::Begin(Camera* cam, Matrix4x4f transform)
 	{
 		s_Data->TextureShader->Bind();
-		s_Data->TextureShader->SetMat4("VPMatrix", cam->CalcVP());
+
+		Matrix4x4f VP = cam->GetProjection() * transform; // TODO: Inverse this
+
+		s_Data->TextureShader->SetMat4("VPMatrix", VP);
 		NewBatch();
 	}
 
@@ -418,7 +421,7 @@ namespace Cherry
 		s_Data->IndexCount += 6;
 	}
 
-	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture)
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture, const Vector4f& color)
 	{
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
@@ -452,32 +455,32 @@ namespace Cherry
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
 		s_Data->RectPtr->texCoord = { 0, 0 };
-		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
 		s_Data->RectPtr->texCoord = { 1, 0 };
-		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
 		s_Data->RectPtr->texCoord = { 1, 1 };
-		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
 		s_Data->RectPtr->texCoord = { 0, 1 };
-		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->IndexCount += 6;
 	}
 
-	void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture)
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture, const Vector4f& color)
 	{
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
@@ -511,25 +514,25 @@ namespace Cherry
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[0];
 		s_Data->RectPtr->texCoord = { 0, 0 };
-		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
 		s_Data->RectPtr->texCoord = { 1, 0 };
-		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
 		s_Data->RectPtr->texCoord = { 1, 1 };
-		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
 		s_Data->RectPtr->texCoord = { 0, 1 };
-		s_Data->RectPtr->color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
 		s_Data->RectPtr++;
 

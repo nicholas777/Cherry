@@ -5,6 +5,47 @@ namespace Cherry
 	Scoped<SceneHierarchyPanel> EditorLayer::m_SceneHierarchyPanel;
 	Scoped<PropertiesPanel> EditorLayer::m_PropertiesPanel;
 
+	class CameraControllerScript : public Script
+	{
+	public:
+		void OnCreate()
+		{
+
+		}
+
+		void OnUpdate(const Timestep& delta)
+		{
+			float x = 0, y = 0;
+
+			if (Input::GetKeyPressed(Key::W))
+			{
+				y += 0.01f;
+			}
+			if (Input::GetKeyPressed(Key::S))
+			{
+				y -= 0.01f;
+			}
+			if (Input::GetKeyPressed(Key::A))
+			{
+				x -= 0.01f;
+			}
+			if (Input::GetKeyPressed(Key::D))
+			{
+				x += 0.01f;
+			}
+
+			if (!(x == 0 && y == 0))
+			{
+				GetComponent<TransformComponent>().Translation += Vector2f(-x * delta.GetMilliseconds(), -y * delta.GetMilliseconds());
+			}
+		}
+
+		void OnDestroy()
+		{
+
+		}
+	};
+
 	EditorLayer::~EditorLayer()
 	{
 	}
@@ -34,12 +75,20 @@ namespace Cherry
 		
 		float aspect = WINDOW_WIDTH / WINDOW_HEIGHT;
 		
-		m_EditorCamera = new Camera({0, 0}, -aspect, aspect, 1, -1, -1, 1);
-		m_LevelEditorCamera = new Camera({ 0, 0 }, -aspect, aspect, 1, -1, -1, 1);
-		m_LevelEditorCameraController = new CameraController(m_LevelEditorCamera.Get(), 0.002f);
-		
+		m_EditorCamera = m_Scene->CreateEntity("Main camera");
+		m_EditorCamera.AddComponent<TransformComponent>(
+			Vector2f(0.0f, 0.0f), 
+			0.0f, 
+			Vector2f(1.0f, 1.0f)
+		);
+
+		m_EditorCamera.AddComponent<CameraComponent>();
+		m_EditorCamera.GetComponent<CameraComponent>().camera = Camera(ortho(-12, 12, 10, -10));
+
+		m_EditorCamera.AddComponent<ScriptComponent>().Bind<CameraControllerScript>();
+
 		m_Font = new Font("assets/Goldfish.ttf", 64);
-		
+
 		m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
 		m_PropertiesPanel = new PropertiesPanel();
 
@@ -49,12 +98,7 @@ namespace Cherry
 	void EditorLayer::OnUpdate(const Timestep& delta)
 	{
 		m_Framebuffer->Bind();
-		RenderCommand::Clear();
-
-		m_LevelEditorCameraController->Update(delta.GetMilliseconds());
-		Renderer2D::Begin(m_LevelEditorCamera.Get());
 		m_Scene->OnUpdate(delta);
-		Renderer2D::End();
 		m_Framebuffer->Unbind();
 	}
 
@@ -103,7 +147,7 @@ namespace Cherry
 		m_SceneHierarchyPanel->OnUpdate();
 		m_PropertiesPanel->OnUpdate();
 
-		//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Scene Viewport");
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		
@@ -115,6 +159,8 @@ namespace Cherry
 
 		uint32_t textureID = m_Framebuffer->GetColorAttachment();
 		ImGui::Image((void*)textureID, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+
+		ImGui::PopStyleVar();
 
         ImGui::End();
         ImGui::End();

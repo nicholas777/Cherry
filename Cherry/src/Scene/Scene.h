@@ -5,10 +5,7 @@
 #include "core/Timestep.h"
 #include "Renderer/Renderer2D.h"
 
-#include "Component.h"
-
-// TODO: EnTT include is broken
-#include "../vendor/EnTT/entt.hpp"
+#include "entt.hpp"
 
 namespace Cherry
 {
@@ -21,13 +18,14 @@ namespace Cherry
 		~Scene();
 
 		Entity CreateEntity(const std::string& name);
+		void DeleteEntity(const Entity& entity);
 
 		void OnUpdate(const Timestep& delta);
+		
 	private:
 		entt::registry m_Registry;
 
-		Scoped<Camera> m_Camera;
-
+		friend class Script;
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 	};

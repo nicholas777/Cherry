@@ -33,8 +33,6 @@ namespace Cherry
 
 		Vector2f m_ViewportPanelSize;
 
-		Scoped<Camera> m_EditorCamera;
-		Scoped<Camera> m_LevelEditorCamera;
-		Scoped<CameraController> m_LevelEditorCameraController;
+		Entity m_EditorCamera;
 	};
 }

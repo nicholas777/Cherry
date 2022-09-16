@@ -57,16 +57,16 @@ namespace Cherry
 
 	void TransformationMatrix::Scale(const Vector2f& scalar)
 	{
-		columns[0].x *= scalar.x;
-		columns[1].y *= scalar.y;
+		columns[0].x += scalar.x;
+		columns[1].y += scalar.y;
 
 		m_Scale += scalar;
 	}
 
 	void TransformationMatrix::Scale(float scalar)
 	{
-		columns[0].x *= scalar;
-		columns[1].y *= scalar;
+		columns[0].x += scalar;
+		columns[1].y += scalar;
 
 		m_Scale += scalar;
 	}
@@ -116,14 +116,8 @@ namespace Cherry
 
 	void TransformationMatrix::SetScale(float scalar)
 	{
-		SetIdentity();
-		columns[3][0] = m_Translation.x;
-		columns[3][1] = m_Translation.y;
-
 		columns[0].x = cos(m_Rotation * 3.14159265 / 180);
-		columns[0].y = -sin(m_Rotation * 3.14159265 / 180);
 		columns[1].x = sin(m_Rotation * 3.14159265 / 180);
-		columns[1].y = cos(m_Rotation * 3.14159265 / 180);
 
 		Matrix4x4f scale = Matrix4x4f::Identity();
 		scale[0].x = scalar;
@@ -184,6 +178,7 @@ namespace Cherry
 		(*mat)[1].y *= scale;
 	}
 
+	// TODO: This is broken
 	void Scale(Matrix4x4f* mat, float scaleX, float scaleY)
 	{
 		(*mat)[0].x *= scaleX;

@@ -14,5 +14,6 @@ namespace Cherry
 
 	private:
 		Entity m_Current;
+		bool m_UseTexture;
 	};
 }

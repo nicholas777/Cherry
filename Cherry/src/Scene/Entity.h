@@ -17,7 +17,16 @@ namespace Cherry
 		Entity(entt::entity handle, Scene* scene)
 			: m_Handle(handle), m_Scene(scene) {}
 
-		Entity(const Entity&) = default;
+		Entity(const Entity& entity)
+		{
+			m_Handle = entity.m_Handle;
+			m_Scene = entity.m_Scene;
+		};
+
+		bool IsValid()
+		{
+			return m_Scene->m_Registry.valid(m_Handle);
+		}
 
 		template <typename T>
 		bool HasComponent() const
@@ -54,6 +63,11 @@ namespace Cherry
 		operator uint32_t() const
 		{
 			return (uint32_t)m_Handle;
+		}
+
+		operator entt::entity() const
+		{
+			return m_Handle;
 		}
 
 		operator bool() const

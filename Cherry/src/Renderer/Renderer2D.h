@@ -17,7 +17,7 @@ namespace Cherry
 		static void Init();
 		static void Shutdown();
 
-		static void Begin(Camera* cam);
+		static void Begin(Camera* cam, Matrix4x4f transform);
 		static void Begin();
 		static void End();
 
@@ -26,8 +26,8 @@ namespace Cherry
 		static void DrawRect(const Vector2f& position, const Vector2f& size, const SubTexture& texture);
 		static void DrawRect(const Vector2f& position, const Vector2f& size, const Vector4f& color);
 
-		static void DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture);
-		static void DrawRect(const Matrix4x4f& transform, const SubTexture& texture);
+		static void DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture, const Vector4f& color = { 1, 1, 1, 1 });
+		static void DrawRect(const Matrix4x4f& transform, const SubTexture& texture, const Vector4f& color = { 1, 1, 1, 1 });
 		static void DrawRect(const Matrix4x4f& transform, const Vector4f& color);
 
 		static void DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const Vector4f& color);

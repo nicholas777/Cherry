@@ -25,6 +25,10 @@ namespace Cherry
 		void SetScale(Vector2f scalar);
 		void SetScale(float scalar);
 
+		Vector2f GetTranslation() { return m_Translation; }
+		float SetRotation() { return m_Rotation; }
+		Vector2f GetScale() { return m_Scale; }
+
 		void operator=(Matrix4x4f mat);
 		Vector4f operator*(Vector4f vec);
 
