@@ -37,7 +37,6 @@ namespace Cherry
 		TextureFilter minFilter = TextureFilter::Nearest;
 		TextureFilter magFilter = TextureFilter::Linear;
 
-
 		TextureFormat format = TextureFormat::RGBA;
 
 		TextureParams() {}

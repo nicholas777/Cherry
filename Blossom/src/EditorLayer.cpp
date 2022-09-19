@@ -52,13 +52,16 @@ namespace Cherry
 
 	void EditorLayer::OnAttach()
 	{
-		m_Scene = SceneSerializer::Deserialize("assets/example.chs");
+		m_Scene = SceneSerializer::Deserialize("assets/Project/example.chs");
 
 		FramebufferData data;
 		data.width = WINDOW_WIDTH;
 		data.height = WINDOW_HEIGHT;
 
 		m_Framebuffer = Framebuffer::Create(data);
+
+		TextureParams params;
+		params.format = TextureFormat::RGBA;
 
 		m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
 		m_PropertiesPanel = new PropertiesPanel();
@@ -68,7 +71,7 @@ namespace Cherry
 
 	void EditorLayer::OnDetach()
 	{
-		SceneSerializer::Serialize(m_Scene, "assets/example.chs");
+		SceneSerializer::Serialize(m_Scene, "assets/Project/example.chs");
 	}
 
 	void EditorLayer::OnUpdate(const Timestep& delta)
@@ -150,4 +153,3 @@ namespace Cherry
 	}
 
 }
-

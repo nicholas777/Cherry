@@ -117,7 +117,47 @@ namespace Cherry
             SerializeEntity(Entity(entity, scene.Get()), out);
         });
         
-        out << YAML::EndSeq << YAML::EndMap << YAML::EndMap;
+        out << YAML::EndSeq;
+
+        out << YAML::Key << "Assets";
+        out << YAML::Value << YAML::BeginMap;
+
+        out << YAML::Key << "Textures";
+        out << YAML::Value << YAML::BeginSeq;
+
+        for (auto it = scene->m_AssetManager.m_Textures.begin(); it != scene->m_AssetManager.m_Textures.end(); it++)
+        {
+            out << YAML::BeginMap; // Texture
+
+            out << YAML::Key << "ID";
+            out << YAML::Value << it->first;
+
+            out << YAML::Key << "File";
+            out << YAML::Value << it->second.filepath;
+
+            out << YAML::Key << "Params";
+            out << YAML::Value << YAML::BeginMap; // Params
+
+            out << YAML::Key << "Format";
+            out << YAML::Value << (int)it->second.params.format;
+
+            out << YAML::Key << "MinFilter";
+            out << YAML::Value << (int)it->second.params.minFilter;
+
+            out << YAML::Key << "MagFilter";
+            out << YAML::Value << (int)it->second.params.magFilter;
+
+            out << YAML::Key << "Wrap";
+            out << YAML::Value << (int)it->second.params.wrap;
+
+            out << YAML::EndMap; // Params
+
+            out << YAML::EndMap; // Texture
+        }
+
+        out << YAML::EndSeq << YAML::EndMap;
+        
+        out << YAML::EndMap << YAML::EndMap;
         
         std::ofstream stream(filepath);
         stream << out.c_str();
@@ -206,6 +246,30 @@ namespace Cherry
                 comp.camera.SetSpan(entity["CameraComponent"]["span"].as<float>());
                 
                 comp.camera.RecelcProjection();
+            }
+        }
+
+        if (scene["Scene"]["Assets"]["Textures"])
+        {
+            for (int i = 0; i < scene["Scene"]["Assets"]["Textures"].size(); i++)
+            {
+                YAML::Node asset = scene["Scene"]["Assets"]["Textures"][i];
+
+                TextureAsset texture;
+                texture.filepath = asset["File"].as<std::string>();
+                texture.params = TextureParams(
+                    static_cast<TextureWrap>(asset["Params"]["Wrap"].as<int>()),
+                    static_cast<TextureFilter>(asset["Params"]["MinFilter"].as<int>()),
+                    static_cast<TextureFilter>(asset["Params"]["MagFilter"].as<int>()),
+                    static_cast<TextureFormat>(asset["Params"]["Format"].as<int>())
+                );
+                texture.ptr = Texture::Create(texture.filepath, texture.params);
+
+                s->m_AssetManager.m_Textures.insert(
+                    std::make_pair(
+                        asset["ID"].as<uint32_t>(), std::move(texture)
+                    )
+                );
             }
         }
 

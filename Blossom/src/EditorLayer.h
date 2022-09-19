@@ -9,7 +9,8 @@ namespace Cherry
 	class EditorLayer : public Layer
 	{
 	public:
-
+		EditorLayer()
+			: Layer("EditorLayer") {};
 		virtual ~EditorLayer() override;
 
 		virtual void OnAttach() override;
@@ -21,9 +22,6 @@ namespace Cherry
 		static void SelectEntity(const Entity& entity);
 
 	private:
-		Scoped<Texture> m_SmileTexture;
-
-		Shared<Font> m_Font;
 
 		static Scoped<SceneHierarchyPanel> m_SceneHierarchyPanel;
 		static Scoped<PropertiesPanel> m_PropertiesPanel;
