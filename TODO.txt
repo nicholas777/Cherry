@@ -1,16 +1,15 @@
 
 Release 0.1
 - Blossom Editor
-    - Properties panel
-        - Camera component UI
     - Play button
     - Content browser panel
     - Level editor
-- Serialization
+- Asset system
 
 Release 0.2
 - UI System
 - Scripting
+- Sound system
 
 Release 0.3
 - Vulkan
@@ -19,4 +18,3 @@ Release 0.3
 
 Future goals
 - Custom ECS
-- Sound System
