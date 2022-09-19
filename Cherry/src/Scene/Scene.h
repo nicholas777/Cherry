@@ -27,6 +27,7 @@ namespace Cherry
 
 		friend class Script;
 		friend class Entity;
+		friend class SceneSerializer;
 		friend class SceneHierarchyPanel;
 	};
 }

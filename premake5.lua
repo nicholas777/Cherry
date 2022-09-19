@@ -18,11 +18,13 @@ workspace "Cherry"
 	include "Cherry/vendor/Freetype"
 	include "Cherry/vendor/FreetypeGL"
 	include "Cherry/vendor/imgui"
+    include "Cherry/vendor/yaml-cpp"
 
 project "Cherry"
 	location "Cherry"
 	kind "StaticLib"
 	language "C++"
+	staticruntime "On"
 	
 	targetdir (outputDir .. outputPath .. "/%{prj.name}")
 	objdir (outputDir .. "/int/" .. outputPath .. "/%{prj.name}")
@@ -47,7 +49,8 @@ project "Cherry"
 		"%{prj.name}/vendor/FreetypeGL",
 		"%{prj.name}/vendor/stb_image",
 		"%{prj.name}/vendor/EnTT",
-		"%{prj.name}/vendor/imgui"
+		"%{prj.name}/vendor/imgui",
+		"%{prj.name}/vendor/yaml-cpp/include"
 	}
 
 	links {
@@ -56,6 +59,7 @@ project "Cherry"
 		"Freetype",
 		"FreetypeGL",
 		"ImGui",
+		"yaml-cpp",
 		"opengl32.lib"
 	}
 
@@ -90,6 +94,7 @@ project "Blossom"
 	location "Blossom"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "On"
 
 	targetdir (outputDir .. outputPath .. "/%{prj.name}")
 	objdir (outputDir .. "/int/" .. outputPath .. "/%{prj.name}")
@@ -106,6 +111,7 @@ project "Blossom"
 		"Cherry/vendor/GLAD/include",
 		"Cherry/vendor/EnTT",
 		"Cherry/vendor/imgui",
+		"Cherry/vendor/yaml-cpp/include",
 		"Blossom/src"
 	}
 
@@ -119,8 +125,7 @@ project "Blossom"
 		}
 
 		links {
-			"Cherry",
-			"ImGui"
+			"Cherry"
 		}
 
 	filter "configurations:debug"

@@ -34,7 +34,6 @@ namespace Cherry
             return;
         }
 
-
         ImGui::Begin("Properties");
 
         if (m_Current.HasComponent<NameComponent>())
@@ -47,7 +46,7 @@ namespace Cherry
                 char str[128];
                 memset(str, 0, sizeof(str));
                 strcpy(str, name.Name.c_str());
-
+                
                 if (ImGui::InputText("Name", str, sizeof(str)))
                 {
                     name.Name = str;
@@ -102,7 +101,6 @@ namespace Cherry
             {
                 SpriteComponent& sprite = m_Current.GetComponent<SpriteComponent>();
                 
-
                 int useTexture;
                 if (ImGui::RadioButton("Use color", &useTexture, 0))
                 {
@@ -153,13 +151,15 @@ namespace Cherry
                     if (!sprite.SpriteTexture.IsAlive())
                     {
                         ImGui::Text("This entity doesn't have a texture attached");
-                        ImGui::TreePop();
-                        ImGui::End();
-                        return;
                     }
-
-                    ImGui::Text("Texture");
-                    ImGui::Image((void*)sprite.SpriteTexture->GetTextureID(), ImVec2(160.0f, 160.0f), ImVec2(0, 1), ImVec2(1, 0));
+                    else
+                    {
+                        ImGui::Text("Texture");
+                        ImGui::Image(
+                            (void*)sprite.SpriteTexture->GetTextureID(), 
+                            ImVec2(160.0f, 160.0f), ImVec2(0, 1), 
+                            ImVec2(1, 0));
+                    }
                 }
 
                 ImGui::TreePop();
@@ -168,11 +168,34 @@ namespace Cherry
 
         if (m_Current.HasComponent<CameraComponent>())
         {
-            // TODO: Camera component view
             ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_OpenOnArrow;
             if (ImGui::TreeNodeEx((void*)2, flags, "Camera Component"))
             {
-                ImGui::Text("Camera components are not \nimplemented yet!");
+                CameraComponent& comp = m_Current.GetComponent<CameraComponent>();
+
+                ImGui::Checkbox("Primary", &comp.IsPrimary);
+
+                float span = comp.camera.GetSpan();
+                if (ImGui::InputFloat("Span", &span))
+                {
+                    comp.camera.SetSpan(span);
+                    comp.camera.RecelcProjection();
+                }
+
+                float znear = comp.camera.GetNear();
+                if (ImGui::InputFloat("Near plane", &znear))
+                {
+                    comp.camera.SetNear(znear);
+                    comp.camera.RecelcProjection();
+                }
+
+                float zfar = comp.camera.GetFar();
+                if (ImGui::InputFloat("Near plane", &zfar))
+                {
+                    comp.camera.SetFar(zfar);
+                    comp.camera.RecelcProjection();
+                }
+
                 ImGui::TreePop();
             }
         }

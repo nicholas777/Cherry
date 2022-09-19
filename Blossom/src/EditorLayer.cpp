@@ -52,7 +52,7 @@ namespace Cherry
 
 	void EditorLayer::OnAttach()
 	{
-		m_Scene = new Scene;
+		m_Scene = SceneSerializer::Deserialize("assets/example.chs");
 
 		FramebufferData data;
 		data.width = WINDOW_WIDTH;
@@ -60,39 +60,15 @@ namespace Cherry
 
 		m_Framebuffer = Framebuffer::Create(data);
 
-		Entity e = m_Scene->CreateEntity("Smiley");
-
-		TextureParams params;
-		params.format = TextureFormat::Auto;
-		params.minFilter = TextureFilter::Linear;
-		params.magFilter = TextureFilter::Nearest;
-		params.wrap = TextureWrap::Repeat;
-
-		m_SmileTexture = Texture::Create("assets/Smile.png", params);
-		e.AddComponent<SpriteComponent>();
-		e.GetComponent<SpriteComponent>().SpriteTexture = m_SmileTexture.Get();
-		e.AddComponent<TransformComponent>(Vector2f(0, 0), 0.0f, Vector2f(1, 1));
-		
-		float aspect = WINDOW_WIDTH / WINDOW_HEIGHT;
-		
-		m_EditorCamera = m_Scene->CreateEntity("Main camera");
-		m_EditorCamera.AddComponent<TransformComponent>(
-			Vector2f(0.0f, 0.0f), 
-			0.0f, 
-			Vector2f(1.0f, 1.0f)
-		);
-
-		m_EditorCamera.AddComponent<CameraComponent>();
-		m_EditorCamera.GetComponent<CameraComponent>().camera = Camera(ortho(-12, 12, 10, -10));
-
-		m_EditorCamera.AddComponent<ScriptComponent>().Bind<CameraControllerScript>();
-
-		m_Font = new Font("assets/Goldfish.ttf", 64);
-
 		m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
 		m_PropertiesPanel = new PropertiesPanel();
 
 		RenderCommand::SetClearColor({1, 0, 0, 1});
+	}
+
+	void EditorLayer::OnDetach()
+	{
+		SceneSerializer::Serialize(m_Scene, "assets/example.chs");
 	}
 
 	void EditorLayer::OnUpdate(const Timestep& delta)
@@ -155,6 +131,7 @@ namespace Cherry
 		{
 			m_ViewportPanelSize = { viewportSize.x, viewportSize.y };
 			m_Framebuffer->Resize(m_ViewportPanelSize);
+			
 		}
 
 		uint32_t textureID = m_Framebuffer->GetColorAttachment();

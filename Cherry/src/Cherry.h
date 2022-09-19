@@ -37,8 +37,10 @@
 #include "Scene/Entity.h"
 #include "Scene/Scene.h"
 #include "Scene/Script.h"
+#include "Scene/SceneSerializer.h"
 
 #include "Graphics/Cameras/Camera.h"
+#include "Graphics/Cameras/SceneCamera.h"
 
 #include "Math/Vector.h"
 #include "Math/Matrix.h"

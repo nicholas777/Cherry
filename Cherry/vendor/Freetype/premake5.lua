@@ -1,7 +1,7 @@
 project "Freetype"
     kind "StaticLib"
     language "C++"
-    staticruntime "off"
+    staticruntime "On"
     
     targetdir (outputDir .. outputPath .. "/%{prj.name}")
 	objdir (outputDir .. "/int/" .. outputPath.. "/%{prj.name}")

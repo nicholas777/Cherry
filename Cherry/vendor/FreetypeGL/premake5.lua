@@ -1,7 +1,7 @@
 project "FreetypeGL"
 	kind "StaticLib"
     language "C"
-    staticruntime "off"
+    staticruntime "On"
 
     includedirs
     {

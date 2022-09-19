@@ -4,7 +4,7 @@
 #include "Math/Matrix.h"
 #include "core/Pointer.h"
 #include "Renderer/Texture.h"
-#include "Graphics/Cameras/Camera.h"
+#include "Graphics/Cameras/SceneCamera.h"
 #include "core/Timestep.h"
 #include "Script.h"
 
@@ -62,7 +62,7 @@ namespace Cherry
 
 	struct CameraComponent
 	{
-		Camera camera;
+		SceneCamera camera;
 		bool IsPrimary = true;
 
 		CameraComponent() = default;

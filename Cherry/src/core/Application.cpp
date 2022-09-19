@@ -28,10 +28,9 @@ namespace Cherry
 
 	Application::~Application()
 	{
-		Renderer2D::Shutdown();
-
-		delete m_Window;
 		delete m_LayerStack;
+		delete m_Window;
+		Renderer2D::Shutdown();
 	}
 
 	void Application::Run()

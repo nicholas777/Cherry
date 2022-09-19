@@ -11,14 +11,6 @@ namespace Cherry
         : m_Scene(scene)
     {
 
-        Entity e1 = m_Scene->CreateEntity("Entity1");
-        Entity e2 = m_Scene->CreateEntity("Entity2");
-        Entity e3 = m_Scene->CreateEntity("Entity3");
-        Entity e4 = m_Scene->CreateEntity("Entity4");
-        Entity e5 = m_Scene->CreateEntity("Entity5");
-        Entity e6 = m_Scene->CreateEntity("Entity6");
-        Entity e7 = m_Scene->CreateEntity("Entity7");
-        Entity e8 = m_Scene->CreateEntity("Entity8");
     }
 
     SceneHierarchyPanel::~SceneHierarchyPanel()

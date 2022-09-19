@@ -126,7 +126,7 @@ namespace Cherry
 	{
 	public:
 		Shared()
-			: _Value(nullptr) {}
+			: _Value(new PtrValue<T>(nullptr)) {}
 
 		Shared(T*&& v)
 		{
@@ -192,7 +192,7 @@ namespace Cherry
 
 		bool IsAlive()
 		{
-			if (_Value == nullptr)
+			if (_Value->ptr == nullptr)
 				return false;
 
 			return true;

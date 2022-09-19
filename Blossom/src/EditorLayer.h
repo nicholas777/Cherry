@@ -13,6 +13,7 @@ namespace Cherry
 		virtual ~EditorLayer() override;
 
 		virtual void OnAttach() override;
+		virtual void OnDetach() override;
 		virtual void OnUpdate(const Timestep& delta) override;
 
 		virtual void OnImGuiRender() override;
