@@ -1,8 +1,6 @@
 outputDir = "bin/"
 outputPath = "%{cfg.platform}.%{cfg.buildcfg}.%{cfg.architecture}"
 
-appName = "Tests"
-
 workspace "Cherry"
 	architecture "x64"
 	startproject "Blossom"

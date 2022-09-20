@@ -72,7 +72,7 @@ namespace Cherry
 		{
 			if (mainCamera)
 			{
-				Renderer2D::Begin(mainCamera, cameraTransform);
+				Renderer2D::Begin(mainCamera->GetProjection(), cameraTransform);
 
 				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 
@@ -96,6 +96,61 @@ namespace Cherry
 		}
 	}
 
+	void Scene::OnUpdate(const Timestep& delta, const StaticCamera& camera)
+	{
+		RenderCommand::Clear();
+		Renderer2D::Begin(camera.GetProjection(), camera.GetTransform());
+
+		{
+			m_Registry.view<ScriptComponent>().each([=](auto entity, auto& scriptExecutor)
+				{
+					if (!scriptExecutor.script)
+					{
+						scriptExecutor.CreateInstanceFn();
+						scriptExecutor.script->m_Entity = Entity(entity, this);
+						scriptExecutor.OnCreateFn(scriptExecutor.script);
+					}
+
+					scriptExecutor.OnUpdateFn(scriptExecutor.script, delta);
+				});
+		}
+
+		{
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
+
+			for (auto& entity : group)
+			{
+				auto& [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+
+				if (sprite.UseTexture)
+				{
+					if (sprite.SpriteTexture.IsAlive())
+						Renderer2D::DrawRect(transform.GetMatrix(), sprite.SpriteTexture, sprite.Color);
+				}
+				else
+				{
+					Renderer2D::DrawRect(transform.GetMatrix(), sprite.Color);
+				}
+			}
+		}
+
+		Renderer2D::End();
+	}
+
+	Entity Scene::GetPrimaryCamera()
+	{
+		auto view = m_Registry.view<CameraComponent>();
+
+		for (auto entity : view)
+		{
+			auto& comp = view.get<CameraComponent>(entity);
+
+			if (comp.IsPrimary)
+				return Entity(entity, this);
+		}
+		return {};
+	}
+	
 	uint32_t Scene::CreateTexture(const std::string& filepath, TextureParams params)
 	{
 		return m_AssetManager.CreateTexture(filepath, params);

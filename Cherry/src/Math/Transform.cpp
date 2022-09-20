@@ -174,15 +174,15 @@ namespace Cherry
 
 	void Scale(Matrix4x4f* mat, float scale)
 	{
-		(*mat)[0].x *= scale;
-		(*mat)[1].y *= scale;
+		(*mat)[0].x += scale;
+		(*mat)[1].y += scale;
 	}
 
 	// TODO: This is broken
 	void Scale(Matrix4x4f* mat, float scaleX, float scaleY)
 	{
-		(*mat)[0].x *= scaleX;
-		(*mat)[1].y *= scaleY;
+		(*mat)[0].x += scaleX;
+		(*mat)[1].y += scaleY;
 	}
 
 }

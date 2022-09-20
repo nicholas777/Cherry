@@ -17,6 +17,8 @@ namespace Cherry
 		virtual void OnDetach() override;
 		virtual void OnUpdate(const Timestep& delta) override;
 
+		virtual void OnEvent(Event& e) override;
+
 		virtual void OnImGuiRender() override;
 
 		static void SelectEntity(const Entity& entity);
@@ -27,11 +29,13 @@ namespace Cherry
 		static Scoped<PropertiesPanel> m_PropertiesPanel;
 
 		Shared<Scene> m_Scene;
-
 		Scoped<Framebuffer> m_Framebuffer;
 
 		Vector2f m_ViewportPanelSize;
 
-		Entity m_EditorCamera;
+		bool m_IsRuntime = false;
+		StaticCamera m_EditorCamera;
+
+		static Entity m_SelectedEntity;
 	};
 }

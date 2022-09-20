@@ -107,11 +107,11 @@ namespace Cherry
 		delete s_Data;
 	}
 	
-	void Renderer2D::Begin(Camera* cam, Matrix4x4f transform)
+	void Renderer2D::Begin(const Matrix4x4f& proj, const Matrix4x4f& transform)
 	{
 		s_Data->TextureShader->Bind();
 
-		Matrix4x4f VP = cam->GetProjection() * transform; // TODO: Inverse this
+		Matrix4x4f VP = proj * transform; // TODO: Inverse this
 
 		s_Data->TextureShader->SetMat4("VPMatrix", VP);
 		NewBatch();

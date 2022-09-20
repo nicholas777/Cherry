@@ -10,7 +10,7 @@ Scene:
         scale: [1, 1]
       CameraComponent:
         primary: true
-        span: 5
+        span: 1
         znear: -1
         zfar: 1
     - ID: 3
@@ -39,7 +39,7 @@ Scene:
       NameComponent:
         name: Blue Square
       TransformComponent:
-        translation: [0, 2]
+        translation: [-2, 2]
         rotation: 0
         scale: [1, 1]
       SpriteComponent:

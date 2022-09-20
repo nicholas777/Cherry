@@ -4,6 +4,33 @@ namespace Cherry
 {
 	Scoped<SceneHierarchyPanel> EditorLayer::m_SceneHierarchyPanel;
 	Scoped<PropertiesPanel> EditorLayer::m_PropertiesPanel;
+	Entity EditorLayer::m_SelectedEntity = Entity();
+
+
+
+	Vector2f GetCameraOffsets(const Timestep& delta)
+	{
+		float x = 0, y = 0;
+
+		if (Input::GetKeyPressed(Key::W))
+		{
+			y -= 0.01f;
+		}
+		if (Input::GetKeyPressed(Key::S))
+		{
+			y += 0.01f;
+		}
+		if (Input::GetKeyPressed(Key::A))
+		{
+			x += 0.01f;
+		}
+		if (Input::GetKeyPressed(Key::D))
+		{
+			x -= 0.01f;
+		}
+
+		return Vector2f(x * delta.GetMilliseconds(), y * delta.GetMilliseconds());
+	}
 
 	class CameraControllerScript : public Script
 	{
@@ -60,8 +87,7 @@ namespace Cherry
 
 		m_Framebuffer = Framebuffer::Create(data);
 
-		TextureParams params;
-		params.format = TextureFormat::RGBA;
+		m_EditorCamera = StaticCamera(5, -1, 1);
 
 		m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
 		m_PropertiesPanel = new PropertiesPanel();
@@ -77,8 +103,31 @@ namespace Cherry
 	void EditorLayer::OnUpdate(const Timestep& delta)
 	{
 		m_Framebuffer->Bind();
-		m_Scene->OnUpdate(delta);
+		if (m_IsRuntime)
+		{
+			m_Scene->OnUpdate(delta);
+		}
+		else
+		{
+			Vector2f xy = GetCameraOffsets(delta);
+			Translate(&m_EditorCamera.GetTransform(), xy.x, xy.y);
+			m_Scene->OnUpdate(delta, m_EditorCamera);
+		}
+
 		m_Framebuffer->Unbind();
+	}
+
+	void EditorLayer::OnEvent(Event& e)
+	{
+		if (e.Type == EventType::MouseScrollEvent)
+		{
+			MouseScrollEvent& ev = static_cast<MouseScrollEvent&>(e);
+			if (!m_IsRuntime)
+			{
+				// TODO: When scrolling the diection reverses at some point
+				Scale(&m_EditorCamera.GetTransform(), (float)ev.Offset / 25);
+			}
+		}
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -126,6 +175,8 @@ namespace Cherry
 		m_SceneHierarchyPanel->OnUpdate();
 		m_PropertiesPanel->OnUpdate();
 
+		ImGui::End();
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Scene Viewport");
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
@@ -143,12 +194,11 @@ namespace Cherry
 		ImGui::PopStyleVar();
 
         ImGui::End();
-        ImGui::End();
 	}
 
 	void EditorLayer::SelectEntity(const Entity& entity)
 	{
-		CH_INFO("Entity selected: " + entity.GetComponent<NameComponent>().Name);
+		m_SelectedEntity = entity;
 		m_PropertiesPanel->SetEntity(entity);
 	}
 

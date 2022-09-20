@@ -17,7 +17,7 @@ namespace Cherry
 		static void Init();
 		static void Shutdown();
 
-		static void Begin(Camera* cam, Matrix4x4f transform);
+		static void Begin(const Matrix4x4f& proj, const Matrix4x4f& transform);
 		static void Begin();
 		static void End();
 

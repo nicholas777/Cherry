@@ -41,6 +41,7 @@
 
 #include "Graphics/Cameras/Camera.h"
 #include "Graphics/Cameras/SceneCamera.h"
+#include "Graphics/Cameras/StaticCamera.h"
 
 #include "Math/Vector.h"
 #include "Math/Matrix.h"
@@ -50,7 +51,5 @@
 
 #include "core/Application.h"
 #include "core/Timestep.h"
-
-#include "Graphics/Cameras/CameraController.h"
 
 #include "Utils/ColorUtils.h"
