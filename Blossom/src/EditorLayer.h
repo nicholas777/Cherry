@@ -3,6 +3,7 @@
 #include "Cherry.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertiesPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 
 namespace Cherry
 {
@@ -27,6 +28,7 @@ namespace Cherry
 
 		static Scoped<SceneHierarchyPanel> m_SceneHierarchyPanel;
 		static Scoped<PropertiesPanel> m_PropertiesPanel;
+		static Scoped<ContentBrowserPanel> m_ContentBrowserPanel;
 
 		Shared<Scene> m_Scene;
 		Scoped<Framebuffer> m_Framebuffer;

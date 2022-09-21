@@ -2,6 +2,7 @@
 
 #include "Renderer/Texture.h"
 #include "core/Pointer.h"
+#include "Scene.h"
 
 namespace Cherry
 {
@@ -17,14 +18,28 @@ namespace Cherry
 		TextureAsset(TextureAsset&&) = default;
 	};
 
+	struct SceneAsset
+	{
+		Scoped<Scene> ptr;
+		std::string filepath;
+	};
+
 	class AssetManager
 	{
 	public:
-		uint32_t CreateTexture(const std::string& filepath, TextureParams params = TextureParams());
-		TextureAsset& GetTexture(uint32_t id);
-	private:
-		std::unordered_map<uint32_t, TextureAsset> m_Textures;
+		static uint32_t CreateTexture(const std::string& filepath, TextureParams params = TextureParams());
+		static uint32_t CreateTexture(uint32_t ID, const std::string& filepath, TextureParams params = TextureParams());
+		
+		static TextureAsset& GetTexture(uint32_t id);
+		static std::unordered_map<uint32_t, TextureAsset>& GetTextures();
 
-		friend class SceneSerializer;
+		static uint32_t CreateScene(const std::string& filepath);
+		static uint32_t CreateScene(uint32_t ID, const std::string& filepath);
+
+		static SceneAsset& GetScene(uint32_t id);
+		static std::unordered_map<uint32_t, SceneAsset>& GetScenes();
+	private:
+		static std::unordered_map<uint32_t, TextureAsset> m_Textures;
+		static std::unordered_map<uint32_t, SceneAsset> m_Scenes;
 	};
 }

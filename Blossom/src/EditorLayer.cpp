@@ -4,6 +4,7 @@ namespace Cherry
 {
 	Scoped<SceneHierarchyPanel> EditorLayer::m_SceneHierarchyPanel;
 	Scoped<PropertiesPanel> EditorLayer::m_PropertiesPanel;
+	Scoped<ContentBrowserPanel> EditorLayer::m_ContentBrowserPanel;
 	Entity EditorLayer::m_SelectedEntity = Entity();
 
 
@@ -91,12 +92,14 @@ namespace Cherry
 
 		m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
 		m_PropertiesPanel = new PropertiesPanel();
+		m_ContentBrowserPanel = new ContentBrowserPanel();
 
 		RenderCommand::SetClearColor({1, 0, 0, 1});
 	}
 
 	void EditorLayer::OnDetach()
 	{
+		m_ContentBrowserPanel.Free();
 		SceneSerializer::Serialize(m_Scene, "assets/Project/example.chs");
 	}
 
@@ -174,6 +177,7 @@ namespace Cherry
 
 		m_SceneHierarchyPanel->OnUpdate();
 		m_PropertiesPanel->OnUpdate();
+		m_ContentBrowserPanel->OnUpdate();
 
 		ImGui::End();
 
@@ -192,6 +196,8 @@ namespace Cherry
 		ImGui::Image((void*)textureID, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::PopStyleVar();
+
+		ImGui::ShowDemoWindow();
 
         ImGui::End();
 	}

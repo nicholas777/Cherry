@@ -150,14 +150,4 @@ namespace Cherry
 		}
 		return {};
 	}
-	
-	uint32_t Scene::CreateTexture(const std::string& filepath, TextureParams params)
-	{
-		return m_AssetManager.CreateTexture(filepath, params);
-	}
-
-	TextureAsset& Scene::GetTexture(uint32_t id)
-	{
-		return m_AssetManager.GetTexture(id);
-	}
 }

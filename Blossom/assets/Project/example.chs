@@ -57,12 +57,3 @@ Scene:
         Mode: color
         Texture: Invalid
         color: [0.0196180604, 0.725868702, 0.0305254217, 1]
-  Assets:
-    Textures:
-      - ID: 0
-        File: assets/Project/Smile.png
-        Params:
-          Format: 1
-          MinFilter: 1
-          MagFilter: 2
-          Wrap: 1
