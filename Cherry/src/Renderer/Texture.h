@@ -57,6 +57,7 @@ namespace Cherry
 		virtual uint32_t GetHeight() = 0;
 
 		virtual void SetData(void* data) = 0;
+		virtual void ResetParams(TextureParams params) = 0;
 		virtual uint32_t GetTextureID() = 0;
 
 		virtual void Bind(int unit = 0) = 0;

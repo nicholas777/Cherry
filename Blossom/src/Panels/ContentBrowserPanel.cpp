@@ -1,4 +1,6 @@
 #include "ContentBrowserPanel.h"
+#include "EditorLayer.h"
+
 #include <imgui.h>
 
 namespace Cherry
@@ -46,10 +48,32 @@ namespace Cherry
 				ImGui::TableNextRow();
 
 				ImGui::TableSetColumnIndex(0);
-				ImGui::Text(asset.second.filepath.c_str());
+				if (ImGui::Selectable(asset.second.filepath.c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+				{
+					EditorLayer::SelectAsset(&asset.second);
+				}
 
 				ImGui::TableSetColumnIndex(1);
 				ImGui::Text("Texture");
+			}
+
+			for (std::pair<const uint32_t, SceneAsset>& asset : AssetManager::GetScenes())
+			{
+				ImGui::TableNextRow();
+
+				ImGui::TableSetColumnIndex(0);
+				if (ImGui::Selectable(asset.second.filepath.c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+				{
+					EditorLayer::SelectAsset(&asset.second);
+				}
+
+				ImGui::TableSetColumnIndex(1);
+				ImGui::Text("Scene");
+
+				if (ImGui::IsItemClicked())
+				{
+					CH_TRACE("Asset clicked");
+				}
 			}
 
 			ImGui::EndTable();

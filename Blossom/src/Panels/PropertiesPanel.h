@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Cherry.h"
+#include <Cherry.h>
 
 namespace Cherry
 {
@@ -10,10 +10,18 @@ namespace Cherry
 		PropertiesPanel();
 		
 		void SetEntity(const Entity& e);
+		void SetAsset(Asset* a);
 		void OnUpdate();
 
 	private:
 		Entity m_Current;
+		Asset* m_Asset;
+
+		int m_Mode = 0;
+
 		bool m_UseTexture;
+
+		void DrawEntity();
+		void DrawAsset();
 	};
 }

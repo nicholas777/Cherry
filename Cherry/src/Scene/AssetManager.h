@@ -6,22 +6,35 @@
 
 namespace Cherry
 {
-	struct TextureAsset
+	enum class AssetType
+	{
+		Unknown = 0,
+		Texture, Scene
+	};
+
+	struct Asset
+	{
+		AssetType type;
+
+		Asset(AssetType Type) : type(Type) {}
+	};
+
+	struct TextureAsset : public Asset
 	{
 		Scoped<Texture> ptr;
 		std::string filepath;
 
 		TextureParams params;
 
-		TextureAsset() = default;
-		TextureAsset(const TextureAsset&) = default;
-		TextureAsset(TextureAsset&&) = default;
+		TextureAsset() : Asset(AssetType::Texture) {}
 	};
 
-	struct SceneAsset
+	struct SceneAsset : public Asset
 	{
 		Scoped<Scene> ptr;
 		std::string filepath;
+
+		SceneAsset() : Asset(AssetType::Scene) {}
 	};
 
 	class AssetManager

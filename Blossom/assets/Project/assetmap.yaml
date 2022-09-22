@@ -5,7 +5,7 @@ Textures:
   - ID: 0
     File: assets/Project/Smile.png
     Params:
-      Format: 1
+      Format: 6
       MinFilter: 1
       MagFilter: 2
       Wrap: 1

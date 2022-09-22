@@ -208,4 +208,9 @@ namespace Cherry
 		m_PropertiesPanel->SetEntity(entity);
 	}
 
+	void EditorLayer::SelectAsset(Asset* asset)
+	{
+		m_PropertiesPanel->SetAsset(asset);
+	}
+
 }

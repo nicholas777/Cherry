@@ -23,6 +23,7 @@ namespace Cherry
 		virtual void OnImGuiRender() override;
 
 		static void SelectEntity(const Entity& entity);
+		static void SelectAsset(Asset* asset);
 
 	private:
 

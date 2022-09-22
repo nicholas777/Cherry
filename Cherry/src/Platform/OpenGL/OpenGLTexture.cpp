@@ -159,8 +159,12 @@ namespace Cherry
 
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, ToGLFormat(params.minFilter));
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, ToGLFormat(params.magFilter));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ToGLFormat(params.wrap));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ToGLFormat(params.wrap));
+		
+		if (params.wrap != TextureWrap::None)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ToGLFormat(params.wrap));
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ToGLFormat(params.wrap));
+		}
 
 		stbi_image_free(data);
 	}
@@ -208,6 +212,20 @@ namespace Cherry
 	OpenGLTexture::~OpenGLTexture()
 	{
 		glDeleteTextures(1, &m_TextureID);
+	}
+
+	void OpenGLTexture::ResetParams(TextureParams params)
+	{
+		Bind();
+
+		glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, ToGLFormat(params.minFilter));
+		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, ToGLFormat(params.magFilter));
+
+		if (params.wrap != TextureWrap::None)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ToGLFormat(params.wrap));
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ToGLFormat(params.wrap));
+		}
 	}
 
 	void OpenGLTexture::SetData(void* data)

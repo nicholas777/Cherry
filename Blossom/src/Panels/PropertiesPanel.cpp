@@ -14,9 +14,25 @@ namespace Cherry
         {
             m_UseTexture = m_Current.GetComponent<SpriteComponent>().SpriteTexture.IsAlive();
         }
+
+        m_Mode = 0;
+    }
+
+    void PropertiesPanel::SetAsset(Asset* a)
+    {
+        m_Asset = a;
+        m_Mode = 1;
     }
 
     void PropertiesPanel::OnUpdate()
+    {
+        if (m_Mode == 0)
+            DrawEntity();
+        else
+            DrawAsset();
+    }
+
+    void PropertiesPanel::DrawEntity()
     {
         if (!m_Current)
         {
@@ -240,6 +256,107 @@ namespace Cherry
 
         ImGui::End();
         
+    }
+
+    void PropertiesPanel::DrawAsset()
+    {
+        if (m_Asset == nullptr)
+        {
+            ImGui::Begin("Properties");
+            ImGui::Text("Invalid Asset!");
+            ImGui::End();
+            return;
+        }
+
+        if (m_Asset->type == AssetType::Unknown)
+        {
+            ImGui::Begin("Properties");
+            ImGui::Text("Invalid asset!");
+            ImGui::End();
+            return;
+        }
+
+        ImGui::Begin("Properties");
+
+        if (m_Asset->type == AssetType::Texture)
+        {
+            TextureAsset* asset = (TextureAsset*)m_Asset;
+
+            const char* items[] = { "Repeat", "Mirrored Repeat", "Clamp to Edge", "Clamp to Border" };
+            if (ImGui::BeginCombo("Wrap", items[(int)asset->params.wrap - 1]))
+            {
+                for (int i = 0; i < IM_ARRAYSIZE(items); i++)
+                {
+                    bool selected = i == (int)asset->params.wrap - 1;
+                    if (ImGui::Selectable(items[i], selected))
+                    {
+                        asset->params.wrap = static_cast<TextureWrap>(i + 1);
+                        asset->ptr->ResetParams(asset->params);
+                    }
+
+                    if (selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            const char* items3[] = { "Nearest", "Linear" };
+            if (ImGui::BeginCombo("Min-Filter", items3[(int)asset->params.minFilter - 1]))
+            {
+                for (int i = 0; i < IM_ARRAYSIZE(items3); i++)
+                {
+                    bool selected = i == (int)asset->params.minFilter - 1;
+                    if (ImGui::Selectable(items3[i], selected))
+                    {
+                        asset->params.minFilter = static_cast<TextureFilter>(i + 1);
+                        asset->ptr->ResetParams(asset->params);
+                    }
+
+                    if (selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            const char* items4[] = { "Nearest", "Linear" };
+            if (ImGui::BeginCombo("Mag-Filter", items4[(int)asset->params.magFilter - 1]))
+            {
+                for (int i = 0; i < IM_ARRAYSIZE(items4); i++)
+                {
+                    bool selected = i == (int)asset->params.magFilter - 1;
+                    if (ImGui::Selectable(items4[i], selected))
+                    {
+                        asset->params.magFilter = static_cast<TextureFilter>(i + 1);
+                        asset->ptr->ResetParams(asset->params);
+                    }
+
+                    if (selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            const char* items2[] = { "RGBA", "RGB", "Luminance", "Luminance with Alpha", "Depth24Stencil8", "Auto" };
+            if (ImGui::BeginCombo("Format", items2[(int)asset->params.format - 1]))
+            {
+                for (int i = 0; i < IM_ARRAYSIZE(items2); i++)
+                {
+                    bool selected = i == (int)asset->params.format - 1;
+                    if (ImGui::Selectable(items2[i], selected))
+                    {
+                        asset->params.format = static_cast<TextureFormat>(i + 1);
+                        asset->ptr = Texture::Create(asset->filepath, asset->params);
+                    }
+
+                    if (selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+
+                ImGui::EndCombo();
+            }
+        }
+
+        ImGui::End();
     }
 
 }

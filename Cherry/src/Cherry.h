@@ -38,6 +38,7 @@
 #include "Scene/Scene.h"
 #include "Scene/Script.h"
 #include "Scene/SceneSerializer.h"
+#include "Scene/AssetManager.h"
 
 #include "Graphics/Cameras/Camera.h"
 #include "Graphics/Cameras/SceneCamera.h"

@@ -22,6 +22,7 @@ namespace Cherry
 
 		virtual uint32_t GetTextureID() override { return m_TextureID; };
 
+		virtual void ResetParams(TextureParams params) override;
 		virtual void SetData(void* data) override;
 
 		virtual void Bind(int unit = 0) override;
