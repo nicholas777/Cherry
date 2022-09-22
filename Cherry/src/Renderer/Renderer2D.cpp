@@ -34,7 +34,7 @@ namespace Cherry
 
 		uint32_t CurrentRects = 0;
 
-		Scoped<Texture> WhiteTexture;
+		Shared<Texture> WhiteTexture;
 		std::array<Texture*, MaxTextureSlots> TextureSlots;
 		float TextureSlotIndex = 1.0;
 	};

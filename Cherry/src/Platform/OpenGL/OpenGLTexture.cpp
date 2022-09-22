@@ -154,9 +154,10 @@ namespace Cherry
 
 		glGenTextures(1, &m_TextureID);
 		glBindTexture(GL_TEXTURE_2D, m_TextureID);
-
+		
 		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, width, height, 0, m_Format, GL_UNSIGNED_BYTE, data);
 
+		// TODO: Random access violation sometimes happens here, fix it
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, ToGLFormat(params.minFilter));
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, ToGLFormat(params.magFilter));
 		

@@ -5,9 +5,9 @@ Textures:
   - ID: 0
     File: assets/Project/Smile.png
     Params:
-      Format: 6
-      MinFilter: 1
-      MagFilter: 2
+      Format: 2
+      MinFilter: 2
+      MagFilter: 1
       Wrap: 1
   - ID: 1
     File: assets/Project/tilemap_packed.png

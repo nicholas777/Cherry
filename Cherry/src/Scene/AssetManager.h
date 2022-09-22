@@ -21,7 +21,7 @@ namespace Cherry
 
 	struct TextureAsset : public Asset
 	{
-		Scoped<Texture> ptr;
+		Shared<Texture> ptr;
 		std::string filepath;
 
 		TextureParams params;
@@ -31,7 +31,7 @@ namespace Cherry
 
 	struct SceneAsset : public Asset
 	{
-		Scoped<Scene> ptr;
+		Shared<Scene> ptr;
 		std::string filepath;
 
 		SceneAsset() : Asset(AssetType::Scene) {}

@@ -62,11 +62,11 @@ namespace Cherry
 
 		virtual void Bind(int unit = 0) = 0;
 
-		static Scoped<Texture> Create(std::string path);
-		static Scoped<Texture> Create(uint32_t width, uint32_t height);
+		static Shared<Texture> Create(std::string path);
+		static Shared<Texture> Create(uint32_t width, uint32_t height);
 
-		static Scoped<Texture> Create(std::string path, TextureParams params);
-		static Scoped<Texture> Create(uint32_t width, uint32_t height, TextureParams params);
+		static Shared<Texture> Create(std::string path, TextureParams params);
+		static Shared<Texture> Create(uint32_t width, uint32_t height, TextureParams params);
 	};
 
 	struct SubTexture

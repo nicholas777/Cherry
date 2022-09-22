@@ -176,6 +176,17 @@ namespace Cherry
                             ImVec2(160.0f, 160.0f), ImVec2(0, 1), 
                             ImVec2(1, 0));
                     }
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetTexture"))
+                        {
+                            CH_ASSERT(payload->DataSize == sizeof(TextureAsset), "help idk what this error is");
+                            sprite.SpriteTexture = (*(const TextureAsset*)payload->Data).ptr;
+                        }
+
+                        ImGui::EndDragDropTarget();
+                    }
                 }
 
                 ImGui::TreePop();
@@ -354,6 +365,7 @@ namespace Cherry
 
                 ImGui::EndCombo();
             }
+
         }
 
         ImGui::End();

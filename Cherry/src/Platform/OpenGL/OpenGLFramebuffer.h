@@ -21,7 +21,7 @@ namespace Cherry
 		virtual void Unbind() override;
 	private:
 		uint32_t m_FramebufferID;
-		Scoped<Texture> m_ColorAttachment, m_DepthStencilAttachment;
+		Shared<Texture> m_ColorAttachment, m_DepthStencilAttachment;
 		FramebufferData m_Data;
 	};
 }

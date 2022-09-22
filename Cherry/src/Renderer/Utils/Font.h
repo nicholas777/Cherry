@@ -38,7 +38,7 @@ namespace Cherry
 		texture_atlas_t* m_FtTexture;
 		texture_font_t* m_FtFont;
 
-		Scoped<Texture> m_Texture;
+		Shared<Texture> m_Texture;
 		std::unordered_map<char, Character> m_Characters;
 
 		uint32_t m_FontSize;

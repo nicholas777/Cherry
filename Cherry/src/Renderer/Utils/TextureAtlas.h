@@ -19,7 +19,7 @@ namespace Cherry
 		inline uint32_t GetSheetWidth() { return m_TotalWidth; }
 		inline uint32_t GetSheetHeight() { return m_TotalHeight; }
 	private:
-		Scoped<Texture> m_Texture;
+		Shared<Texture> m_Texture;
 		std::vector<SubTexture> m_SubTextures;
 
 		uint32_t m_TextureWidth, m_TextureHeight;

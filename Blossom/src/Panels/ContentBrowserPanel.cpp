@@ -53,6 +53,13 @@ namespace Cherry
 					EditorLayer::SelectAsset(&asset.second);
 				}
 
+				if (ImGui::BeginDragDropSource())
+				{
+					ImGui::SetDragDropPayload("AssetTexture", &asset.second, sizeof(TextureAsset));
+					ImGui::Text(asset.second.filepath.c_str());
+					ImGui::EndDragDropSource();
+				}
+
 				ImGui::TableSetColumnIndex(1);
 				ImGui::Text("Texture");
 			}
