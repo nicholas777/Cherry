@@ -1,0 +1,1 @@
+call ..\lib\premake\premake5 vs2022 --file=../premake5.lua

@@ -176,11 +176,25 @@ namespace Cherry
             ImGui::DockSpace(ImGui::GetID("MyDockSpace"), ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
+		ImGui::End();
+
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+				{
+
+				}
+
+				ImGui::EndMenu();
+			}
+		}
+
 		m_SceneHierarchyPanel->OnUpdate();
 		m_PropertiesPanel->OnUpdate();
 		m_ContentBrowserPanel->OnUpdate();
 
-		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Scene Viewport");
