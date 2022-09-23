@@ -22,7 +22,9 @@ Scene:
         scale: [1, 1]
       SpriteComponent:
         Mode: color
-        Texture: Invalid
+        Texture: -1
+        BottomLeftUV: [0, 0]
+        TopRightUV: [1, 1]
         color: [1, 1, 1, 1]
     - ID: 2
       NameComponent:
@@ -33,7 +35,9 @@ Scene:
         scale: [1, 1]
       SpriteComponent:
         Mode: color
-        Texture: Invalid
+        Texture: -1
+        BottomLeftUV: [0, 0]
+        TopRightUV: [1, 1]
         color: [0, 0, 0, 1]
     - ID: 1
       NameComponent:
@@ -44,7 +48,9 @@ Scene:
         scale: [1, 1]
       SpriteComponent:
         Mode: texture
-        Texture: Invalid
+        Texture: 0
+        BottomLeftUV: [0, 0]
+        TopRightUV: [1, 1]
         color: [1, 1, 1, 1]
     - ID: 0
       NameComponent:
@@ -55,5 +61,7 @@ Scene:
         scale: [1, 1]
       SpriteComponent:
         Mode: color
-        Texture: Invalid
+        Texture: -1
+        BottomLeftUV: [0, 0]
+        TopRightUV: [1, 1]
         color: [0.0196180604, 0.725868702, 0.0305254217, 1]

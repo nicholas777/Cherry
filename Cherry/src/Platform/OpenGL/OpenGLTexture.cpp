@@ -157,7 +157,9 @@ namespace Cherry
 		
 		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, width, height, 0, m_Format, GL_UNSIGNED_BYTE, data);
 
-		// TODO: Random access violation sometimes happens here, fix it
+		// TODO: Random access violation sometimes happens here:
+		// Exception thrown at 0x00007FFD3214C75B (ig9icd64.dll)
+		// in Blossom.exe: 0xC0000005: Access violation reading location 
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, ToGLFormat(params.minFilter));
 		glTextureParameteri(m_TextureID, GL_TEXTURE_MAG_FILTER, ToGLFormat(params.magFilter));
 		

@@ -2,9 +2,7 @@
 Release 0.1
 - Blossom Editor
     - Play button
-    - Content browser panel
     - Level editor
-- Asset system
 
 Release 0.2
 - UI System

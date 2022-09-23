@@ -71,18 +71,28 @@ namespace Cherry
 
 	struct SubTexture
 	{
-		Texture* texture;
+		Shared<Texture> texture;
 		Vector2f textureCoords[4];
 
 		SubTexture()
 			: texture(nullptr) {};
 
-		SubTexture(Texture* tex, const Vector2f& vec1, const Vector2f& vec2, const Vector2f& vec3, const Vector2f& vec4)
+		SubTexture(Shared<Texture> tex, const Vector2f& vec1, const Vector2f& vec2, const Vector2f& vec3, const Vector2f& vec4)
 		{
 			textureCoords[0] = vec1;
 			textureCoords[1] = vec2;
 			textureCoords[2] = vec3;
 			textureCoords[3] = vec4;
+
+			texture = tex;
+		}
+
+		SubTexture(Shared<Texture> tex, const Vector2f& bottomLeft = Vector2f(0.0f, 0.0f), const Vector2f& topRight = Vector2f(1.0, 1.0))
+		{
+			textureCoords[0] = bottomLeft;
+			textureCoords[1] = Vector2f(topRight.x, bottomLeft.y);
+			textureCoords[2] = topRight;
+			textureCoords[3] = Vector2f(bottomLeft.x, topRight.y);
 
 			texture = tex;
 		}

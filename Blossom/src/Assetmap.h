@@ -12,11 +12,9 @@ namespace Cherry
 		static void Load(const std::filesystem::path& filepath)
 		{
 
-			// TODO: Checks to make suer that filepaths are valid
-
 			YAML::Node map = YAML::LoadFile(filepath.generic_u8string());
 
-			if (map["Textures"] && map["Textures"].IsSequence())
+			if (map["Textures"])
 			{
 				for (int i = 0; i < map["Textures"].size(); i++)
 				{
@@ -47,6 +45,22 @@ namespace Cherry
 					);
 				}
 			}
+			
+			for (auto& entry : std::filesystem::recursive_directory_iterator(filepath.parent_path()))
+			{
+				if (entry.path().extension() == ".png")
+				{
+					AssetManager::CreateTextureIfNotExists(entry.path().string());
+					continue;
+				}
+
+				if (entry.path().extension() == ".chs")
+				{
+					AssetManager::CreateSceneIfNotExists(entry.path().string());
+					continue;
+				}
+			}
+			
 		}
 
 		static std::filesystem::path Create(const std::filesystem::path& directory)

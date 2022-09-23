@@ -270,7 +270,7 @@ namespace Cherry
 
 		for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
 		{
-			if (texture.texture == s_Data->TextureSlots[i])
+			if (texture.texture.Get() == s_Data->TextureSlots[i])
 			{
 				textureIndex = i;
 				break;
@@ -286,7 +286,7 @@ namespace Cherry
 			}
 
 			textureIndex = s_Data->TextureSlotIndex;
-			s_Data->TextureSlots[textureIndex] = texture.texture;
+			s_Data->TextureSlots[textureIndex] = texture.texture.Get();
 			s_Data->TextureSlotIndex++;
 		}
 
@@ -332,7 +332,7 @@ namespace Cherry
 
 		for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
 		{
-			if (texture.texture == s_Data->TextureSlots[i])
+			if (texture.texture.Get() == s_Data->TextureSlots[i])
 			{
 				textureIndex = i;
 				break;
@@ -348,7 +348,7 @@ namespace Cherry
 			}
 
 			textureIndex = s_Data->TextureSlotIndex;
-			s_Data->TextureSlots[textureIndex] = texture.texture;
+			s_Data->TextureSlots[textureIndex] = texture.texture.Get();
 			s_Data->TextureSlotIndex++;
 		}
 
@@ -492,7 +492,7 @@ namespace Cherry
 
 		for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
 		{
-			if (texture.texture == s_Data->TextureSlots[i])
+			if (texture.texture.Get() == s_Data->TextureSlots[i])
 			{
 				textureIndex = i;
 				break;
@@ -508,7 +508,7 @@ namespace Cherry
 			}
 
 			textureIndex = s_Data->TextureSlotIndex;
-			s_Data->TextureSlots[textureIndex] = texture.texture;
+			s_Data->TextureSlots[textureIndex] = texture.texture.Get();
 			s_Data->TextureSlotIndex++;
 		}
 
@@ -621,7 +621,7 @@ namespace Cherry
 
 		for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
 		{
-			if (texture.texture == s_Data->TextureSlots[i])
+			if (texture.texture.Get() == s_Data->TextureSlots[i])
 			{
 				textureIndex = i;
 				break;
@@ -637,7 +637,7 @@ namespace Cherry
 			}
 			
 			textureIndex = s_Data->TextureSlotIndex;
-			s_Data->TextureSlots[textureIndex] = texture.texture;
+			s_Data->TextureSlots[textureIndex] = texture.texture.Get();
 			s_Data->TextureSlotIndex++;
 		}
 

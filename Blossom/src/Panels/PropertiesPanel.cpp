@@ -172,17 +172,56 @@ namespace Cherry
                     {
                         ImGui::Text("Texture");
                         ImGui::Image(
-                            (void*)sprite.SpriteTexture->GetTextureID(), 
+                            (void*)sprite.SpriteTexture->texture->GetTextureID(), 
                             ImVec2(160.0f, 160.0f), ImVec2(0, 1), 
                             ImVec2(1, 0));
+
+                        float bl[2] =
+                        {
+                            sprite.SpriteTexture->textureCoords[0].x,
+                            sprite.SpriteTexture->textureCoords[0].y
+                        };
+
+                        float tr[2] =
+                        {
+                            sprite.SpriteTexture->textureCoords[2].x,
+                            sprite.SpriteTexture->textureCoords[3].y
+                        };
+
+                        if (ImGui::InputFloat2("Bottom-Left UV", bl))
+                        {
+                            sprite.SpriteTexture->textureCoords[0] = bl;
+                            sprite.SpriteTexture->textureCoords[1] = Vector2f(tr[0], bl[1]);
+                            sprite.SpriteTexture->textureCoords[3] = Vector2f(bl[0], tr[1]);
+                        }
+
+                        if (ImGui::InputFloat2("Top-Right UV", tr))
+                        {
+                            sprite.SpriteTexture->textureCoords[1] = Vector2f(tr[0], bl[1]);
+                            sprite.SpriteTexture->textureCoords[2] = tr;
+                            sprite.SpriteTexture->textureCoords[3] = Vector2f(bl[0], tr[1]);
+                        }
                     }
 
                     if (ImGui::BeginDragDropTarget())
                     {
                         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetTexture"))
                         {
-                            CH_ASSERT(payload->DataSize == sizeof(TextureAsset), "help idk what this error is");
-                            sprite.SpriteTexture = (*(const TextureAsset*)payload->Data).ptr;
+                            CH_ASSERT(payload->DataSize == sizeof(uint32_t), "");
+                            if (sprite.SpriteTexture.IsAlive())
+                            {
+                                sprite.SpriteTexture = new SubTexture(
+                                    AssetManager::GetTexture((*(const uint32_t*)payload->Data)).ptr,
+                                    sprite.SpriteTexture->textureCoords[0],
+                                    sprite.SpriteTexture->textureCoords[2]
+                                );
+                            }
+                            else
+                            {
+                                sprite.SpriteTexture = new SubTexture(
+                                    AssetManager::GetTexture((*(const uint32_t*)payload->Data)).ptr
+                                );
+                            }
                         }
 
                         ImGui::EndDragDropTarget();

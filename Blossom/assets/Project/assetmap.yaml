@@ -1,16 +1,16 @@
 Scenes:
   - ID: 0
-    File: assets/Project/example.chs
+    File: assets/Project\example.chs
 Textures:
   - ID: 0
-    File: assets/Project/Smile.png
+    File: assets/Project\Smile.png
     Params:
       Format: 2
       MinFilter: 2
       MagFilter: 1
       Wrap: 1
   - ID: 1
-    File: assets/Project/tilemap_packed.png
+    File: assets/Project\tilemap_packed.png
     Params:
       Format: 1
       MinFilter: 1

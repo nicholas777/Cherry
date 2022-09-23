@@ -35,6 +35,22 @@ namespace Cherry
 		return ID;
 	}
 
+	void AssetManager::CreateTextureIfNotExists(const std::string& filepath, TextureParams params)
+	{
+		for (std::pair<const uint32_t, TextureAsset>& asset : m_Textures)
+		{
+			if (asset.second.filepath == filepath)
+				return;
+		}
+
+		TextureAsset texture;
+		texture.filepath = filepath;
+		texture.ptr = Texture::Create(filepath, params);
+		texture.params = params;
+
+		m_Textures.insert(std::make_pair(m_Textures.size(), std::move(texture)));
+	}
+
 	TextureAsset& AssetManager::GetTexture(uint32_t id)
 	{
 		CH_ASSERT(m_Textures.find(id) != m_Textures.end(), "Asset not found");
@@ -66,6 +82,21 @@ namespace Cherry
 		m_Scenes.insert(std::make_pair(ID, std::move(asset)));
 
 		return ID;
+	}
+
+	void AssetManager::CreateSceneIfNotExists(const std::string& filepath)
+	{
+		for (std::pair<const uint32_t, SceneAsset>& asset : m_Scenes)
+		{
+			if (asset.second.filepath == filepath)
+				return;
+		}
+
+		SceneAsset asset;
+		asset.filepath = filepath;
+		asset.ptr = SceneSerializer::Deserialize(filepath);
+
+		m_Scenes.insert(std::make_pair(m_Scenes.size(), std::move(asset)));
 	}
 
 	SceneAsset& AssetManager::GetScene(uint32_t id)

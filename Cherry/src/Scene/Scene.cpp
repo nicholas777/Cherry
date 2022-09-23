@@ -83,7 +83,7 @@ namespace Cherry
 					if (sprite.UseTexture)
 					{
 						if (sprite.SpriteTexture.IsAlive())
-							Renderer2D::DrawRect(transform.GetMatrix(), sprite.SpriteTexture, sprite.Color);
+							Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture, sprite.Color);
 					}
 					else
 					{
@@ -125,7 +125,7 @@ namespace Cherry
 				if (sprite.UseTexture)
 				{
 					if (sprite.SpriteTexture.IsAlive())
-						Renderer2D::DrawRect(transform.GetMatrix(), sprite.SpriteTexture, sprite.Color);
+						Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture, sprite.Color);
 				}
 				else
 				{

@@ -7,7 +7,7 @@ namespace Cherry
 	Scoped<ContentBrowserPanel> EditorLayer::m_ContentBrowserPanel;
 	Entity EditorLayer::m_SelectedEntity = Entity();
 
-
+	// TODO: Rewrite the whole assetmap system
 
 	Vector2f GetCameraOffsets(const Timestep& delta)
 	{
@@ -80,6 +80,8 @@ namespace Cherry
 
 	void EditorLayer::OnAttach()
 	{
+		m_ContentBrowserPanel = new ContentBrowserPanel();
+
 		m_Scene = SceneSerializer::Deserialize("assets/Project/example.chs");
 
 		FramebufferData data;
@@ -92,7 +94,6 @@ namespace Cherry
 
 		m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
 		m_PropertiesPanel = new PropertiesPanel();
-		m_ContentBrowserPanel = new ContentBrowserPanel();
 
 		RenderCommand::SetClearColor({1, 0, 0, 1});
 	}

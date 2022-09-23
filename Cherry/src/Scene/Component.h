@@ -47,7 +47,9 @@ namespace Cherry
 	struct SpriteComponent
 	{
 		Vector4f Color = { 1, 1, 1, 1 };
-		Shared<Texture> SpriteTexture;
+
+		Shared<SubTexture> SpriteTexture;
+
 		bool UseTexture = false;
 
 		SpriteComponent() = default;
@@ -56,8 +58,10 @@ namespace Cherry
 		SpriteComponent(const Vector4f& color)
 			: Color(color), SpriteTexture(nullptr), UseTexture(false) {}
 
-		SpriteComponent(const Shared<Texture>& texture)
-			: SpriteTexture(texture), Color({ 1, 1, 1, 1 }), UseTexture(true) {}
+		SpriteComponent(const Shared<Texture>& texture, 
+			const Vector2f& bottomLeft = Vector2f(0.0f, 0.0f),
+			const Vector2f& topRight = Vector2f(1.0f, 1.0f))
+			: SpriteTexture(new SubTexture(texture, bottomLeft, topRight)), Color({ 1, 1, 1, 1 }), UseTexture(true) {}
 	};
 
 	struct CameraComponent

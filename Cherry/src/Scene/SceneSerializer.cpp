@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Component.h"
 #include "Math/Vector.h"
+#include "AssetManager.h"
 
 #include "entt.hpp"
 
@@ -69,7 +70,22 @@ namespace Cherry
             out << YAML::Key << "Mode";
             out << YAML::Value << (comp.UseTexture == true ? "texture" : "color");
 
-            out << YAML::Key << "Texture" << YAML::Value << "Invalid";
+            uint32_t id = -1;
+
+            for (std::pair<const uint32_t, TextureAsset>& asset : AssetManager::GetTextures())
+            {
+                if (asset.second.ptr.Get() == comp.SpriteTexture->texture.Get())
+                {
+                    id = asset.first;
+                    break;
+                }
+            }
+
+            out << YAML::Key << "Texture" << YAML::Value << id;
+
+            SerializeVec2(comp.SpriteTexture->textureCoords[0], "BottomLeftUV", out);
+            SerializeVec2(comp.SpriteTexture->textureCoords[2], "TopRightUV", out);
+            
             SerializeVec4(comp.Color, "color", out);
 
             out << YAML::EndMap;
@@ -152,6 +168,7 @@ namespace Cherry
         {
             YAML::Node entity = scene["Scene"]["Entities"][i];
             Entity e;
+
             if (entity["NameComponent"])
             {
                 e = s->CreateEntity(entity["NameComponent"]["name"].as<std::string>());
@@ -185,9 +202,20 @@ namespace Cherry
                 else
                 {
                     comp.UseTexture = true;
+
+                    TextureAsset texture = AssetManager::GetTexture(entity["SpriteComponent"]["Texture"].as<uint32_t>());
+                    
+                    comp.SpriteTexture = new SubTexture(
+                        texture.ptr,
+                        Vector2f(entity["SpriteComponent"]["BottomLeftUV"][0].as<float>(),
+                                 entity["SpriteComponent"]["BottomLeftUV"][1].as<float>()),
+                        Vector2f(entity["SpriteComponent"]["TopRightUV"][0].as<float>(),
+                                 entity["SpriteComponent"]["TopRightUV"][1].as<float>())
+                    );
                 }
 
-                // TODO: Saving textures in serialization
+
+
 
                 comp.Color.x = entity["SpriteComponent"]["color"][0].as<float>();
                 comp.Color.y = entity["SpriteComponent"]["color"][1].as<float>();

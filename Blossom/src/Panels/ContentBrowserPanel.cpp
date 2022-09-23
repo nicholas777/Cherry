@@ -55,7 +55,7 @@ namespace Cherry
 
 				if (ImGui::BeginDragDropSource())
 				{
-					ImGui::SetDragDropPayload("AssetTexture", &asset.second, sizeof(TextureAsset));
+					ImGui::SetDragDropPayload("AssetTexture", &asset.first, sizeof(uint32_t));
 					ImGui::Text(asset.second.filepath.c_str());
 					ImGui::EndDragDropSource();
 				}
@@ -98,10 +98,10 @@ namespace Cherry
 			CH_ASSERT(false, "Invalid path");
 			return std::filesystem::path();
 		}
-
+		
 		for (auto& item : std::filesystem::recursive_directory_iterator(dir))
 		{
-			if (item.path().filename() == "assetmap" && item.path().extension() == ".yaml")
+			if (item.path().filename() == "assetmap.yaml")
 			{
 				return item.path();
 			}
