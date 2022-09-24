@@ -9,7 +9,13 @@ namespace Cherry
 	class SceneCamera : public Camera
 	{
 	public:
-		SceneCamera() = default;
+		SceneCamera()
+			: m_Span(10.0f), m_Near(-1.0f), m_Far(1.0f)
+		{
+			float aspect = WINDOW_WIDTH / WINDOW_HEIGHT;
+			m_Projection = ortho(-m_Span * aspect, m_Span * aspect, m_Span, -m_Span, m_Far, m_Near);
+		}
+		
 		SceneCamera(float span, float znear, float zfar)
 			: m_Span(span), m_Near(znear), m_Far(zfar)
 		{

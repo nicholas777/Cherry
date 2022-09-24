@@ -5,7 +5,7 @@ Scene:
       NameComponent:
         name: Camera
       TransformComponent:
-        translation: [-3, 0]
+        translation: [-4.55426502, -4.72019672]
         rotation: 0
         scale: [1, 1]
       CameraComponent:

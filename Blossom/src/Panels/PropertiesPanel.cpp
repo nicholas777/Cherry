@@ -164,9 +164,23 @@ namespace Cherry
                 }
                 else
                 {
-                    if (!sprite.SpriteTexture.IsAlive())
+                    if (!sprite.SpriteTexture->texture.IsAlive())
                     {
                         ImGui::Text("This entity doesn't have a texture attached");
+                        if (ImGui::BeginDragDropTarget())
+                        {
+                            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetTexture"))
+                            {
+                                CH_ASSERT(payload->DataSize == sizeof(uint32_t), "");
+
+                                sprite.SpriteTexture = new SubTexture(
+                                    AssetManager::GetTexture((*(const uint32_t*)payload->Data)).ptr
+                                );
+                            }
+
+                            ImGui::EndDragDropTarget();
+                        }
+
                     }
                     else
                     {
@@ -175,6 +189,23 @@ namespace Cherry
                             (void*)sprite.SpriteTexture->texture->GetTextureID(), 
                             ImVec2(160.0f, 160.0f), ImVec2(0, 1), 
                             ImVec2(1, 0));
+
+                        if (ImGui::BeginDragDropTarget())
+                        {
+                            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetTexture"))
+                            {
+                                CH_ASSERT(payload->DataSize == sizeof(uint32_t), "");
+                                
+                                sprite.SpriteTexture = new SubTexture(
+                                    AssetManager::GetTexture((*(const uint32_t*)payload->Data)).ptr,
+                                    sprite.SpriteTexture->textureCoords[0],
+                                    sprite.SpriteTexture->textureCoords[2]
+                                );
+                                
+                            }
+
+                            ImGui::EndDragDropTarget();
+                        }
 
                         float bl[2] =
                         {
@@ -202,30 +233,6 @@ namespace Cherry
                             sprite.SpriteTexture->textureCoords[3] = Vector2f(bl[0], tr[1]);
                         }
                     }
-
-                    if (ImGui::BeginDragDropTarget())
-                    {
-                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetTexture"))
-                        {
-                            CH_ASSERT(payload->DataSize == sizeof(uint32_t), "");
-                            if (sprite.SpriteTexture.IsAlive())
-                            {
-                                sprite.SpriteTexture = new SubTexture(
-                                    AssetManager::GetTexture((*(const uint32_t*)payload->Data)).ptr,
-                                    sprite.SpriteTexture->textureCoords[0],
-                                    sprite.SpriteTexture->textureCoords[2]
-                                );
-                            }
-                            else
-                            {
-                                sprite.SpriteTexture = new SubTexture(
-                                    AssetManager::GetTexture((*(const uint32_t*)payload->Data)).ptr
-                                );
-                            }
-                        }
-
-                        ImGui::EndDragDropTarget();
-                    }
                 }
 
                 ImGui::TreePop();
@@ -235,7 +242,7 @@ namespace Cherry
         if (m_Current.HasComponent<CameraComponent>())
         {
             ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_OpenOnArrow;
-            if (ImGui::TreeNodeEx((void*)2, flags, "Camera Component"))
+            if (ImGui::TreeNodeEx((void*)3, flags, "Camera Component"))
             {
                 CameraComponent& comp = m_Current.GetComponent<CameraComponent>();
 
@@ -256,7 +263,7 @@ namespace Cherry
                 }
 
                 float zfar = comp.camera.GetFar();
-                if (ImGui::InputFloat("Near plane", &zfar))
+                if (ImGui::InputFloat("Far plane", &zfar))
                 {
                     comp.camera.SetFar(zfar);
                     comp.camera.RecelcProjection();
@@ -267,7 +274,7 @@ namespace Cherry
         }
 
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_OpenOnArrow;
-        if (ImGui::TreeNodeEx((void*)3, flags, "Component Browser"))
+        if (ImGui::TreeNodeEx((void*)5, flags, "Component Browser"))
         {
             if (ImGui::BeginListBox("Components"))
             {
@@ -281,7 +288,7 @@ namespace Cherry
                 if (ImGui::Selectable("SpriteComponent", &selected))
                 {
                     if (!m_Current.HasComponent<SpriteComponent>())
-                        m_Current.AddComponent<SpriteComponent>();
+                        m_Current.AddComponent<SpriteComponent>().SpriteTexture = new SubTexture(Shared<Texture>(nullptr));
                 }
 
                 if (ImGui::Selectable("CameraComponent", &selected))

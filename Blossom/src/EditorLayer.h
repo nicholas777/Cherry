@@ -4,6 +4,7 @@
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertiesPanel.h"
 #include "Panels/ContentBrowserPanel.h"
+#include <filesystem>
 
 namespace Cherry
 {
@@ -32,6 +33,8 @@ namespace Cherry
 		static Scoped<ContentBrowserPanel> m_ContentBrowserPanel;
 
 		Shared<Scene> m_Scene;
+		std::filesystem::path m_ScenePath;
+
 		Scoped<Framebuffer> m_Framebuffer;
 
 		Vector2f m_ViewportPanelSize;
@@ -40,5 +43,10 @@ namespace Cherry
 		StaticCamera m_EditorCamera;
 
 		static Entity m_SelectedEntity;
+
+		void NewFile();
+		void OpenFile();
+		void SaveFile();
+		void SaveFileAs();
 	};
 }

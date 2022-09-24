@@ -25,6 +25,7 @@ namespace Cherry
 		void OnUpdate(const Timestep& delta, const StaticCamera& camera);
 
 		Entity GetPrimaryCamera();
+		Entity GetEntityByName(const std::string& name);
 	private:
 		entt::registry m_Registry;
 

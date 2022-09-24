@@ -10,11 +10,4 @@ namespace Cherry
 	protected:
 		virtual void LoadSystemInfoImpl() override;
 	};
-
-#ifdef CH_PLATFORM_WINDOWS
-	void SystemInfoLoader::InitSystemInfoLoader()
-	{
-		m_Instance = new WindowsSystemInfoLoader();
-	}
-#endif
 }

@@ -1,6 +1,8 @@
 Scenes:
   - ID: 0
     File: assets/Project\example.chs
+  - ID: 1
+    File: assets/Project\level1.chs
 Textures:
   - ID: 0
     File: assets/Project\Smile.png

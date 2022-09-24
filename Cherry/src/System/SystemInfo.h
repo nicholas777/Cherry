@@ -22,8 +22,6 @@ namespace Cherry
 			return SystemInfo();
 		};
 
-		static void InitSystemInfoLoader();
-
 	protected:
 
 		virtual void LoadSystemInfoImpl() {};

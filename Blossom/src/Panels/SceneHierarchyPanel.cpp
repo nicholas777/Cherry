@@ -33,7 +33,7 @@ namespace Cherry
 
             auto& name = entity.GetComponent<NameComponent>();
 
-            ImGuiTreeNodeFlags flags = (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+            ImGuiTreeNodeFlags flags = (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
             bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, name.Name.c_str());
 
             if (ImGui::IsItemClicked())

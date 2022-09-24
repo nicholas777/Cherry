@@ -70,15 +70,19 @@ namespace Cherry
             out << YAML::Key << "Mode";
             out << YAML::Value << (comp.UseTexture == true ? "texture" : "color");
 
-            uint32_t id = -1;
+            int id = -1;
 
-            for (std::pair<const uint32_t, TextureAsset>& asset : AssetManager::GetTextures())
+            if (comp.UseTexture)
             {
-                if (asset.second.ptr.Get() == comp.SpriteTexture->texture.Get())
+                for (std::pair<const uint32_t, TextureAsset>& asset : AssetManager::GetTextures())
                 {
-                    id = asset.first;
-                    break;
+                    if (asset.second.ptr.Get() == comp.SpriteTexture->texture.Get())
+                    {
+                        id = asset.first;
+                        break;
+                    }
                 }
+
             }
 
             out << YAML::Key << "Texture" << YAML::Value << id;
@@ -198,15 +202,21 @@ namespace Cherry
                 if (entity["SpriteComponent"]["Mode"].as<std::string>() == "color")
                 {
                     comp.UseTexture = false;
+
+                    comp.SpriteTexture = new SubTexture(Shared<Texture>(nullptr));
                 }
                 else
                 {
                     comp.UseTexture = true;
+                    Shared<Texture> texture;
 
-                    TextureAsset texture = AssetManager::GetTexture(entity["SpriteComponent"]["Texture"].as<uint32_t>());
+                    if (entity["SpriteComponent"]["Texture"].as<int>() == -1)
+                        texture = Shared<Texture>(nullptr);
+                    else
+                        texture = AssetManager::GetTexture(entity["SpriteComponent"]["Texture"].as<int>()).ptr;
                     
                     comp.SpriteTexture = new SubTexture(
-                        texture.ptr,
+                        texture,
                         Vector2f(entity["SpriteComponent"]["BottomLeftUV"][0].as<float>(),
                                  entity["SpriteComponent"]["BottomLeftUV"][1].as<float>()),
                         Vector2f(entity["SpriteComponent"]["TopRightUV"][0].as<float>(),

@@ -1,4 +1,5 @@
 #include "EditorLayer.h"
+#include "System/FileDialogs.h"
 
 namespace Cherry
 {
@@ -82,7 +83,11 @@ namespace Cherry
 	{
 		m_ContentBrowserPanel = new ContentBrowserPanel();
 
-		m_Scene = SceneSerializer::Deserialize("assets/Project/example.chs");
+		m_ScenePath = "assets/Project/example.chs";
+
+		m_Scene = SceneSerializer::Deserialize(m_ScenePath.string());
+
+		m_Scene->GetEntityByName("Camera").AddComponent<ScriptComponent>().Bind<CameraControllerScript>();
 
 		FramebufferData data;
 		data.width = WINDOW_WIDTH;
@@ -101,7 +106,6 @@ namespace Cherry
 	void EditorLayer::OnDetach()
 	{
 		m_ContentBrowserPanel.Free();
-		SceneSerializer::Serialize(m_Scene, "assets/Project/example.chs");
 	}
 
 	void EditorLayer::OnUpdate(const Timestep& delta)
@@ -176,27 +180,45 @@ namespace Cherry
             ImGui::DockSpace(ImGui::GetID("MyDockSpace"), ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
-		ImGui::End();
-
 		if (ImGui::BeginMainMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
 				{
-
+					NewFile();
+				}
+				if (ImGui::MenuItem("Open Scene", "Ctrl+O"))
+				{
+					OpenFile();
+				}
+				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+				{
+					SaveFile();
+				}
+				if (ImGui::MenuItem("Save Scene As", "Ctrl+Shift+S"))
+				{
+					SaveFileAs();
 				}
 
 				ImGui::EndMenu();
 			}
+
+			ImGui::EndMainMenuBar();
 		}
 
 		m_SceneHierarchyPanel->OnUpdate();
 		m_PropertiesPanel->OnUpdate();
 		m_ContentBrowserPanel->OnUpdate();
 
-
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+
+		ImGui::Begin("Scene bar", &IsOpen, ImGuiWindowFlags_NoTitleBar);
+		if (ImGui::Button("Play"))
+			m_IsRuntime = !m_IsRuntime;
+
+		ImGui::End();
+
 		ImGui::Begin("Scene Viewport");
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		
@@ -215,6 +237,7 @@ namespace Cherry
 		ImGui::ShowDemoWindow();
 
         ImGui::End();
+		ImGui::End();
 	}
 
 	void EditorLayer::SelectEntity(const Entity& entity)
@@ -226,6 +249,52 @@ namespace Cherry
 	void EditorLayer::SelectAsset(Asset* asset)
 	{
 		m_PropertiesPanel->SetAsset(asset);
+	}
+
+	void EditorLayer::NewFile()
+	{
+		m_Scene = new Scene();
+		m_SceneHierarchyPanel->SetScene(m_Scene);
+		m_ScenePath = "";
+	}
+
+	void EditorLayer::OpenFile()
+	{
+		std::filesystem::path path = FileDialogManager::OpenFile("Cherry Scene (.chs)\0*.chs\0\0)");
+
+		if (!path.empty())
+		{
+			if (path.extension() != ".chs")
+			{
+				CH_ERROR("Could not open file, not a Scene");
+				return;
+			}
+
+			m_ScenePath = path;
+			m_Scene = SceneSerializer::Deserialize(path.string());
+			m_SceneHierarchyPanel->SetScene(m_Scene);
+		}
+	}
+
+	void EditorLayer::SaveFile()
+	{
+		if (m_ScenePath.empty())
+			SaveFileAs();
+		else
+			SceneSerializer::Serialize(m_Scene, m_ScenePath.string());
+	}
+
+	void EditorLayer::SaveFileAs()
+	{
+		std::filesystem::path path = FileDialogManager::SaveFile("Cherry Scene (.chs)\0*.chs\0\0)");
+		m_ScenePath = path;
+
+		if (path.extension() != ".chs")
+		{
+			CH_ERROR("File is not a .chs file");
+		}
+
+		SceneSerializer::Serialize(m_Scene, m_ScenePath.string());
 	}
 
 }

@@ -150,4 +150,17 @@ namespace Cherry
 		}
 		return {};
 	}
+	
+	Entity Scene::GetEntityByName(const std::string& name)
+	{
+		auto view = m_Registry.view<NameComponent>();
+
+		for (auto entity : view)
+		{
+			if (view.get<NameComponent>(entity).Name == name)
+				return Entity(entity, this);
+		}
+
+		return Entity();
+	}
 }
