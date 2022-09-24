@@ -20,7 +20,7 @@ namespace Cherry
 				{
 					YAML::Node texture = map["Textures"][i];
 
-					AssetManager::CreateTexture(
+					AssetManager::CreateTextureIfNotExists(
 						texture["ID"].as<uint32_t>(),
 						texture["File"].as<std::string>(),
 						TextureParams(
@@ -39,7 +39,7 @@ namespace Cherry
 				{
 					YAML::Node texture = map["Scenes"][i];
 
-					AssetManager::CreateScene(
+					AssetManager::CreateSceneIfNotExists(
 						texture["ID"].as<uint32_t>(),
 						texture["File"].as<std::string>()
 					);

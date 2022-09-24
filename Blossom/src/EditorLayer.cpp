@@ -6,9 +6,8 @@ namespace Cherry
 	Scoped<SceneHierarchyPanel> EditorLayer::m_SceneHierarchyPanel;
 	Scoped<PropertiesPanel> EditorLayer::m_PropertiesPanel;
 	Scoped<ContentBrowserPanel> EditorLayer::m_ContentBrowserPanel;
+	Shared<Scene> EditorLayer::m_Scene = Shared<Scene>(nullptr);
 	Entity EditorLayer::m_SelectedEntity = Entity();
-
-	// TODO: Rewrite the whole assetmap system
 
 	Vector2f GetCameraOffsets(const Timestep& delta)
 	{
@@ -81,13 +80,10 @@ namespace Cherry
 
 	void EditorLayer::OnAttach()
 	{
-		m_ContentBrowserPanel = new ContentBrowserPanel();
+		m_ContentBrowserPanel = new ContentBrowserPanel("assets/Project");
 
-		m_ScenePath = "assets/Project/example.chs";
-
-		m_Scene = SceneSerializer::Deserialize(m_ScenePath.string());
-
-		m_Scene->GetEntityByName("Camera").AddComponent<ScriptComponent>().Bind<CameraControllerScript>();
+		m_ScenePath = "";
+		m_Scene = new Scene;
 
 		FramebufferData data;
 		data.width = WINDOW_WIDTH;
@@ -215,7 +211,26 @@ namespace Cherry
 
 		ImGui::Begin("Scene bar", &IsOpen, ImGuiWindowFlags_NoTitleBar);
 		if (ImGui::Button("Play"))
+		{
 			m_IsRuntime = !m_IsRuntime;
+		}
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Play scene");
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Reload"))
+		{
+			m_ContentBrowserPanel->WriteAssetmap();
+			m_ContentBrowserPanel->SetDirectory("assets/Project");
+		}
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Save and reload assets");
+		}
+
 
 		ImGui::End();
 
@@ -249,6 +264,12 @@ namespace Cherry
 	void EditorLayer::SelectAsset(Asset* asset)
 	{
 		m_PropertiesPanel->SetAsset(asset);
+	}
+
+	void EditorLayer::SelectScene(Shared<Scene> asset)
+	{
+		m_Scene = asset;
+		m_SceneHierarchyPanel->SetScene(asset);
 	}
 
 	void EditorLayer::NewFile()

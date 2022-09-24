@@ -59,7 +59,8 @@ namespace Cherry
 
         opendialog.lpstrFilter = filter;
         opendialog.nFilterIndex = 1;
-
+        opendialog.lpstrDefExt = std::string(filter).substr(std::string(filter).find_last_of('.') + 1).c_str();
+        
         opendialog.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 
         if (GetSaveFileNameA(&opendialog) == TRUE)

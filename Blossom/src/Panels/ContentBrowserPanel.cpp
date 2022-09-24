@@ -1,5 +1,6 @@
 #include "ContentBrowserPanel.h"
 #include "EditorLayer.h"
+#include <System/FileDialogs.h>
 
 #include <imgui.h>
 
@@ -7,10 +8,10 @@ namespace Cherry
 {
 
 
-	ContentBrowserPanel::ContentBrowserPanel()
+	ContentBrowserPanel::ContentBrowserPanel(const std::string& directory)
 	{
 		// TODO: Project system
-		SetDirectory("assets/Project");
+		SetDirectory(directory);
 	}
 
 	ContentBrowserPanel::~ContentBrowserPanel()
@@ -22,14 +23,22 @@ namespace Cherry
 	{
 		m_AssetmapPath = FindAssetmap(directory);
 
-		if (std::filesystem::exists(directory))
+		if (std::filesystem::exists(directory) && std::filesystem::is_directory(directory))
 		{
+			m_ProjectRoot = std::filesystem::path(directory);
+			m_CurrentDir = m_ProjectRoot;
 			Assetmap::Load(m_AssetmapPath);
 		}
 		else
 		{
 			CH_ASSERT(false, "Directory path is invalid");
 		}
+	}
+
+	void ContentBrowserPanel::ReloadAssets()
+	{
+		m_AssetmapPath = FindAssetmap(m_ProjectRoot);
+		Assetmap::Load(m_AssetmapPath);
 	}
 	
 	void ContentBrowserPanel::OnUpdate()
@@ -43,47 +52,102 @@ namespace Cherry
 			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
-			for (std::pair<const uint32_t, TextureAsset>& asset : AssetManager::GetTextures())
+			if (m_CurrentDir != m_ProjectRoot)
 			{
 				ImGui::TableNextRow();
-
 				ImGui::TableSetColumnIndex(0);
-				if (ImGui::Selectable(asset.second.filepath.c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+				
+				if (ImGui::Selectable("../", false, ImGuiSelectableFlags_SpanAllColumns))
 				{
-					EditorLayer::SelectAsset(&asset.second);
-				}
-
-				if (ImGui::BeginDragDropSource())
-				{
-					ImGui::SetDragDropPayload("AssetTexture", &asset.first, sizeof(uint32_t));
-					ImGui::Text(asset.second.filepath.c_str());
-					ImGui::EndDragDropSource();
+					m_CurrentDir = m_CurrentDir.parent_path();
 				}
 
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("Texture");
+				ImGui::Text("Directory");
+			}
+
+			for (auto& entry : std::filesystem::directory_iterator(m_CurrentDir))
+			{
+				if (entry.is_directory())
+				{
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+
+					if (ImGui::Selectable(entry.path().filename().string().c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+					{
+						m_CurrentDir = entry.path();
+					}
+
+					ImGui::TableSetColumnIndex(1);
+					ImGui::Text("Directory");
+				}
+			}
+
+			for (std::pair<const uint32_t, TextureAsset>& asset : AssetManager::GetTextures())
+			{
+				if (std::filesystem::path(asset.second.filepath).parent_path() == m_CurrentDir)
+				{
+					ImGui::TableNextRow();
+
+					ImGui::TableSetColumnIndex(0);
+					if (ImGui::Selectable(std::filesystem::path(asset.second.filepath).filename().string().c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+					{
+						EditorLayer::SelectAsset(&asset.second);
+					}
+
+					if (ImGui::BeginDragDropSource())
+					{
+						ImGui::SetDragDropPayload("AssetTexture", &asset.first, sizeof(uint32_t));
+						ImGui::Text(asset.second.filepath.c_str());
+						ImGui::EndDragDropSource();
+					}
+
+					ImGui::TableSetColumnIndex(1);
+					ImGui::Text("Texture");
+				}
 			}
 
 			for (std::pair<const uint32_t, SceneAsset>& asset : AssetManager::GetScenes())
 			{
-				ImGui::TableNextRow();
-
-				ImGui::TableSetColumnIndex(0);
-				if (ImGui::Selectable(asset.second.filepath.c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+				if (std::filesystem::path(asset.second.filepath).parent_path() == m_CurrentDir)
 				{
-					EditorLayer::SelectAsset(&asset.second);
-				}
+					ImGui::TableNextRow();
 
-				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("Scene");
+					ImGui::TableSetColumnIndex(0);
+					if (ImGui::Selectable(std::filesystem::path(asset.second.filepath).filename().string().c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+					{
+						EditorLayer::SelectAsset(&asset.second);
+					}
 
-				if (ImGui::IsItemClicked())
-				{
-					CH_TRACE("Asset clicked");
+					if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
+					{
+						EditorLayer::SelectScene(asset.second.ptr);
+					}
+
+					ImGui::TableSetColumnIndex(1);
+					ImGui::Text("Scene");
+
 				}
 			}
 
 			ImGui::EndTable();
+		}
+
+		if (ImGui::BeginPopupContextWindow())
+		{
+			if (ImGui::BeginMenu("New"))
+			{
+				if (ImGui::MenuItem("Scene"))
+				{
+					std::string path = FileDialogManager::SaveFile("Cherry Scene (.chs)\0*.chs\0\0");
+					Shared<Scene> scene = new Scene;
+					SceneSerializer::Serialize(scene, path);
+				}
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndPopup();
 		}
 
 		ImGui::End();

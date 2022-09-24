@@ -25,6 +25,7 @@ namespace Cherry
 
 		static void SelectEntity(const Entity& entity);
 		static void SelectAsset(Asset* asset);
+		static void SelectScene(Shared<Scene> asset);
 
 	private:
 
@@ -32,7 +33,7 @@ namespace Cherry
 		static Scoped<PropertiesPanel> m_PropertiesPanel;
 		static Scoped<ContentBrowserPanel> m_ContentBrowserPanel;
 
-		Shared<Scene> m_Scene;
+		static Shared<Scene> m_Scene;
 		std::filesystem::path m_ScenePath;
 
 		Scoped<Framebuffer> m_Framebuffer;

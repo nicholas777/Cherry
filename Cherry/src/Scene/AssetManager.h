@@ -42,14 +42,18 @@ namespace Cherry
 	public:
 		static uint32_t CreateTexture(const std::string& filepath, TextureParams params = TextureParams());
 		static uint32_t CreateTexture(uint32_t ID, const std::string& filepath, TextureParams params = TextureParams());
+		
 		static void CreateTextureIfNotExists(const std::string& filepath, TextureParams params = TextureParams());
+		static void CreateTextureIfNotExists(uint32_t ID, const std::string& filepath, TextureParams params = TextureParams());
 		
 		static TextureAsset& GetTexture(uint32_t id);
 		static std::unordered_map<uint32_t, TextureAsset>& GetTextures();
 
 		static uint32_t CreateScene(const std::string& filepath);
 		static uint32_t CreateScene(uint32_t ID, const std::string& filepath);
+
 		static void CreateSceneIfNotExists(const std::string& filepath);
+		static void CreateSceneIfNotExists(uint32_t ID, const std::string& filepath);
 
 		static SceneAsset& GetScene(uint32_t id);
 		static std::unordered_map<uint32_t, SceneAsset>& GetScenes();
