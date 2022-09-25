@@ -1,16 +1,7 @@
-
-Goals 24 - 25.9:
-- Make content browser panel show only files (and other directories) in one directory
-  Including ../ directory X
-- Undo/redo system
-- Reload assets button X
-- Selecting scenes from content panel X
-- no default scene X
-- Creating empty scenes from content panel X
-- Deleting assets
-
-Release 0.1
+﻿Release 0.1
 - Blossom Editor
+    - Mouse picking
+    - Undo/redo system
 
 Release 0.2
 - UI System

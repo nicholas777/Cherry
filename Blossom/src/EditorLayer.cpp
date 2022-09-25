@@ -9,6 +9,9 @@ namespace Cherry
 	Shared<Scene> EditorLayer::m_Scene = Shared<Scene>(nullptr);
 	Entity EditorLayer::m_SelectedEntity = Entity();
 
+	std::vector<ReversableAction*> EditorLayer::m_ActionsToUndo = std::vector<ReversableAction*>();
+	std::vector<ReversableAction*> EditorLayer::m_ActionsToRedo = std::vector<ReversableAction*>();
+
 	Vector2f GetCameraOffsets(const Timestep& delta)
 	{
 		float x = 0, y = 0;
@@ -123,6 +126,26 @@ namespace Cherry
 
 	void EditorLayer::OnEvent(Event& e)
 	{
+		if (e.Type == EventType::KeyPressEvent)
+		{
+			KeyPressEvent& event = static_cast<KeyPressEvent&>(e);
+
+			if (event.Keycode == Key::Z)
+			{
+				if (Input::GetKeyPressed(Key::Control))
+				{
+					UndoAction();
+				}
+			}
+			else if (event.Keycode == Key::Y)
+			{
+				if (Input::GetKeyPressed(Key::Control))
+				{
+					RedoAction();
+				}
+			}
+		}
+
 		if (e.Type == EventType::MouseScrollEvent)
 		{
 			MouseScrollEvent& ev = static_cast<MouseScrollEvent&>(e);
@@ -270,6 +293,69 @@ namespace Cherry
 	{
 		m_Scene = asset;
 		m_SceneHierarchyPanel->SetScene(asset);
+	}
+
+	void EditorLayer::RegisterAction(ReversableAction* action)
+	{
+		if (m_ActionsToUndo.size() >= 10)
+		{
+			delete* m_ActionsToUndo.begin();
+			m_ActionsToUndo.erase(m_ActionsToUndo.begin());
+			m_ActionsToUndo.push_back(action);
+		}
+		else
+		{
+			m_ActionsToUndo.push_back(action);
+		}
+	}
+
+	void EditorLayer::UndoAction()
+	{
+		if (m_ActionsToUndo.size() > 0)
+		{
+			m_ActionsToUndo.back()->Reverse();
+
+			if (m_ActionsToUndo.back()->IsEntityCreateAction)
+			{
+				EntityDeleteAction* reversed = new EntityDeleteAction;
+
+				Entity entity = static_cast<EntityCreateAction*>(m_ActionsToUndo.back())->entity;
+
+				reversed->entity = entity;
+
+				if (entity.HasComponent<NameComponent>())
+					reversed->name = new NameComponent(entity.GetComponent<NameComponent>());
+
+				if (entity.HasComponent<TransformComponent>())
+					reversed->transform = new TransformComponent(entity.GetComponent<TransformComponent>());
+
+				if (entity.HasComponent<SpriteComponent>())
+					reversed->sprite = new SpriteComponent(entity.GetComponent<SpriteComponent>());
+
+				if (entity.HasComponent<CameraComponent>())
+					reversed->camera = new CameraComponent(entity.GetComponent<CameraComponent>());
+
+				m_ActionsToRedo.push_back(reversed);
+			}
+			else
+			{
+				ReversableAction* reversed = m_ActionsToUndo.back()->ToReversed();
+				m_ActionsToRedo.push_back(reversed);
+			}
+
+			m_ActionsToUndo.pop_back();
+		}
+	}
+	
+	void EditorLayer::RedoAction()
+	{
+		if (m_ActionsToRedo.size() > 0)
+		{
+			ReversableAction* reversed = m_ActionsToRedo.back()->ToReversed();
+			m_ActionsToRedo.back()->Reverse();
+			m_ActionsToRedo.pop_back();
+			m_ActionsToUndo.push_back(reversed);
+		}
 	}
 
 	void EditorLayer::NewFile()

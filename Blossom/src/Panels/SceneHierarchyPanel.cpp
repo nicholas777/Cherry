@@ -52,6 +52,19 @@ namespace Cherry
                 ImGui::EndPopup();
             }
 
+            if (entity.HasComponent<SpriteComponent>())
+            {
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetTexture"))
+                    {
+                        SpriteComponent& comp = entity.GetComponent<SpriteComponent>();
+
+                        comp.SpriteTexture->texture = AssetManager::GetTexture(*(uint32_t*)payload->Data).ptr;
+                    }
+                }
+            }
+
             if (opened)
                 ImGui::TreePop();
         });

@@ -56,7 +56,7 @@ namespace Cherry
 		SpriteComponent(const SpriteComponent&) = default;
 
 		SpriteComponent(const Vector4f& color)
-			: Color(color), SpriteTexture(nullptr), UseTexture(false) {}
+			: Color(color), SpriteTexture(new SubTexture(nullptr)), UseTexture(false) {}
 
 		SpriteComponent(const Shared<Texture>& texture, 
 			const Vector2f& bottomLeft = Vector2f(0.0f, 0.0f),
@@ -71,6 +71,8 @@ namespace Cherry
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const SceneCamera& cam, bool primary)
+			: camera(cam), IsPrimary(primary) {}
 	};
 
 	struct ScriptComponent

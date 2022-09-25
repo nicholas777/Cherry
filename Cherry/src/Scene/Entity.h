@@ -75,9 +75,16 @@ namespace Cherry
 			return m_Handle != entt::null && m_Scene != nullptr;
 		}
 
+		static void Delete(const Entity& entity)
+		{
+			entity.m_Scene->DeleteEntity(entity);
+		}
+
 	private:
 		entt::entity m_Handle;
 		Scene* m_Scene;
+
+		friend class EntityDeleteAction;
 	};
 
 }

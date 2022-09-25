@@ -18,14 +18,14 @@ Textures:
   - ID: 1
     File: assets/Project\tilemap_packed.png
     Params:
-      Format: 1
+      Format: 2
       MinFilter: 1
       MagFilter: 2
       Wrap: 1
   - ID: 2
     File: assets/Project\Smile2.png
     Params:
-      Format: 1
-      MinFilter: 1
-      MagFilter: 2
+      Format: 2
+      MinFilter: 2
+      MagFilter: 1
       Wrap: 1

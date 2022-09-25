@@ -5,9 +5,11 @@
 #include "Panels/PropertiesPanel.h"
 #include "Panels/ContentBrowserPanel.h"
 #include <filesystem>
+#include "EditorAction.h"
 
 namespace Cherry
 {
+	
 	class EditorLayer : public Layer
 	{
 	public:
@@ -27,7 +29,14 @@ namespace Cherry
 		static void SelectAsset(Asset* asset);
 		static void SelectScene(Shared<Scene> asset);
 
+		static void RegisterAction(ReversableAction* action);
+		static void UndoAction();
+		static void RedoAction();
+
 	private:
+
+		static std::vector<ReversableAction*> m_ActionsToUndo;
+		static std::vector<ReversableAction*> m_ActionsToRedo;
 
 		static Scoped<SceneHierarchyPanel> m_SceneHierarchyPanel;
 		static Scoped<PropertiesPanel> m_PropertiesPanel;
