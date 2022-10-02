@@ -233,7 +233,6 @@ namespace Cherry
                 comp.Color.w = entity["SpriteComponent"]["color"][3].as<float>();
             }
 
-            // TODO: Assets
             if (entity["CameraComponent"])
             {
                 CameraComponent& comp = e.AddComponent<CameraComponent>();

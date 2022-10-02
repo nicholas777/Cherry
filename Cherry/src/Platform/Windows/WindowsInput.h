@@ -31,6 +31,7 @@ namespace Cherry
 			return glfwGetMouseButton(m_Window, static_cast<int32_t>(mousecode)) == GLFW_PRESS;
 		};
 
+		// TODO: Make this function return screen space coords and have separate convertion function
 		virtual Vector2f GetMousePosImpl() override
 		{ 
 			double x, y;
@@ -38,6 +39,14 @@ namespace Cherry
 
 			return { (float)x / WINDOW_WIDTH * 2 - 1, -((float)y / WINDOW_HEIGHT * 2 - 1) };
 		};
+
+		virtual Vector2i GetMousePosRawImpl() override
+		{
+			double x, y;
+			glfwGetCursorPos(m_Window, &x, &y);
+
+			return Vector2i((int)x, (int)y);
+		}
 
 		virtual float GetMouseXImpl() override
 		{ 

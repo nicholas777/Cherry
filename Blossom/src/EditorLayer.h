@@ -46,6 +46,7 @@ namespace Cherry
 		std::filesystem::path m_ScenePath;
 
 		Scoped<Framebuffer> m_Framebuffer;
+		bool m_EditorChanged = true;
 
 		Vector2f m_ViewportPanelSize;
 

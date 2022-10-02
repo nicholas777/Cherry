@@ -207,7 +207,7 @@ namespace Cherry
 			}
 		};
 
-		void operator=(Shared&& right)
+		void operator=(Shared&& right) noexcept
 		{
 			_Value = right._Value;
 			right._Value = nullptr;

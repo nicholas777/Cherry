@@ -91,6 +91,7 @@ namespace Cherry
 		FramebufferData data;
 		data.width = WINDOW_WIDTH;
 		data.height = WINDOW_HEIGHT;
+		data.attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RedInteger, FramebufferTextureFormat::Depth24Stencil8 };
 
 		m_Framebuffer = Framebuffer::Create(data);
 
@@ -99,7 +100,7 @@ namespace Cherry
 		m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
 		m_PropertiesPanel = new PropertiesPanel();
 
-		RenderCommand::SetClearColor({1, 0, 0, 1});
+		RenderCommand::SetClearColor({ 1, 0, 0, 1 });
 	}
 
 	void EditorLayer::OnDetach()
@@ -110,6 +111,7 @@ namespace Cherry
 	void EditorLayer::OnUpdate(const Timestep& delta)
 	{
 		m_Framebuffer->Bind();
+		RenderCommand::Clear();
 		if (m_IsRuntime)
 		{
 			m_Scene->OnUpdate(delta);
@@ -146,7 +148,7 @@ namespace Cherry
 			}
 		}
 
-		if (e.Type == EventType::MouseScrollEvent)
+		else if (e.Type == EventType::MouseScrollEvent)
 		{
 			MouseScrollEvent& ev = static_cast<MouseScrollEvent&>(e);
 			if (!m_IsRuntime)
@@ -154,6 +156,15 @@ namespace Cherry
 				// TODO: When scrolling the diection reverses at some point
 				Scale(&m_EditorCamera.GetTransform(), (float)ev.Offset / 25);
 			}
+		}
+
+		else if (e.Type == EventType::MouseClickEvent)
+		{
+			MouseClickEvent& ev = static_cast<MouseClickEvent&>(e);
+
+			int id = m_Framebuffer->ReadPixel(1, Input::GetMousePosRaw().x, Input::GetMousePosRaw().y);
+
+			CH_INFO("Clicked entity: " + std::to_string(id));
 		}
 	}
 
@@ -254,7 +265,6 @@ namespace Cherry
 			ImGui::SetTooltip("Save and reload assets");
 		}
 
-
 		ImGui::End();
 
 		ImGui::Begin("Scene Viewport");
@@ -267,7 +277,7 @@ namespace Cherry
 			
 		}
 
-		uint32_t textureID = m_Framebuffer->GetColorAttachment();
+		uint32_t textureID = m_Framebuffer->GetColorAttachmentID(0);
 		ImGui::Image((void*)textureID, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::PopStyleVar();

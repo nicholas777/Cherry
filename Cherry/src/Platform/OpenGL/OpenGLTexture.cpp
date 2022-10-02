@@ -9,7 +9,7 @@
 
 namespace Cherry
 {
-
+	// TODO: Immutable texture storage
 	static GLenum ToGLFormat(TextureWrap wrap)
 	{
 		switch (wrap)
@@ -133,8 +133,10 @@ namespace Cherry
 					break;
 				case 4:
 					m_Format = GL_RGBA;
+					break;
 				default:
 					CH_ASSERT(false, "Unknown texture format");
+					break;
 			}
 		}
 		else

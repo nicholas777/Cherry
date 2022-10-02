@@ -96,6 +96,7 @@ namespace Cherry
 		}
 	}
 
+	// TODO: Proper system for scene rendering
 	void Scene::OnUpdate(const Timestep& delta, const StaticCamera& camera)
 	{
 		RenderCommand::Clear();
@@ -125,11 +126,11 @@ namespace Cherry
 				if (sprite.UseTexture)
 				{
 					if (sprite.SpriteTexture->texture.IsAlive())
-						Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture, sprite.Color);
+						Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture, sprite.Color, (uint32_t)entity);
 				}
 				else
 				{
-					Renderer2D::DrawRect(transform.GetMatrix(), sprite.Color);
+					Renderer2D::DrawRect(transform.GetMatrix(), sprite.Color, (uint32_t)entity);
 				}
 			}
 		}

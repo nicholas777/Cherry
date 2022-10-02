@@ -1,7 +1,7 @@
 ﻿Release 0.1
 - Blossom Editor
     - Mouse picking
-    - Undo/redo system
+    - Gizmos
 
 Release 0.2
 - UI System

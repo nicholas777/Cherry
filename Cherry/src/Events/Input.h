@@ -28,6 +28,10 @@ namespace Cherry
 		{
 			return m_Instance->GetMousePosImpl();
 		};
+		static Vector2i GetMousePosRaw()
+		{
+			return m_Instance->GetMousePosRawImpl();
+		};
 
 		static float GetMouseX()
 		{
@@ -47,6 +51,8 @@ namespace Cherry
 		virtual bool GetMousePressedImpl(MouseButton mousecode) { return false; };
 
 		virtual Vector2f GetMousePosImpl() { return Vector2f(); };
+		virtual Vector2i GetMousePosRawImpl() { return Vector2i(); };
+
 		virtual float GetMouseXImpl() { return 0.0; };
 		virtual float GetMouseYImpl() { return 0.0; };
 

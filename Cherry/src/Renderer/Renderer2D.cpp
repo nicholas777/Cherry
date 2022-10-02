@@ -9,6 +9,8 @@ namespace Cherry
 		Vector4f color;
 		Vector2f texCoord;
 		float texSlot;
+
+		int entityID = -1;
 	};
 
 	struct RendererData
@@ -60,7 +62,8 @@ namespace Cherry
 			{ "position", ShaderDataType::Float2 },
 			{ "color", ShaderDataType::Float4 },
 			{ "UV", ShaderDataType::Float2 },
-			{ "TextureSlot", ShaderDataType::Float }
+			{ "TextureSlot", ShaderDataType::Float },
+			{ "EntityID", ShaderDataType::Int }
 		});
 
 		s_Data->BatchVAO->AddVertexBuffer(s_Data->BatchVBO.Get());
@@ -421,7 +424,7 @@ namespace Cherry
 		s_Data->IndexCount += 6;
 	}
 
-	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture, const Vector4f& color)
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture, const Vector4f& color, uint32_t entityID)
 	{
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
@@ -457,30 +460,34 @@ namespace Cherry
 		s_Data->RectPtr->texCoord = { 0, 0 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
 		s_Data->RectPtr->texCoord = { 1, 0 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
 		s_Data->RectPtr->texCoord = { 1, 1 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
 		s_Data->RectPtr->texCoord = { 0, 1 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->IndexCount += 6;
 	}
 
-	void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture, const Vector4f& color)
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture, const Vector4f& color, uint32_t entityID)
 	{
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
@@ -516,30 +523,34 @@ namespace Cherry
 		s_Data->RectPtr->texCoord = { 0, 0 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
 		s_Data->RectPtr->texCoord = { 1, 0 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
 		s_Data->RectPtr->texCoord = { 1, 1 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
 		s_Data->RectPtr->texCoord = { 0, 1 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->IndexCount += 6;
 	}
 
-	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Vector4f& color)
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Vector4f& color, uint32_t entityID)
 	{
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
@@ -553,24 +564,28 @@ namespace Cherry
 		s_Data->RectPtr->texCoord = { 0, 0 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[1];
 		s_Data->RectPtr->texCoord = { 1, 0 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[2];
 		s_Data->RectPtr->texCoord = { 1, 1 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->RectPtr->pos = transform * s_Data->RectVertices[3];
 		s_Data->RectPtr->texCoord = { 0, 1 };
 		s_Data->RectPtr->color = color;
 		s_Data->RectPtr->texSlot = textureIndex;
+		s_Data->RectPtr->entityID = (int)entityID;
 		s_Data->RectPtr++;
 
 		s_Data->IndexCount += 6;
