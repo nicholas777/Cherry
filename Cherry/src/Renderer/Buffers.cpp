@@ -8,12 +8,12 @@
 
 namespace Cherry
 {
-	Scoped<VertexBuffer> VertexBuffer::Create(uint32_t count)
+	Scoped<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None: CH_ASSERT(false, "RenderAPI::API::None is not supported"); return nullptr;
-			case RenderAPI::API::OpenGL: return Scoped<VertexBuffer>(new OpenGLVertexBuffer(count));
+			case RenderAPI::API::OpenGL: return Scoped<VertexBuffer>(new OpenGLVertexBuffer(size));
 		}
 	}
 

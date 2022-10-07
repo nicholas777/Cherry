@@ -49,7 +49,9 @@ namespace Cherry
 		bool m_EditorChanged = true;
 
 		Vector2f m_ViewportPanelSize;
+		Vector2f m_ViewportPanelPos;
 
+		bool m_EntitySelected = false;
 		bool m_IsRuntime = false;
 		StaticCamera m_EditorCamera;
 

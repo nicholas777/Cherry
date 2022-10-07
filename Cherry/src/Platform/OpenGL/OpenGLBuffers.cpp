@@ -23,13 +23,13 @@ namespace Cherry
 		}
 	}
 
-	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t count)
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
 	{
 		glGenBuffers(1, &m_BufferID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_BufferID);
-		glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 
-		m_Size = count;
+		m_Size = size;
 
 		m_Inserts = 0;
 	}

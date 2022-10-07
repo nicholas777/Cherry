@@ -13,7 +13,7 @@ namespace Cherry
         m_Current = e;
         if (m_Current.HasComponent<SpriteComponent>())
         {
-            m_UseTexture = m_Current.GetComponent<SpriteComponent>().SpriteTexture.IsAlive();
+            m_UseTexture = m_Current.GetComponent<SpriteComponent>().UseTexture;
         }
 
         m_Mode = 0;

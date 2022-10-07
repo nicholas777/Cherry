@@ -1,5 +1,6 @@
 #include "EditorLayer.h"
 #include "System/FileDialogs.h"
+#include <entt.hpp>
 
 namespace Cherry
 {
@@ -111,7 +112,6 @@ namespace Cherry
 	void EditorLayer::OnUpdate(const Timestep& delta)
 	{
 		m_Framebuffer->Bind();
-		RenderCommand::Clear();
 		if (m_IsRuntime)
 		{
 			m_Scene->OnUpdate(delta);
@@ -121,6 +121,27 @@ namespace Cherry
 			Vector2f xy = GetCameraOffsets(delta);
 			Translate(&m_EditorCamera.GetTransform(), xy.x, xy.y);
 			m_Scene->OnUpdate(delta, m_EditorCamera);
+		}
+
+		if (m_EntitySelected)
+		{
+			auto [mouseX, mouseY] = ImGui::GetMousePos();
+			mouseX -= m_ViewportPanelPos.x;
+			mouseY -= m_ViewportPanelPos.y;
+
+			mouseY = m_ViewportPanelSize.y - mouseY;
+
+			m_Framebuffer->Bind();
+			int id = m_Framebuffer->ReadPixel(1, (uint32_t)mouseX, (uint32_t)mouseY);
+			m_Framebuffer->Unbind();
+
+			Entity entity = Entity((entt::entity)id, m_Scene.Get());
+			m_EntitySelected = false;
+			if (!entity.IsValid())
+				return;
+
+			SelectEntity(entity);
+
 		}
 
 		m_Framebuffer->Unbind();
@@ -160,14 +181,10 @@ namespace Cherry
 
 		else if (e.Type == EventType::MouseClickEvent)
 		{
-			MouseClickEvent& ev = static_cast<MouseClickEvent&>(e);
-
-			int id = m_Framebuffer->ReadPixel(1, Input::GetMousePosRaw().x, Input::GetMousePosRaw().y);
-
-			CH_INFO("Clicked entity: " + std::to_string(id));
+			m_EntitySelected = true;
 		}
 	}
-
+	
 	void EditorLayer::OnImGuiRender()
 	{
 		static bool IsOpen = true;
@@ -269,6 +286,11 @@ namespace Cherry
 
 		ImGui::Begin("Scene Viewport");
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+
+		ImVec2 viewportPos = ImGui::GetWindowContentRegionMin();
+		ImVec2 viewportOffset = ImGui::GetWindowPos();
+
+		m_ViewportPanelPos = { viewportPos.x + viewportOffset.x, viewportPos.y + viewportOffset.y };
 		
 		if (m_ViewportPanelSize != Vector2f(viewportSize.x, viewportSize.y))
 		{

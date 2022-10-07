@@ -23,11 +23,12 @@ namespace Cherry
 
 	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, uint32_t x, uint32_t y)
 	{
-		// TODO: Editor crashes with too many entities
 		// TODO: Extend this to allow for multiple pixel formats
-		glReadBuffer(m_ColorAttachments[attachmentIndex]);
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 		int value;
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &value);
+
+		uint32_t error = glGetError();
 		return value;
 	}
 
