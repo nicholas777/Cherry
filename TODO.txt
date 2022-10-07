@@ -1,11 +1,11 @@
 ﻿Release 0.1
 - Blossom Editor
-    - Mouse picking
     - Gizmos
+    - Proper scene runtime system
+- C# Scripting
 
 Release 0.2
 - UI System
-- Scripting
 - Sound system
 
 Release 0.3

@@ -40,5 +40,7 @@ namespace Cherry
 	private:
 		static void Flush();
 		static void NewBatch();
+
+		static float GetTextureIndex(Texture* ptr);
 	};
 }
