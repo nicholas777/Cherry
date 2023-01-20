@@ -178,11 +178,15 @@ namespace Cherry
 		(*mat)[1].y += scale;
 	}
 
-	// TODO: This is broken
 	void Scale(Matrix4x4f* mat, float scaleX, float scaleY)
 	{
 		(*mat)[0].x += scaleX;
 		(*mat)[1].y += scaleY;
+	}
+
+	Vector2f GetTranslation(const Matrix4x4f& mat)
+	{
+		return Vector2f(mat[3][0], mat[3][1]);
 	}
 
 }

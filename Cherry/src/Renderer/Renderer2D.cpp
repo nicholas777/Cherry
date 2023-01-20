@@ -161,6 +161,7 @@ namespace Cherry
 			s_Data->RectPtr->texCoord = texCoords[i];
 			s_Data->RectPtr->color = { 1, 1, 1, 1 };
 			s_Data->RectPtr->texSlot = textureIndex;
+			s_Data->RectPtr->entityID = -1.0f;
 			s_Data->RectPtr++;
 		}
 
@@ -187,6 +188,7 @@ namespace Cherry
 			s_Data->RectPtr->texCoord = texture.textureCoords[i];
 			s_Data->RectPtr->color = { 1, 1, 1, 1 };
 			s_Data->RectPtr->texSlot = textureIndex;
+			s_Data->RectPtr->entityID = -1.0f;
 			s_Data->RectPtr++;
 		}
 
@@ -217,13 +219,14 @@ namespace Cherry
 			s_Data->RectPtr->texCoord = texCoords[i];
 			s_Data->RectPtr->color = color;
 			s_Data->RectPtr->texSlot = 0;
+			s_Data->RectPtr->entityID = -1.0f;
 			s_Data->RectPtr++;
 		}
 
 		s_Data->IndexCount += 6;
 	}
 
-	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture, const Vector4f& color, uint32_t entityID)
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture, const Vector4f& color, int entityID)
 	{
 		static Vector2f* texCoords = new Vector2f[4]{
 			{ 0.0f, 0.0f },
@@ -253,7 +256,7 @@ namespace Cherry
 		s_Data->IndexCount += 6;
 	}
 
-	void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture, const Vector4f& color, uint32_t entityID)
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture, const Vector4f& color, int entityID)
 	{
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
@@ -276,7 +279,7 @@ namespace Cherry
 		s_Data->IndexCount += 6;
 	}
 
-	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Vector4f& color, uint32_t entityID)
+	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Vector4f& color, int entityID)
 	{
 		static Vector2f* texCoords = new Vector2f[4]{
 			{ 0.0f, 0.0f },
@@ -333,6 +336,7 @@ namespace Cherry
 			s_Data->RectPtr->texCoord = texCoords[i];
 			s_Data->RectPtr->color = { 1, 1, 1, 1 };
 			s_Data->RectPtr->texSlot = textureIndex;
+			s_Data->RectPtr->entityID = -1.0f;
 			s_Data->RectPtr++;
 		}
 
@@ -359,6 +363,7 @@ namespace Cherry
 			s_Data->RectPtr->texCoord = texture.textureCoords[i];
 			s_Data->RectPtr->color = { 1, 1, 1, 1 };
 			s_Data->RectPtr->texSlot = textureIndex;
+			s_Data->RectPtr->entityID = -1.0f;
 			s_Data->RectPtr++;
 		}
 
@@ -384,6 +389,7 @@ namespace Cherry
 			s_Data->RectPtr->texCoord = texCoords[i];
 			s_Data->RectPtr->color = color;
 			s_Data->RectPtr->texSlot = 0;
+			s_Data->RectPtr->entityID = -1.0f;
 			s_Data->RectPtr++;
 		}
 

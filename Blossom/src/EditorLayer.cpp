@@ -2,6 +2,9 @@
 #include "System/FileDialogs.h"
 #include <entt.hpp>
 
+// BUG: Zooming doesn't zoom into the center of the screen, rather it zooms towards the bottom
+// TODO: Support for gizoms rotating and scaling
+
 namespace Cherry
 {
 	Scoped<SceneHierarchyPanel> EditorLayer::m_SceneHierarchyPanel;
@@ -96,10 +99,15 @@ namespace Cherry
 
 		m_Framebuffer = Framebuffer::Create(data);
 
-		m_EditorCamera = StaticCamera(5, -1, 1);
+		m_EditorCamera = StaticCamera(20, -1, 1);
 
 		m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
 		m_PropertiesPanel = new PropertiesPanel();
+
+		// Gizmos
+
+		m_RedArrow = Texture::Create("assets/RedArrow.png");
+		m_GreenArrow = Texture::Create("assets/GreenArrow.png");
 
 		RenderCommand::SetClearColor({ 1, 0, 0, 1 });
 	}
@@ -121,6 +129,27 @@ namespace Cherry
 			Vector2f xy = GetCameraOffsets(delta);
 			Translate(&m_EditorCamera.GetTransform(), xy.x, xy.y);
 			m_Scene->OnUpdate(delta, m_EditorCamera);
+
+			// Gizmos
+			if (m_SelectedEntity && !m_IsRuntime && m_SelectedEntity.HasComponent<TransformComponent>())
+			{
+				TransformComponent& tc = m_SelectedEntity.GetComponent<TransformComponent>();
+				Matrix4x4f transform = Matrix4x4f::Identity();
+				Translate(&transform, tc.Translation.x, tc.Translation.y);
+
+				Renderer2D::Begin(m_EditorCamera.GetProjection(), m_EditorCamera.GetTransform());
+				
+				Translate(&transform, 0.75f, 0);
+				Renderer2D::DrawRect(transform, m_RedArrow, {1, 1, 1, 1}, -1);
+
+				Translate(&transform, -0.75f, 0.75f);
+				Rotate(&transform, -90);
+				Renderer2D::DrawRect(transform, m_GreenArrow, { 1, 1, 1, 1 }, -2);
+
+				Renderer2D::End();
+
+			}
+			
 		}
 
 		if (m_EntitySelected)
@@ -134,6 +163,20 @@ namespace Cherry
 			m_Framebuffer->Bind();
 			int id = m_Framebuffer->ReadPixel(1, (uint32_t)mouseX, (uint32_t)mouseY);
 			m_Framebuffer->Unbind();
+
+			// TODO: Renderer2D::RenderRect() defaults entityID parameter to -1 which in editor activates gizmos
+			if (id == -1 || id == -2 && m_SelectedEntity)
+			{
+				m_GizmoType = id;
+				m_GizmoSelected = true;
+				m_GizmoStart = Vector2i(mouseX, mouseY);
+				m_GizmoOffset = Vector2i();
+				m_EntitySelected = false;
+
+				m_GizmosPrevTranslation = m_SelectedEntity.GetComponent<TransformComponent>().Translation;
+
+				return;
+			}
 
 			Entity entity = Entity((entt::entity)id, m_Scene.Get());
 			m_EntitySelected = false;
@@ -182,6 +225,52 @@ namespace Cherry
 		else if (e.Type == EventType::MouseClickEvent)
 		{
 			m_EntitySelected = true;
+		}
+
+		else if (e.Type == EventType::MouseReleaseEvent)
+		{
+			if (!m_GizmoSelected)
+				return;
+
+			m_GizmoSelected = false;
+			auto& transform = m_SelectedEntity.GetComponent<TransformComponent>();
+
+			auto action = new TransformComponentEditAction();
+			action->entity = m_SelectedEntity;
+
+			action->oldPos = m_GizmosPrevTranslation;
+			action->newPos = transform.Translation;
+
+			action->oldRot = transform.Rotation;
+			action->newRot = transform.Rotation;
+
+			action->oldSize = transform.Scale;
+			action->newSize = transform.Scale;
+
+			RegisterAction(action);
+		}
+
+		else if (e.Type == EventType::MouseMoveEvent)
+		{
+			if (!m_GizmoSelected)
+				return;
+
+			auto [mouseX, mouseY] = ImGui::GetMousePos();
+
+			mouseX -= m_ViewportPanelPos.x;
+			mouseY -= m_ViewportPanelPos.y;
+
+			mouseY = m_ViewportPanelSize.y - mouseY;
+
+			m_GizmoOffset = m_GizmoStart - Vector2i(mouseX, mouseY);
+			
+			if (m_GizmoType == -1)
+				m_SelectedEntity.GetComponent<TransformComponent>().Translation -= Vector2f((float)(m_GizmoOffset.x / 20.0), 0);
+			if (m_GizmoType == -2)
+				m_SelectedEntity.GetComponent<TransformComponent>().Translation -= Vector2f(0, (float)(m_GizmoOffset.y / 20.0));
+
+			m_GizmoStart = Vector2i(mouseX, mouseY);
+			
 		}
 	}
 	
@@ -286,7 +375,6 @@ namespace Cherry
 
 		ImGui::Begin("Scene Viewport");
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-
 		ImVec2 viewportPos = ImGui::GetWindowContentRegionMin();
 		ImVec2 viewportOffset = ImGui::GetWindowPos();
 

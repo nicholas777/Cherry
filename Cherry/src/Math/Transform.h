@@ -42,4 +42,6 @@ namespace Cherry
 	void Rotate(Matrix4x4f* mat, float rot);
 	void Scale(Matrix4x4f* mat, float scale);
 	void Scale(Matrix4x4f* mat, float scaleX, float scaleY);
+
+	Vector2f GetTranslation(const Matrix4x4f& mat);
 }

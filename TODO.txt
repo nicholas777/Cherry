@@ -1,10 +1,11 @@
 ﻿Release 0.1
-- Blossom Editor
-    - Gizmos
-    - Proper scene runtime system
 - C# Scripting
 
 Release 0.2
+- Extended Gizmos system
+- Proper undo/redo system
+- Proper scene runtime system
+- Bug fixes
 - UI System
 - Sound system
 
@@ -15,3 +16,4 @@ Release 0.3
 
 Future goals
 - Custom ECS
+- Migrating editor to our custom UI system

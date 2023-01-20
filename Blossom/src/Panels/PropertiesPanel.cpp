@@ -143,7 +143,7 @@ namespace Cherry
                     EditorLayer::RegisterAction(action);
                     transform.Translation = translation;
                 }
-
+                // TODO: Rotation is broken
                 float rotation = transform.Rotation;
                 if (ImGui::InputFloat("Rotation", &rotation, ImGuiInputTextFlags_EnterReturnsTrue))
                 {

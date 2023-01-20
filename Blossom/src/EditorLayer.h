@@ -57,6 +57,12 @@ namespace Cherry
 
 		static Entity m_SelectedEntity;
 
+		Shared<Texture> m_RedArrow, m_GreenArrow;
+		Vector2i m_GizmoStart, m_GizmoOffset;
+		bool m_GizmoSelected = false;
+		int m_GizmoType = 0;
+		Vector2f m_GizmosPrevTranslation;
+
 		void NewFile();
 		void OpenFile();
 		void SaveFile();

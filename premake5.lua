@@ -71,10 +71,6 @@ project "Cherry"
 			"CH_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
-		
-		postbuildcommands {
-			("{copy} %{cfg.buildtarget.relpath} ../bin/" .. outputPath .. "/Blossom")
-		}
 
 	filter "configurations:debug"
 		defines "CH_DEBUG_MODE"

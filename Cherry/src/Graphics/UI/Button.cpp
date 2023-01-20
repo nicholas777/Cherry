@@ -16,7 +16,6 @@ namespace Cherry
 
 	void Button::OnEvent(Event& e)
 	{
-		// TODO: System for casting events easier
 		// TODO: Coordinates for Renderer2D::DrawRect are the center of the rect
 		MouseClickEvent& event = static_cast<MouseClickEvent&>(e);
 

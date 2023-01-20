@@ -58,6 +58,11 @@ namespace Cherry
 			return GetMousePosImpl()[1];
 		};
 
+		virtual bool GetMouseDownImpl(MouseButton button)
+		{
+			return glfwGetMouseButton(m_Window, (int)button) == GLFW_PRESS;
+		}
+
 	private:
 
 		GLFWwindow* m_Window;

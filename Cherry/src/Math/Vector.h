@@ -48,7 +48,6 @@ namespace Cherry
 		{
 			x = value.x;
 			y = value.y;
-			z = value.z;
 		}
 
 		Vector2(const Vector4<T>& value)
@@ -84,6 +83,11 @@ namespace Cherry
 		bool operator!=(const type& other) const
 		{
 			return !(x == other.x && y == other.y);
+		}
+
+		type operator-() const
+		{
+			return type(-x, -y);
 		}
 
 		type operator+(const type& other) const
@@ -260,6 +264,11 @@ namespace Cherry
 		bool operator!=(const type& other) const
 		{
 			return !(*(const T&his) == other);
+		}
+
+		type operator-() const
+		{
+			return type(-x, -y, -z);
 		}
 
 		type operator+(const T& other) const
@@ -486,6 +495,11 @@ namespace Cherry
 		bool operator!=(const type& other) const
 		{
 			return !(*(const T&his) == other);
+		}
+
+		type operator-() const 
+		{
+			return type(-x, -y, -z, -w);
 		}
 
 		type operator+(const T& other) const

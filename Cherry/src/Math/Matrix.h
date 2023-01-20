@@ -441,6 +441,16 @@ namespace Cherry
 			columns[3] = vec_type(0,     0,     0,     value);
 		}
 
+		T* Data()
+		{
+			return &columns[0].x;
+		}
+
+		const T* Data() const
+		{
+			return &columns[0].x;
+		}
+
 		float* ToArray() const
 		{
 			float* value = new float[16];
