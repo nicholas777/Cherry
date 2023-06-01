@@ -4,8 +4,9 @@
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertiesPanel.h"
 #include "Panels/ContentBrowserPanel.h"
-#include <filesystem>
 #include "EditorAction.h"
+
+#include <filesystem>
 
 namespace Cherry
 {
@@ -15,7 +16,7 @@ namespace Cherry
 	public:
 		EditorLayer()
 			: Layer("EditorLayer") {};
-		virtual ~EditorLayer() override;
+		virtual ~EditorLayer() override {};
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

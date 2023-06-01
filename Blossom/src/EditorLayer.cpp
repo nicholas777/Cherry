@@ -40,7 +40,7 @@ namespace Cherry
 		return Vector2f(x * delta.GetMilliseconds(), y * delta.GetMilliseconds());
 	}
 
-	class CameraControllerScript : public Script
+	class CameraControllerScript : public NativeScript
 	{
 	public:
 		void OnCreate()
@@ -81,10 +81,6 @@ namespace Cherry
 		}
 	};
 
-	EditorLayer::~EditorLayer()
-	{
-	}
-
 	void EditorLayer::OnAttach()
 	{
 		m_ContentBrowserPanel = new ContentBrowserPanel("assets/Project");
@@ -110,6 +106,8 @@ namespace Cherry
 		m_GreenArrow = Texture::Create("assets/GreenArrow.png");
 
 		RenderCommand::SetClearColor({ 1, 0, 0, 1 });
+
+		Script script = Script("Assets/CoreScripts/ScriptLib.dll");
 	}
 
 	void EditorLayer::OnDetach()

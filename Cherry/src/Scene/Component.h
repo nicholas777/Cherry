@@ -6,7 +6,7 @@
 #include "Renderer/Texture.h"
 #include "Graphics/Cameras/SceneCamera.h"
 #include "core/Timestep.h"
-#include "Script.h"
+#include "NativeScript.h"
 
 namespace Cherry
 {
@@ -77,14 +77,14 @@ namespace Cherry
 
 	struct ScriptComponent
 	{
-		Script* script = nullptr;
+		NativeScript* script = nullptr;
 
 		std::function<void()> CreateInstanceFn;
 		std::function<void()> DeleteInstanceFn;
 
-		std::function<void(Script*)> OnCreateFn;
-		std::function<void(Script*)> OnDestroyFn;
-		std::function<void(Script*, Timestep)> OnUpdateFn;
+		std::function<void(NativeScript*)> OnCreateFn;
+		std::function<void(NativeScript*)> OnDestroyFn;
+		std::function<void(NativeScript*, Timestep)> OnUpdateFn;
 
 		ScriptComponent() = default;
 		ScriptComponent(const ScriptComponent&) = default;
@@ -95,9 +95,9 @@ namespace Cherry
 			CreateInstanceFn = [&]() { script = new T; };
 			DeleteInstanceFn = [&]() { delete script; };
 
-			OnCreateFn  = [](Script* executor) { ((T*)executor)->OnCreate(); };
-			OnDestroyFn = [](Script* executor) { ((T*)executor)->OnDestroy(); };
-			OnUpdateFn  = [](Script* executor, Timestep delta) { ((T*)executor)->OnUpdate(delta); };
+			OnCreateFn  = [](NativeScript* executor) { ((T*)executor)->OnCreate(); };
+			OnDestroyFn = [](NativeScript* executor) { ((T*)executor)->OnDestroy(); };
+			OnUpdateFn  = [](NativeScript* executor, Timestep delta) { ((T*)executor)->OnUpdate(delta); };
 		}
 	};
 }

@@ -8,6 +8,7 @@
 #include "Timestep.h"
 #include "Pointer.h"
 #include "Renderer/Renderer2D.h"
+#include "Scripting/ScriptEngine.h"
 
 namespace Cherry
 {
@@ -30,7 +31,6 @@ namespace Cherry
 	{
 		delete m_LayerStack;
 		delete m_Window;
-		Renderer2D::Shutdown();
 	}
 
 	void Application::Run()
@@ -38,6 +38,8 @@ namespace Cherry
 		m_Running = true;
 
 		Log::Init(Configuration.Name);
+
+		ScriptEngine::Init();
 
 		m_Window = Window::Create({ Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.IsVSync });
 		Renderer2D::Init();
@@ -51,8 +53,6 @@ namespace Cherry
 		{
 			layer->OnAttach();
 		}
-
-		RenderCommand::Init();
 
 		Timestep DeltaTime;
 
@@ -73,8 +73,12 @@ namespace Cherry
 			m_ImGuiRenderer->End();
 		}
 
+		ScriptEngine::Shutdown();
+
 		m_ImGuiRenderer->OnShutdown();
 		delete m_ImGuiRenderer;
+
+		Renderer2D::Shutdown();
 	}
 
 	void Application::OnEvent(Event& e)

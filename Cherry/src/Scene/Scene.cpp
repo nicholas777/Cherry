@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "Component.h"
-#include "Script.h"
+#include "NativeScript.h"
 
 namespace Cherry
 {

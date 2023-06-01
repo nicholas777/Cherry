@@ -1,4 +1,5 @@
 *.vcxproj*
+*.csproj*
 *.user
 *.sln
 .vs/
@@ -9,3 +10,4 @@ Cherry/vendor/FreetypeGL/obj
 Cherry/vendor/GLAD/bin
 Cherry/vendor/GLFW/bin
 Cherry/vendor/imgui/bin
+Blossom/assets/CoreScripts

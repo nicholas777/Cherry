@@ -36,9 +36,12 @@
 #include "Scene/Component.h"
 #include "Scene/Entity.h"
 #include "Scene/Scene.h"
-#include "Scene/Script.h"
+#include "Scene/NativeScript.h"
 #include "Scene/SceneSerializer.h"
 #include "Scene/AssetManager.h"
+
+#include "Scripting/Script.h"
+#include "Scripting/ScriptEngine.h"
 
 #include "Graphics/Cameras/Camera.h"
 #include "Graphics/Cameras/SceneCamera.h"

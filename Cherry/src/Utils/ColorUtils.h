@@ -16,7 +16,7 @@ namespace Cherry
 							floor(color.y * 255),
 							floor(color.z * 255));
 		}
-		// TODO: Possibly make Color struct
+		// TODO: Consider making Color struct
 		inline static Vector3f RGBToFloat(Vector3i color)
 		{
 			return Vector3f(floor((float)color.x / 255),

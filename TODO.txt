@@ -1,4 +1,10 @@
-﻿Release 0.1
+﻿Scripting Engine
+- Calling c# from c++
+- Attaching c# to entities
+- Calling c++ from c#
+- C# api
+
+Release 0.1
 - C# Scripting
 
 Release 0.2
