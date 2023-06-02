@@ -1,5 +1,8 @@
 #pragma once
 
+#include "core/Pointer.h"
+#include "Script.h"
+
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 
@@ -12,14 +15,9 @@ namespace Cherry
 		static void Init();
 		static void Shutdown();
 
-		static MonoAssembly* LoadAssembly(std::string path);
+		static Shared<Script> LoadScript(std::string path);
 
 	private:
-		struct ScriptEngineInfo
-		{
-
-		};
-		static ScriptEngineInfo m_Info;
 
 		static MonoDomain* m_RootDomain;
 		static MonoDomain* m_AppDomain;

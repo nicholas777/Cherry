@@ -1,5 +1,8 @@
 #pragma once
 
+#include "core/Pointer.h"
+#include "Class.h"
+
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 
@@ -10,19 +13,20 @@ namespace Cherry
 	{
 	public:
 		Script()
-			: m_Assembly(nullptr), m_Image(nullptr), m_TypeDefinitions(TypeDefinitionsTable()) {};
-		Script(MonoAssembly* assembly);
-		Script(const std::string& path);
-		~Script() { delete m_Assembly; };
+			: m_TypeDefinitions(TypeDefinitionsTable()) {};
+		Script(MonoAssembly* assembly, MonoDomain* appDomain);
+		~Script() { delete m_Assembly; delete m_Image; };
 
 		void PrintTypedefs();
+		Shared<Class> GetClassByName(const char* name, const char* nameSpace = "");
 
 	private:
 
 		void LoadTables();
 
-		MonoAssembly* m_Assembly;
-		MonoImage* m_Image;
+		MonoAssembly* m_Assembly = nullptr;
+		MonoImage* m_Image = nullptr;
+		MonoDomain* m_AppDomain = nullptr;
 
 		struct TypeDefinitionsTable
 		{
@@ -30,9 +34,9 @@ namespace Cherry
 			uint32_t Size = 0;
 
 			TypeDefinitionsTable() = default;
+			~TypeDefinitionsTable() { delete Table; };
 		};
 		TypeDefinitionsTable m_TypeDefinitions;
-
 
 	};
 }

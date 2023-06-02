@@ -107,7 +107,11 @@ namespace Cherry
 
 		RenderCommand::SetClearColor({ 1, 0, 0, 1 });
 
-		Script script = Script("Assets/CoreScripts/ScriptLib.dll");
+		/*Shared<Script> script = ScriptEngine::LoadScript("Assets/CoreScripts/ScriptLib.dll");
+		Shared<Class> klass = script->GetClassByName("Core", "Cherry");
+		Shared<Object> obj = klass->Instantiate();
+		Shared<Method> method = klass->GetMethod("PrintMessage", 0);
+		method->Invoke(obj);*/
 	}
 
 	void EditorLayer::OnDetach()

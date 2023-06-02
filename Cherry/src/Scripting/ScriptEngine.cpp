@@ -7,7 +7,7 @@ namespace Cherry
 
 	MonoDomain* ScriptEngine::m_RootDomain = nullptr;
 	MonoDomain* ScriptEngine::m_AppDomain = nullptr;
-
+	// TODO: Better error messages in the scripting engine
 	static char* ReadFile(std::string filename, uint32_t& filesize)
 	{
 		std::ifstream stream(filename, std::ios::binary | std::ios::ate);
@@ -48,9 +48,11 @@ namespace Cherry
 
 	void ScriptEngine::Shutdown()
 	{
+		delete m_RootDomain;
+		delete m_AppDomain;
 	}
 
-	MonoAssembly* ScriptEngine::LoadAssembly(std::string path)
+	Shared<Script> ScriptEngine::LoadScript(std::string path)
 	{
 		uint32_t filesize = 0;
 		char* filedata = ReadFile(path, filesize);
@@ -66,7 +68,7 @@ namespace Cherry
 		CH_VALIDATE(assembly);
 
 		delete[] filedata;
-		return assembly;
+		return new Script(assembly, m_AppDomain);
 	}
 
 }

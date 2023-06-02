@@ -5,19 +5,12 @@
 
 namespace Cherry
 {
-
-	Script::Script(MonoAssembly* assembly)
+	
+	Script::Script(MonoAssembly* assembly, MonoDomain* appDomain)
 	{
 		m_Assembly = assembly;
 		m_Image = mono_assembly_get_image(m_Assembly);
-
-		LoadTables();
-	}
-
-	Script::Script(const std::string& path)
-	{
-		m_Assembly = ScriptEngine::LoadAssembly(path);
-		m_Image = mono_assembly_get_image(m_Assembly);
+		m_AppDomain = appDomain;
 
 		LoadTables();
 	}
@@ -36,12 +29,18 @@ namespace Cherry
 		}
 	}
 
+	Shared<Class> Script::GetClassByName(const char* name, const char* nameSpace)
+	{
+		MonoClass* monoClass = mono_class_from_name(m_Image, nameSpace, name);
+		CH_ASSERT(monoClass, "Unable to generate class");
+
+		return new Class(monoClass, m_AppDomain);
+	}
+
 	void Script::LoadTables()
 	{
 		m_TypeDefinitions.Table = mono_image_get_table_info(m_Image, MONO_TABLE_TYPEDEF);
 		m_TypeDefinitions.Size = mono_table_info_get_rows(m_TypeDefinitions.Table);
-
-		PrintTypedefs();
 	}
 
 }
