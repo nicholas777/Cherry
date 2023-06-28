@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "OpenGLFramebuffer.h"
+#include "Debug/Profiler.h"
 
 #include <glad/glad.h>
 
@@ -52,6 +53,8 @@ namespace Cherry
 
 	void OpenGLFramebuffer::RegenerateFramebuffer()
 	{
+		CH_PROFILE_FUNC();
+
 		uint32_t error = glGetError();
 		if (m_FramebufferID)
 		{

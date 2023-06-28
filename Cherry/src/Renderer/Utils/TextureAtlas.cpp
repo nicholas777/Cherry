@@ -1,11 +1,13 @@
 #include "epch.h"
 #include "TextureAtlas.h"
+#include "Debug/Profiler.h"
 
 namespace Cherry
 {
 	// TODO: Support for space in between tiles
 	TextureAtlas::TextureAtlas(const std::string& filepath, uint32_t textureWidth, uint32_t textureHeight, uint32_t sheetWidth, uint32_t sheetHeight, uint32_t texturesX, uint32_t texturesY)
 	{
+		CH_PROFILE_FUNC();
 
 		m_TextureWidth = textureWidth;
 		m_TextureHeight = textureHeight;

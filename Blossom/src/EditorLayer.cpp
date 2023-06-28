@@ -83,6 +83,8 @@ namespace Cherry
 
 	void EditorLayer::OnAttach()
 	{
+		CH_PROFILE_FUNC();
+
 		m_ContentBrowserPanel = new ContentBrowserPanel("assets/Project");
 
 		m_ScenePath = "";
@@ -107,11 +109,13 @@ namespace Cherry
 
 		RenderCommand::SetClearColor({ 1, 0, 0, 1 });
 
-		/*Shared<Script> script = ScriptEngine::LoadScript("Assets/CoreScripts/ScriptLib.dll");
+		// Scripting
+		CH_PROFILE_SCOPE("Hello there");
+		Shared<Script> script = ScriptEngine::LoadScript("Assets/CoreScripts/ScriptLib.dll");
 		Shared<Class> klass = script->GetClassByName("Core", "Cherry");
 		Shared<Object> obj = klass->Instantiate();
 		Shared<Method> method = klass->GetMethod("PrintMessage", 0);
-		method->Invoke(obj);*/
+		method->Invoke(obj);
 	}
 
 	void EditorLayer::OnDetach()
@@ -121,6 +125,8 @@ namespace Cherry
 
 	void EditorLayer::OnUpdate(const Timestep& delta)
 	{
+		CH_PROFILE_FUNC();
+
 		m_Framebuffer->Bind();
 		if (m_IsRuntime)
 		{
@@ -194,6 +200,8 @@ namespace Cherry
 
 	void EditorLayer::OnEvent(Event& e)
 	{
+		CH_PROFILE_FUNC();
+
 		if (e.Type == EventType::KeyPressEvent)
 		{
 			KeyPressEvent& event = static_cast<KeyPressEvent&>(e);
@@ -278,6 +286,8 @@ namespace Cherry
 	
 	void EditorLayer::OnImGuiRender()
 	{
+		CH_PROFILE_FUNC();
+
 		static bool IsOpen = true;
         static bool opt_fullscreen = true;
         static bool opt_padding = false;
@@ -419,6 +429,8 @@ namespace Cherry
 
 	void EditorLayer::RegisterAction(ReversableAction* action)
 	{
+		CH_PROFILE_FUNC();
+
 		if (m_ActionsToUndo.size() >= 10)
 		{
 			delete* m_ActionsToUndo.begin();
@@ -433,6 +445,8 @@ namespace Cherry
 
 	void EditorLayer::UndoAction()
 	{
+		CH_PROFILE_FUNC();
+
 		if (m_ActionsToUndo.size() > 0)
 		{
 			m_ActionsToUndo.back()->Reverse();

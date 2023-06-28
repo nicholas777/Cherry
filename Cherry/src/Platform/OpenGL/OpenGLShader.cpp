@@ -2,6 +2,7 @@
 #include "OpenGLShader.h"
 #include "core/Core.h"
 #include "core/Log.h"
+#include "Debug/Profiler.h"
 
 #include <glad/glad.h>
 #include <vector>
@@ -10,6 +11,8 @@ namespace Cherry
 {
 	OpenGLShader::OpenGLShader(std::string vertexSrc, std::string fragmentSrc)
 	{
+		CH_PROFILE_FUNC();
+
 		uint32_t vertexShader = CompileVertexShader(vertexSrc);
 		if (!CheckVertexShaderSuccess(vertexShader))
 		{
@@ -41,6 +44,8 @@ namespace Cherry
 
 	OpenGLShader::OpenGLShader(std::string file)
 	{
+		CH_PROFILE_FUNC();
+
 		std::string vertexSrc = "";
 		std::string fragmentSrc = "";
 
@@ -180,6 +185,8 @@ namespace Cherry
 
 	uint32_t OpenGLShader::CompileVertexShader(std::string vertexSrc)
 	{
+		CH_PROFILE_FUNC();
+
 		uint32_t vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
 		const char* source = vertexSrc.c_str();
@@ -192,6 +199,8 @@ namespace Cherry
 
 	bool OpenGLShader::CheckVertexShaderSuccess(uint32_t ID)
 	{
+		CH_PROFILE_FUNC();
+
 		GLint success = 0;
 		glGetShaderiv(ID, GL_COMPILE_STATUS, &success);
 		if (success == GL_FALSE)
@@ -211,6 +220,8 @@ namespace Cherry
 
 	uint32_t OpenGLShader::CompileFragmentShader(std::string fragmentSrc)
 	{
+		CH_PROFILE_FUNC();
+
 		uint32_t fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 		const char* source = fragmentSrc.c_str();
@@ -223,6 +234,8 @@ namespace Cherry
 
 	bool OpenGLShader::CheckFragmentShaderSuccess(uint32_t fragmentShader)
 	{
+		CH_PROFILE_FUNC();
+
 		int success;
 		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 		if (success == GL_FALSE)
@@ -242,6 +255,8 @@ namespace Cherry
 
 	void OpenGLShader::LinkShaderProgram(uint32_t vertex, uint32_t fragment)
 	{
+		CH_PROFILE_FUNC();
+
 		m_ShaderProgram = glCreateProgram();
 
 		glAttachShader(m_ShaderProgram, vertex);
@@ -252,6 +267,8 @@ namespace Cherry
 
 	bool OpenGLShader::CheckProgramLinkingSuccess()
 	{
+		CH_PROFILE_FUNC();
+
 		int isLinked = 0;
 		glGetProgramiv(m_ShaderProgram, GL_LINK_STATUS, (int*)&isLinked);
 		if (isLinked == GL_FALSE)
@@ -273,6 +290,8 @@ namespace Cherry
 
 	void OpenGLShader::ParseFile(std::string file, std::string& vertexSrc, std::string& fragmentSrc)
 	{
+		CH_PROFILE_FUNC();
+
 		std::string line;
 		std::ifstream myfile(file);
 

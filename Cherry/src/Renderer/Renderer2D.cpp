@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "Renderer2D.h"
+#include "Debug/Profiler.h"
 
 namespace Cherry
 {
@@ -45,6 +46,8 @@ namespace Cherry
 
 	void Renderer2D::Init()
 	{
+		CH_PROFILE_FUNC();
+
 		s_Data->RectBase = new RectVertex[s_Data->MaxVertices];
 		s_Data->RectPtr = s_Data->RectBase;
 
@@ -112,6 +115,8 @@ namespace Cherry
 	
 	void Renderer2D::Begin(const Matrix4x4f& proj, const Matrix4x4f& transform)
 	{
+		CH_PROFILE_FUNC();
+
 		s_Data->TextureShader->Bind();
 
 		Matrix4x4f VP = proj * transform; // TODO: Inverse this
@@ -122,6 +127,8 @@ namespace Cherry
 
 	void Renderer2D::Begin()
 	{
+		CH_PROFILE_FUNC();
+
 		Matrix4x4f mat = Matrix4x4f();
 		mat.SetIdentity();
 
@@ -137,6 +144,8 @@ namespace Cherry
 
 	void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size, const Scoped<Texture>& texture)
 	{
+		CH_PROFILE_FUNC();
+
 		static Vector2f* texCoords = new Vector2f[4] {
 			{ 0.0f, 0.0f },
 			{ 1.0f, 0.0f },
@@ -171,6 +180,8 @@ namespace Cherry
 
 	void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size, const SubTexture& texture)
 	{
+		CH_PROFILE_FUNC();
+
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
 			Flush();
@@ -197,6 +208,8 @@ namespace Cherry
 
 	void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size, const Vector4f& color)
 	{
+		CH_PROFILE_FUNC();
+
 		static Vector2f* texCoords = new Vector2f[4]{
 			{ 0.0f, 0.0f },
 			{ 1.0f, 0.0f },
@@ -228,6 +241,8 @@ namespace Cherry
 
 	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture, const Vector4f& color, int entityID)
 	{
+		CH_PROFILE_FUNC();
+
 		static Vector2f* texCoords = new Vector2f[4]{
 			{ 0.0f, 0.0f },
 			{ 1.0f, 0.0f },
@@ -258,6 +273,8 @@ namespace Cherry
 
 	void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture, const Vector4f& color, int entityID)
 	{
+		CH_PROFILE_FUNC();
+
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
 			Flush();
@@ -281,6 +298,8 @@ namespace Cherry
 
 	void Renderer2D::DrawRect(const Matrix4x4f& transform, const Vector4f& color, int entityID)
 	{
+		CH_PROFILE_FUNC();
+
 		static Vector2f* texCoords = new Vector2f[4]{
 			{ 0.0f, 0.0f },
 			{ 1.0f, 0.0f },
@@ -311,6 +330,8 @@ namespace Cherry
 	
 	void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const Scoped<Texture>& texture)
 	{
+		CH_PROFILE_FUNC();
+
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
 			Flush();
@@ -345,6 +366,8 @@ namespace Cherry
 
 	void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const SubTexture& texture)
 	{
+		CH_PROFILE_FUNC();
+
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
 			Flush();
@@ -372,6 +395,8 @@ namespace Cherry
 
 	void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const Vector4f& color)
 	{
+		CH_PROFILE_FUNC();
+
 		TransformationMatrix transform(position);
 		transform.Scale(size);
 		transform.Rotate(rotation);
@@ -398,6 +423,8 @@ namespace Cherry
 
 	void Renderer2D::DrawChar(const Vector2f& coord1, const Vector2f& coord2, const SubTexture& texture, const Vector4f& color)
 	{
+		CH_PROFILE_FUNC();
+
 		if (s_Data->IndexCount >= s_Data->MaxIndices)
 		{
 			Flush();
@@ -457,6 +484,8 @@ namespace Cherry
 
 	void Renderer2D::Flush()
 	{
+		CH_PROFILE_FUNC();
+
 		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data->RectPtr - (uint8_t*)s_Data->RectBase);
 		s_Data->BatchVBO->InsertData(s_Data->RectBase, dataSize, 0);
 
@@ -480,6 +509,7 @@ namespace Cherry
 
 	float Renderer2D::GetTextureIndex(Texture* ptr)
 	{
+		CH_PROFILE_FUNC();
 
 		for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
 		{

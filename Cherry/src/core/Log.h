@@ -10,11 +10,9 @@ namespace Cherry
 	class Log
 	{
 	public:
-		static void Init(const std::string& AppName);
-		inline static std::shared_ptr<spdlog::logger>& GetEngineLogger() { return m_EngineLogger; }
+		static void Init();
 		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return m_ClientLogger; }
 	private:
-		static std::shared_ptr<spdlog::logger> m_EngineLogger;
 		static std::shared_ptr<spdlog::logger> m_ClientLogger;
 	};
 }

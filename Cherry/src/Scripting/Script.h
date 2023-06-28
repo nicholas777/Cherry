@@ -15,7 +15,7 @@ namespace Cherry
 		Script()
 			: m_TypeDefinitions(TypeDefinitionsTable()) {};
 		Script(MonoAssembly* assembly, MonoDomain* appDomain);
-		~Script() { delete m_Assembly; delete m_Image; };
+		~Script();
 
 		void PrintTypedefs();
 		Shared<Class> GetClassByName(const char* name, const char* nameSpace = "");
@@ -34,7 +34,7 @@ namespace Cherry
 			uint32_t Size = 0;
 
 			TypeDefinitionsTable() = default;
-			~TypeDefinitionsTable() { delete Table; };
+			~TypeDefinitionsTable() { };
 		};
 		TypeDefinitionsTable m_TypeDefinitions;
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Scene/AssetManager.h"
+#include "Debug/Profiler.h"
+
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 
@@ -11,6 +13,7 @@ namespace Cherry
 	public:
 		static void Load(const std::filesystem::path& filepath)
 		{
+			CH_PROFILE_FUNC();
 
 			YAML::Node map = YAML::LoadFile(filepath.generic_u8string());
 

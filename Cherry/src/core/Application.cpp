@@ -9,6 +9,7 @@
 #include "Pointer.h"
 #include "Renderer/Renderer2D.h"
 #include "Scripting/ScriptEngine.h"
+#include "Debug/Profiler.h"
 
 namespace Cherry
 {
@@ -17,6 +18,9 @@ namespace Cherry
 
 	Application::Application()
 	{
+		CH_PROFILE_FUNC();
+
+		Log::Init();
 		EventListener::InitEventListenerSystem();
 
 		Configuration = ApplicationConfig();
@@ -29,15 +33,17 @@ namespace Cherry
 
 	Application::~Application()
 	{
+		CH_PROFILE_FUNC();
+
 		delete m_LayerStack;
 		delete m_Window;
 	}
 
-	void Application::Run()
+	void Application::Startup()
 	{
-		m_Running = true;
+		CH_PROFILE_FUNC();
 
-		Log::Init(Configuration.Name);
+		m_Running = true;
 
 		ScriptEngine::Init();
 
@@ -53,6 +59,11 @@ namespace Cherry
 		{
 			layer->OnAttach();
 		}
+	}
+
+	void Application::Run()
+	{
+		CH_PROFILE_FUNC();
 
 		Timestep DeltaTime;
 
@@ -83,6 +94,8 @@ namespace Cherry
 
 	void Application::OnEvent(Event& e)
 	{
+		CH_PROFILE_FUNC();
+
 		for (auto listener : EventListener::EventListeners[e.Type])
 		{
 			listener->OnEvent(e);
@@ -102,6 +115,7 @@ namespace Cherry
 	                                          
 	void Application::OnWindowResize(int width, int height)
 	{
+		CH_PROFILE_FUNC();
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 

@@ -5,6 +5,7 @@
 #include "Events/Event.h"
 #include "core/Application.h"
 #include "Renderer/RenderCommand.h"
+#include "Debug/Profiler.h"
 
 #include "core/KeyCodes.h"
 #include "core/MouseButtonCodes.h"
@@ -14,7 +15,7 @@ namespace Cherry
 	static bool GLFWInit = false;
 
 	void WindowsWindow::ErrorCallback(int error, const char* msg) {
-		Application::GetApplication().OnEvent(GameErrorEvent((std::string("GLFW ERROR: ") + std::string(msg)).c_str()));
+		Application::GetApplication().OnEvent(GameErrorEvent((std::string("GLFW ERROR: ") + msg).c_str()));
 	}
 
 	void WindowsWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -82,6 +83,8 @@ namespace Cherry
 
 	WindowsWindow::WindowsWindow(WindowData data)
 	{
+		CH_PROFILE_FUNC();
+
 		m_Data = data;
 
 		if (!GLFWInit)

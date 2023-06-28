@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "OpenGLBuffers.h"
+#include "Debug/Profiler.h"
 
 #include <glad/glad.h>
 
@@ -94,6 +95,8 @@ namespace Cherry
 
 	void OpenGLVertexBuffer::GenVertexAttribPointers()
 	{
+		CH_PROFILE_FUNC();
+
 		int i = 0;
 		for (auto e : m_Layout.GetBufferElements())
 		{

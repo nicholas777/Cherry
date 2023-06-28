@@ -4,6 +4,7 @@
 
 #include "Core/Log.h"
 #include "core/Pointer.h"
+#include "Debug/Profiler.h"
 
 #include "core/Layer.h"
 #include "core/LayerStack.h"
@@ -42,6 +43,7 @@
 
 #include "Scripting/Script.h"
 #include "Scripting/ScriptEngine.h"
+#include "Scripting/Class.h"
 
 #include "Graphics/Cameras/Camera.h"
 #include "Graphics/Cameras/SceneCamera.h"

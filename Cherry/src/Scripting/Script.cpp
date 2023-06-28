@@ -2,17 +2,25 @@
 #include "Script.h"
 #include "core/Log.h"
 #include "ScriptEngine.h"
+#include "Debug/Profiler.h"
 
 namespace Cherry
 {
 	
 	Script::Script(MonoAssembly* assembly, MonoDomain* appDomain)
 	{
+		CH_PROFILE_FUNC();
+
 		m_Assembly = assembly;
 		m_Image = mono_assembly_get_image(m_Assembly);
 		m_AppDomain = appDomain;
 
 		LoadTables();
+	}
+
+	Script::~Script()
+	{
+		mono_assembly_close(m_Assembly);
 	}
 
 	void Script::PrintTypedefs()

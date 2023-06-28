@@ -2,13 +2,15 @@
 #include "Font.h"
 #include "Renderer/Renderer2D.h"
 #include "core/Application.h"
+#include "Debug/Profiler.h"
 
 namespace Cherry
 {
     Font::Font(std::string filepath, uint32_t fontSize)
         : m_FontSize(fontSize)
     {
-        
+        CH_PROFILE_FUNC();
+
         m_FtTexture = texture_atlas_new(512, 512, 4);
         m_FtFont = texture_font_new_from_file(m_FtTexture, fontSize, filepath.c_str());
         
@@ -60,6 +62,8 @@ namespace Cherry
 
     float Font::GetWidth(std::string string)
     {
+        CH_PROFILE_FUNC();
+
         float result = 0.0f;
 
         for (int i = 0; i < string.size(); i++)
@@ -79,6 +83,8 @@ namespace Cherry
 
     void Font::RenderText(const Vector2f& pos, const std::string& text)
     {
+        CH_PROFILE_FUNC();
+
         float x = pos.x;
 
         for (int i = 0; i < text.length(); i++)
@@ -102,6 +108,8 @@ namespace Cherry
 
     void Font::RenderText(const Vector2f& pos, const std::string& text, const Vector4f& color, const Vector2f& scale)
     {
+        CH_PROFILE_FUNC();
+
         float x = pos.x;
 
         for (int i = 0; i < text.length(); i++)

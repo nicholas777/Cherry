@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "Math/Vector.h"
 #include "AssetManager.h"
+#include "Debug/Profiler.h"
 
 #include "entt.hpp"
 
@@ -11,6 +12,8 @@ namespace Cherry
 {
     static void SerializeVec2(Vector2f vec, const char* name, YAML::Emitter& out)
     {
+        CH_PROFILE_FUNC();
+
         out << YAML::Key << name;
         out << YAML::Flow;
         out << YAML::Value << YAML::BeginSeq;
@@ -20,6 +23,8 @@ namespace Cherry
 
     static void SerializeVec4(Vector4f vec, const char* name, YAML::Emitter& out)
     {
+        CH_PROFILE_FUNC();
+
         out << YAML::Key << name;
         out << YAML::Flow;
         out << YAML::Value << YAML::BeginSeq;
@@ -29,6 +34,8 @@ namespace Cherry
 
     static void SerializeEntity(Entity entity, YAML::Emitter& out)
     {
+        CH_PROFILE_FUNC();
+
         out << YAML::BeginMap;
         out << YAML::Key << "ID";
         out << YAML::Value << (uint32_t)entity;
@@ -122,6 +129,8 @@ namespace Cherry
     
     void SceneSerializer::Serialize(Shared<Scene> scene, const std::string& filepath)
     {
+        CH_PROFILE_FUNC();
+
         YAML::Emitter out;
         out << YAML::BeginMap << YAML::Key << "Scene";
         out << YAML::Value << YAML::BeginMap;
@@ -146,6 +155,8 @@ namespace Cherry
 
     Scene* SceneSerializer::Deserialize(const std::string& filepath)
     {
+        CH_PROFILE_FUNC();
+
         YAML::Node scene = YAML::LoadFile(filepath);
         Scene* s = new Scene;
 

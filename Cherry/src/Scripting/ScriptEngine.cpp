@@ -1,6 +1,8 @@
 #include "epch.h"
 #include "ScriptEngine.h"
 #include "core/Log.h"
+#include "ScriptAPI.h"
+#include "Debug/Profiler.h"
 
 namespace Cherry
 {
@@ -30,6 +32,8 @@ namespace Cherry
 
 	void ScriptEngine::Init()
 	{
+		CH_PROFILE_FUNC();
+
 		mono_set_assemblies_path("assets/mono/lib");
 		
 		MonoDomain* domain = mono_jit_init("ScriptingRuntime");
@@ -44,16 +48,18 @@ namespace Cherry
 		m_AppDomain = mono_domain_create_appdomain("AppDomain", nullptr);
 		mono_domain_set(m_AppDomain, true);
 
+		ScriptAPI::Init();
 	}
 
 	void ScriptEngine::Shutdown()
 	{
-		delete m_RootDomain;
-		delete m_AppDomain;
+		mono_jit_cleanup(m_RootDomain);
 	}
 
 	Shared<Script> ScriptEngine::LoadScript(std::string path)
 	{
+		CH_PROFILE_FUNC();
+
 		uint32_t filesize = 0;
 		char* filedata = ReadFile(path, filesize);
 

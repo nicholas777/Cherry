@@ -25,6 +25,8 @@ namespace Cherry
 
     void SceneHierarchyPanel::OnUpdate()
     {
+        CH_PROFILE_FUNC();
+
         ImGui::Begin("Scene Hierarchy");
 
         m_Scene->m_Registry.each([&](auto EntityID)

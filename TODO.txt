@@ -1,23 +1,31 @@
 ﻿Scripting Engine
-- Calling c# from c++
-- Attaching c# to entities
-- Calling c++ from c#
+- # Calling c# from c++
+- # Calling c++ from c#
 - C# api
+- Attaching c# to entities
+
+Minor improvments
+- Create systems for paths (not just "assets/" or "../Cherry/src/")
 
 Release 0.1
 - C# Scripting
-
-Release 0.2
+- Minor improvments
+- Improved logging system
+	- Ability to log Cherry specific types
+- Profiling
 - Extended Gizmos system
 - Proper undo/redo system
 - Proper scene runtime system
 - Bug fixes
+
+Release 0.2
 - UI System
 - Sound system
 
 Release 0.3
 - Vulkan
 - DirectX
+- Metal
 - PostFX
 
 Future goals

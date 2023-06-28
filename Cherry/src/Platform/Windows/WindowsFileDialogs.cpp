@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "WindowsFileDialogs.h"
+#include "Debug/Profiler.h"
 
 #include <commdlg.h>
 #include <GLFW/glfw3.h>
@@ -13,6 +14,8 @@ namespace Cherry
 {
     std::string WindowsFileDialogManager::OpenFileImpl(const char* filter)
     {
+        CH_PROFILE_FUNC();
+
         HWND win = glfwGetWin32Window((GLFWwindow*)Application::GetApplication().GetWindow()->GetNativeWindow());
 
         OPENFILENAMEA opendialog = { 0 };
@@ -44,6 +47,8 @@ namespace Cherry
 
     std::string WindowsFileDialogManager::SaveFileImpl(const char* filter)
     {
+        CH_PROFILE_FUNC();
+
         OPENFILENAMEA opendialog;
         char szFile[260] = { 0 };
         char currentDir[256] = { 0 };

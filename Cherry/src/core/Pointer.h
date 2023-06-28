@@ -251,7 +251,7 @@ namespace Cherry
 			return _Value != right._Value;
 		}
 
-		template <typename T, typename... Args>
+		template <typename... Args>
 		static Shared<T> Create(Args&&... args)
 		{
 			return Shared<T>(new T(std::forward<Args>(args)...));
@@ -265,6 +265,8 @@ namespace Cherry
 			
 			PtrValue(T* value)
 				: ptr(value), RepCount(1) {};
+
+			~PtrValue() { delete ptr; };
 		};
 
 		PtrValue<T>* _Value;

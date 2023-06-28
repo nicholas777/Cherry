@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "Label.h"
+#include "Debug/Profiler.h"
 
 namespace Cherry
 {
@@ -20,6 +21,7 @@ namespace Cherry
 
 	void Label::OnUpdate()
 	{
+		CH_PROFILE_FUNC();
 		m_Font->RenderText(m_Pos, m_Text, m_Color, m_Scale);
 	}
 }

@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "AssetManager.h"
+#include "Debug/Profiler.h"
 
 #include "core/Core.h"
 #include "core/Log.h"
@@ -13,6 +14,8 @@ namespace Cherry
 
 	uint32_t AssetManager::CreateTexture(const std::string& filepath, TextureParams params)
 	{
+		CH_PROFILE_FUNC();
+
 		TextureAsset texture;
 		texture.filepath = filepath;
 		texture.ptr = Texture::Create(filepath, params);
@@ -25,6 +28,8 @@ namespace Cherry
 
 	uint32_t AssetManager::CreateTexture(uint32_t ID, const std::string& filepath, TextureParams params)
 	{
+		CH_PROFILE_FUNC();
+
 		TextureAsset texture;
 		texture.filepath = filepath;
 		texture.ptr = Texture::Create(filepath, params);
@@ -37,6 +42,8 @@ namespace Cherry
 
 	void AssetManager::CreateTextureIfNotExists(const std::string& filepath, TextureParams params)
 	{
+		CH_PROFILE_FUNC();
+
 		for (std::pair<const uint32_t, TextureAsset>& asset : m_Textures)
 		{
 			if (asset.second.filepath == filepath)
@@ -53,6 +60,8 @@ namespace Cherry
 
 	void AssetManager::CreateTextureIfNotExists(uint32_t ID, const std::string& filepath, TextureParams params)
 	{
+		CH_PROFILE_FUNC();
+
 		for (std::pair<const uint32_t, TextureAsset>& asset : m_Textures)
 		{
 			if (asset.first == ID)
@@ -64,6 +73,8 @@ namespace Cherry
 
 	TextureAsset& AssetManager::GetTexture(uint32_t id)
 	{
+		CH_PROFILE_FUNC();
+
 		CH_ASSERT(m_Textures.find(id) != m_Textures.end(), "Asset not found");
 		return m_Textures[id];
 	}
@@ -75,6 +86,8 @@ namespace Cherry
 
 	uint32_t AssetManager::CreateScene(const std::string& filepath)
 	{
+		CH_PROFILE_FUNC();
+
 		SceneAsset asset;
 		asset.filepath = filepath;
 		asset.ptr = SceneSerializer::Deserialize(filepath);
@@ -86,6 +99,8 @@ namespace Cherry
 
 	uint32_t AssetManager::CreateScene(uint32_t ID, const std::string& filepath)
 	{
+		CH_PROFILE_FUNC();
+
 		SceneAsset asset;
 		asset.filepath = filepath;
 		asset.ptr = SceneSerializer::Deserialize(filepath);
@@ -97,6 +112,8 @@ namespace Cherry
 
 	void AssetManager::CreateSceneIfNotExists(const std::string& filepath)
 	{
+		CH_PROFILE_FUNC();
+
 		for (std::pair<const uint32_t, SceneAsset>& asset : m_Scenes)
 		{
 			if (asset.second.filepath == filepath)
@@ -112,11 +129,13 @@ namespace Cherry
 
 	void AssetManager::CreateSceneIfNotExists(uint32_t ID, const std::string& filepath)
 	{
+		CH_PROFILE_FUNC();
+
 		for (std::pair<const uint32_t, SceneAsset>& asset : m_Scenes)
 		{
 			if (asset.first == ID)
 				return;
-		}
+		} 
 
 		CreateScene(ID, filepath);
 	}

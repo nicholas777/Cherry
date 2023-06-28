@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Component.h"
 #include "NativeScript.h"
+#include "Debug/Profiler.h"
 
 namespace Cherry
 {
@@ -20,6 +21,8 @@ namespace Cherry
 	// TODO: Events for creating and updating entities
 	Entity Scene::CreateEntity(const std::string& name)
 	{
+		CH_PROFILE_FUNC();
+
 		Entity entity = Entity(m_Registry.create(), this);
 		entity.AddComponent<NameComponent>(name);
 
@@ -34,6 +37,8 @@ namespace Cherry
 	// TODO: Resizing camera viewport
 	void Scene::OnUpdate(const Timestep& delta)
 	{
+		CH_PROFILE_FUNC();
+
 		RenderCommand::Clear();
 
 		Camera* mainCamera = nullptr;
@@ -99,6 +104,8 @@ namespace Cherry
 	// TODO: Proper system for scene rendering
 	void Scene::OnUpdate(const Timestep& delta, const StaticCamera& camera)
 	{
+		CH_PROFILE_FUNC();
+
 		RenderCommand::Clear();
 		Renderer2D::Begin(camera.GetProjection(), camera.GetTransform());
 
@@ -140,6 +147,8 @@ namespace Cherry
 
 	Entity Scene::GetPrimaryCamera()
 	{
+		CH_PROFILE_FUNC();
+
 		auto view = m_Registry.view<CameraComponent>();
 
 		for (auto entity : view)
@@ -154,6 +163,8 @@ namespace Cherry
 	
 	Entity Scene::GetEntityByName(const std::string& name)
 	{
+		CH_PROFILE_FUNC();
+
 		auto view = m_Registry.view<NameComponent>();
 
 		for (auto entity : view)

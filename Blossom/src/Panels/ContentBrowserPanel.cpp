@@ -21,6 +21,8 @@ namespace Cherry
 
 	void ContentBrowserPanel::SetDirectory(const std::string& directory)
 	{
+		CH_PROFILE_FUNC();
+
 		m_AssetmapPath = FindAssetmap(directory);
 
 		if (std::filesystem::exists(directory) && std::filesystem::is_directory(directory))
@@ -37,12 +39,16 @@ namespace Cherry
 
 	void ContentBrowserPanel::ReloadAssets()
 	{
+		CH_PROFILE_FUNC();
+
 		m_AssetmapPath = FindAssetmap(m_ProjectRoot);
 		Assetmap::Load(m_AssetmapPath);
 	}
 	
 	void ContentBrowserPanel::OnUpdate()
 	{
+		CH_PROFILE_FUNC();
+
 		ImGui::Begin("Content Browser");
 
 		ImGuiTableFlags flags = ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_RowBg;
@@ -157,6 +163,8 @@ namespace Cherry
 
 	std::filesystem::path ContentBrowserPanel::FindAssetmap(std::filesystem::path dir)
 	{
+		CH_PROFILE_FUNC();
+
 		if (!std::filesystem::is_directory(dir))
 		{
 			CH_ASSERT(false, "Invalid path");

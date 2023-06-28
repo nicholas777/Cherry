@@ -35,6 +35,8 @@ namespace Cherry
 
     void PropertiesPanel::DrawEntity()
     {
+        CH_PROFILE_FUNC();
+
         if (!m_Current)
         {
             ImGui::Begin("Properties");
@@ -569,6 +571,8 @@ namespace Cherry
 
     void PropertiesPanel::DrawAsset()
     {
+        CH_PROFILE_FUNC();
+
         if (m_Asset == nullptr)
         {
             ImGui::Begin("Properties");
