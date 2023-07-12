@@ -67,6 +67,19 @@ namespace Cherry
             out << YAML::EndMap;
         }
 
+        if (entity.HasComponent<ScriptComponent>())
+        {
+            auto& comp = entity.GetComponent<ScriptComponent>();
+
+            out << YAML::Key << "ScriptComponent";
+            out << YAML::Value << YAML::BeginMap;
+            
+            out << YAML::Key << "name";
+            out << YAML::Value << comp.Name;
+
+            out << YAML::EndMap;
+        }
+
         if (entity.HasComponent<SpriteComponent>())
         {
             SpriteComponent& comp = entity.GetComponent<SpriteComponent>();
@@ -204,6 +217,13 @@ namespace Cherry
 
                 comp.Scale.x = entity["TransformComponent"]["scale"][0].as<float>();
                 comp.Scale.y = entity["TransformComponent"]["scale"][1].as<float>();
+            }
+
+            if (entity["ScriptComponent"])
+            {
+                ScriptComponent& comp = e.AddComponent<ScriptComponent>();
+
+                comp.Name = entity["ScriptComponent"]["name"].as<std::string>();
             }
 
             if (entity["SpriteComponent"])
