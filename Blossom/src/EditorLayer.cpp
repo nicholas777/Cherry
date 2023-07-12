@@ -10,13 +10,13 @@ namespace Cherry
 	Scoped<SceneHierarchyPanel> EditorLayer::m_SceneHierarchyPanel;
 	Scoped<PropertiesPanel> EditorLayer::m_PropertiesPanel;
 	Scoped<ContentBrowserPanel> EditorLayer::m_ContentBrowserPanel;
-	Shared<Scene> EditorLayer::m_Scene = Shared<Scene>(nullptr);
+	Scene* EditorLayer::m_Scene = nullptr;
 	Entity EditorLayer::m_SelectedEntity = Entity();
 
 	std::vector<ReversableAction*> EditorLayer::m_ActionsToUndo = std::vector<ReversableAction*>();
 	std::vector<ReversableAction*> EditorLayer::m_ActionsToRedo = std::vector<ReversableAction*>();
 
-	Vector2f GetCameraOffsets(const Timestep& delta)
+	static Vector2f GetCameraOffsets(const Timestep& delta)
 	{
 		float x = 0, y = 0;
 
@@ -109,13 +109,6 @@ namespace Cherry
 
 		RenderCommand::SetClearColor({ 1, 0, 0, 1 });
 
-		// Scripting
-		CH_PROFILE_SCOPE("Hello there");
-		Shared<Script> script = ScriptEngine::LoadScript("Assets/CoreScripts/ScriptLib.dll");
-		Shared<Class> klass = script->GetClassByName("Core", "Cherry");
-		Shared<Object> obj = klass->Instantiate();
-		Shared<Method> method = klass->GetMethod("PrintMessage", 0);
-		method->Invoke(obj);
 	}
 
 	void EditorLayer::OnDetach()
@@ -173,7 +166,7 @@ namespace Cherry
 			m_Framebuffer->Unbind();
 
 			// TODO: Renderer2D::RenderRect() defaults entityID parameter to -1 which in editor activates gizmos
-			if (id == -1 || id == -2 && m_SelectedEntity)
+			if ((id == -1 || id == -2) && m_SelectedEntity)
 			{
 				m_GizmoType = id;
 				m_GizmoSelected = true;
@@ -186,7 +179,7 @@ namespace Cherry
 				return;
 			}
 
-			Entity entity = Entity((entt::entity)id, m_Scene.Get());
+			Entity entity = Entity((entt::entity)id, m_Scene);
 			m_EntitySelected = false;
 			if (!entity.IsValid())
 				return;
@@ -365,6 +358,14 @@ namespace Cherry
 		if (ImGui::Button("Play"))
 		{
 			m_IsRuntime = !m_IsRuntime;
+			if (m_IsRuntime)
+			{
+				m_Scene->OnRuntimeStart();
+			}
+			else
+			{
+				m_Scene->OnRuntimeStop();
+			}
 		}
 		if (ImGui::IsItemHovered())
 		{
@@ -421,7 +422,7 @@ namespace Cherry
 		m_PropertiesPanel->SetAsset(asset);
 	}
 
-	void EditorLayer::SelectScene(Shared<Scene> asset)
+	void EditorLayer::SelectScene(Scene* asset)
 	{
 		m_Scene = asset;
 		m_SceneHierarchyPanel->SetScene(asset);

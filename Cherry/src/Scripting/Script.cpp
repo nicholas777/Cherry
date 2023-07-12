@@ -7,7 +7,7 @@
 namespace Cherry
 {
 	
-	Script::Script(MonoAssembly* assembly, MonoDomain* appDomain)
+	Assembly::Assembly(MonoAssembly* assembly, MonoDomain* appDomain)
 	{
 		CH_PROFILE_FUNC();
 
@@ -18,12 +18,12 @@ namespace Cherry
 		LoadTables();
 	}
 
-	Script::~Script()
+	Assembly::~Assembly()
 	{
-		mono_assembly_close(m_Assembly);
+		
 	}
 
-	void Script::PrintTypedefs()
+	void Assembly::PrintTypedefs()
 	{
 		for (uint32_t i = 0; i < m_TypeDefinitions.Size; i++)
 		{
@@ -37,7 +37,7 @@ namespace Cherry
 		}
 	}
 
-	Shared<Class> Script::GetClassByName(const char* name, const char* nameSpace)
+	Shared<Class> Assembly::GetClassByName(const char* name, const char* nameSpace)
 	{
 		MonoClass* monoClass = mono_class_from_name(m_Image, nameSpace, name);
 		CH_ASSERT(monoClass, "Unable to generate class");
@@ -45,7 +45,7 @@ namespace Cherry
 		return new Class(monoClass, m_AppDomain);
 	}
 
-	void Script::LoadTables()
+	void Assembly::LoadTables()
 	{
 		m_TypeDefinitions.Table = mono_image_get_table_info(m_Image, MONO_TABLE_TYPEDEF);
 		m_TypeDefinitions.Size = mono_table_info_get_rows(m_TypeDefinitions.Table);

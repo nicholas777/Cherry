@@ -31,7 +31,7 @@ namespace Cherry
 
 	struct SceneAsset : public Asset
 	{
-		Shared<Scene> ptr;
+		Scene* ptr;
 		std::string filepath;
 
 		SceneAsset() : Asset(AssetType::Scene) {}

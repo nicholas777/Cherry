@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "NativeScript.h"
 #include "Debug/Profiler.h"
+#include "Scripting/ScriptEngine.h"
 
 namespace Cherry
 {
@@ -34,6 +35,34 @@ namespace Cherry
 		m_Registry.destroy(entity);
 	}
 
+	void Scene::OnRuntimeStart()
+	{
+		ScriptEngine::OnRuntimeStart(this);
+
+		m_Registry.view<ScriptComponent>().each([=](auto entity, auto& script)
+		{
+			ScriptEngine::InitScriptedEntity(Entity(entity, this));
+
+			if (script.OnCreate)
+			{
+				script.OnCreate->Invoke(script.Instance);
+			}
+		});
+	}
+
+	void Scene::OnRuntimeStop()
+	{
+		m_Registry.view<ScriptComponent>().each([=](auto entity, auto& script)
+		{
+			if (script.OnDestroy)
+			{
+				script.OnDestroy->Invoke(script.Instance);
+			}
+		});
+
+		ScriptEngine::OnRuntimeStop();
+	}
+
 	// TODO: Resizing camera viewport
 	void Scene::OnUpdate(const Timestep& delta)
 	{
@@ -45,7 +74,7 @@ namespace Cherry
 		Matrix4x4f cameraTransform;
 
 		{
-			m_Registry.view<ScriptComponent>().each([=](auto entity, auto& scriptExecutor)
+			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& scriptExecutor)
 			{
 				if (!scriptExecutor.script)
 				{
@@ -55,6 +84,16 @@ namespace Cherry
 				}
 
 				scriptExecutor.OnUpdateFn(scriptExecutor.script, delta);
+			});
+		}
+
+		{
+			m_Registry.view<ScriptComponent>().each([=](auto entity, auto& script)
+			{
+				if (script.OnUpdate)
+				{
+					script.OnUpdate->Invoke(script.Instance, delta.GetMilliseconds());
+				}
 			});
 		}
 
@@ -110,17 +149,17 @@ namespace Cherry
 		Renderer2D::Begin(camera.GetProjection(), camera.GetTransform());
 
 		{
-			m_Registry.view<ScriptComponent>().each([=](auto entity, auto& scriptExecutor)
+			m_Registry.view<NativeScriptComponent>();/* .each([=](auto entity, auto& scriptExecutor)
+			/* {
+				if (!scriptExecutor.script)
 				{
-					if (!scriptExecutor.script)
-					{
-						scriptExecutor.CreateInstanceFn();
-						scriptExecutor.script->m_Entity = Entity(entity, this);
-						scriptExecutor.OnCreateFn(scriptExecutor.script);
-					}
+					scriptExecutor.CreateInstanceFn();
+					scriptExecutor.script->m_Entity = Entity(entity, this);
+					scriptExecutor.OnCreateFn(scriptExecutor.script);
+				}
 
-					scriptExecutor.OnUpdateFn(scriptExecutor.script, delta);
-				});
+				scriptExecutor.OnUpdateFn(scriptExecutor.script, delta);
+			});*/
 		}
 
 		{

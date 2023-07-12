@@ -9,10 +9,10 @@ namespace Cherry
 	{
 	public:
 		SceneHierarchyPanel() = default;
-		SceneHierarchyPanel(Shared<Scene> scene);
+		SceneHierarchyPanel(Scene* scene);
 		~SceneHierarchyPanel();
 
-		void SetScene(Shared<Scene> scene);
+		void SetScene(Scene* scene);
 
 		void OnUpdate();
 
@@ -20,7 +20,7 @@ namespace Cherry
 		Vector4f m_Color;
 		Shared<Font> m_Font;
 
-		Shared<Scene> m_Scene;
+		Scene* m_Scene;
 
 		Entity m_SelectedEntity = Entity(entt::null, nullptr);
 

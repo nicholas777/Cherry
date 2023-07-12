@@ -198,6 +198,47 @@ namespace Cherry
 
         }
 
+        if (m_Current.HasComponent<ScriptComponent>())
+        {
+            auto& comp = m_Current.GetComponent<ScriptComponent>();
+            bool removeComponent = false;
+
+            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Selected | ImGuiTreeNodeFlags_OpenOnArrow;
+            bool opened = ImGui::TreeNodeEx((void*)2756, flags, "Script Component");
+
+            if (ImGui::BeginPopupContextItem("Script Component"))
+            {
+                if (ImGui::MenuItem("Remove Component"))
+                {
+                    removeComponent = true;
+                }
+
+                ImGui::EndPopup();
+            }
+
+            if (opened)
+            {
+                char str[128];
+                memset(str, 0, sizeof(str));
+                strcpy(str, comp.Name.c_str());
+
+                if (ImGui::InputText("Script Class", str, sizeof(str)))
+                {
+                    comp.Name = str;
+                }
+
+                if (!ScriptEngine::IsScriptClass(str))
+                    ImGui::TextColored({ 1, 0, 0, 1 }, "Invalid class name");
+
+                ImGui::TreePop();
+            }
+
+            if (removeComponent)
+            {
+                m_Current.RemoveComponent<ScriptComponent>();
+            }
+        }
+
         if (m_Current.HasComponent<SpriteComponent>())
         {
             bool removeComponent = false;
@@ -539,6 +580,12 @@ namespace Cherry
                         m_Current.AddComponent<TransformComponent>();
                 }
 
+                if (ImGui::Selectable("ScriptComponent", &selected))
+                {
+                    if (!m_Current.HasComponent<ScriptComponent>())
+                        m_Current.AddComponent<ScriptComponent>();
+                }
+
                 if (ImGui::Selectable("SpriteComponent", &selected))
                 {
                     if (!m_Current.HasComponent<SpriteComponent>())
@@ -551,13 +598,13 @@ namespace Cherry
                         m_Current.AddComponent<CameraComponent>();
                 }
 
-                if (ImGui::Selectable("ScriptExecutorComponent", &selected))
+                /*if (ImGui::Selectable("NativeScriptComponent", &selected))
                 {
-                    if (!m_Current.HasComponent<ScriptComponent>())
+                    if (!m_Current.HasComponent<NativeScriptComponent>())
                     {
                         // m_Current.AddComponent<ScriptComponent>();
                     }
-                }
+                }*/
 
                 ImGui::EndListBox();
             }

@@ -1,33 +1,39 @@
 ﻿Scripting Engine
-- # Calling c# from c++
-- # Calling c++ from c#
+# Calling c# from c++
+# Calling c++ from c#
+# Attaching c# to entities
 - C# api
-- Attaching c# to entities
+- Editing fields in editor
+- Hot reloading
 
 Minor improvments
 - Create systems for paths (not just "assets/" or "../Cherry/src/")
+- Rewrite GetMousePos() functions
+
+Bug fixes
+- Camera component viewpoint is offset
+- When zooming in editor zooms towards the bottom of the screen
 
 Release 0.1
+# Profiling
 - C# Scripting
 - Minor improvments
 - Improved logging system
 	- Ability to log Cherry specific types
-- Profiling
 - Extended Gizmos system
 - Proper undo/redo system
 - Proper scene runtime system
 - Bug fixes
+- Sound system
 
 Release 0.2
 - UI System
-- Sound system
-
-Release 0.3
 - Vulkan
 - DirectX
 - Metal
 - PostFX
 
-Future goals
+Release 0.3
 - Custom ECS
+- Custom logging system
 - Migrating editor to our custom UI system

@@ -28,7 +28,7 @@ namespace Cherry
 
 		static void SelectEntity(const Entity& entity);
 		static void SelectAsset(Asset* asset);
-		static void SelectScene(Shared<Scene> asset);
+		static void SelectScene(Scene* asset);
 
 		static void RegisterAction(ReversableAction* action);
 		static void UndoAction();
@@ -43,7 +43,7 @@ namespace Cherry
 		static Scoped<PropertiesPanel> m_PropertiesPanel;
 		static Scoped<ContentBrowserPanel> m_ContentBrowserPanel;
 
-		static Shared<Scene> m_Scene;
+		static Scene* m_Scene;
 		std::filesystem::path m_ScenePath;
 
 		Scoped<Framebuffer> m_Framebuffer;

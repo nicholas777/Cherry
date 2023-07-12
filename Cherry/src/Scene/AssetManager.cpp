@@ -131,7 +131,7 @@ namespace Cherry
 	{
 		CH_PROFILE_FUNC();
 
-		for (std::pair<const uint32_t, SceneAsset>& asset : m_Scenes)
+		for (auto& asset : m_Scenes)
 		{
 			if (asset.first == ID)
 				return;

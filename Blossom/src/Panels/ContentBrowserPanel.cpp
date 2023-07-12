@@ -146,7 +146,7 @@ namespace Cherry
 				if (ImGui::MenuItem("Scene"))
 				{
 					std::string path = FileDialogManager::SaveFile("Cherry Scene (.chs)\0*.chs\0\0");
-					Shared<Scene> scene = new Scene;
+					Scene* scene = new Scene;
 					SceneSerializer::Serialize(scene, path);
 				}
 

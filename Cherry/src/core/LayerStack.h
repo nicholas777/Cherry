@@ -10,7 +10,7 @@ namespace Cherry
 	class LayerStack
 	{
 	public:
-		LayerStack() {};
+		LayerStack() { m_Layers = std::vector<Layer*>(); };
 		~LayerStack();
 
 		void PushLayer(Layer* layer);

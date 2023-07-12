@@ -7,6 +7,7 @@
 #include "Graphics/Cameras/SceneCamera.h"
 #include "core/Timestep.h"
 #include "NativeScript.h"
+#include "Scripting/Class.h"
 
 namespace Cherry
 {
@@ -77,6 +78,24 @@ namespace Cherry
 
 	struct ScriptComponent
 	{
+		std::string Name;
+
+		Shared<Class> ScriptClass;
+		Shared<Method> OnCreate;
+		Shared<Method> OnUpdate;
+		Shared<Method> OnDestroy;
+
+		Shared<Object> Instance;
+
+		ScriptComponent() = default;
+		ScriptComponent(std::string name)
+		{
+			Name = name;
+		}
+	};
+
+	struct NativeScriptComponent
+	{
 		NativeScript* script = nullptr;
 
 		std::function<void()> CreateInstanceFn;
@@ -86,8 +105,8 @@ namespace Cherry
 		std::function<void(NativeScript*)> OnDestroyFn;
 		std::function<void(NativeScript*, Timestep)> OnUpdateFn;
 
-		ScriptComponent() = default;
-		ScriptComponent(const ScriptComponent&) = default;
+		NativeScriptComponent() = default;
+		NativeScriptComponent(const NativeScriptComponent&) = default;
 
 		template <typename T>
 		void Bind()

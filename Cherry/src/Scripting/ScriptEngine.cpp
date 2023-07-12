@@ -3,12 +3,24 @@
 #include "core/Log.h"
 #include "ScriptAPI.h"
 #include "Debug/Profiler.h"
+#include "Scene/Scene.h"
+#include "Scene/Entity.h"
 
 namespace Cherry
 {
 
+	static const char* EntityIDMonoName = "__Entity_ID";
+
 	MonoDomain* ScriptEngine::m_RootDomain = nullptr;
 	MonoDomain* ScriptEngine::m_AppDomain = nullptr;
+	Shared<Assembly> ScriptEngine::m_CoreAssembly = nullptr;
+	Shared<Assembly> ScriptEngine::m_GameAssembly = nullptr;
+	Shared<Class> ScriptEngine::m_EntityClass = nullptr;
+
+	std::unordered_map<std::string, ScriptEngine::EntityClass> ScriptEngine::m_EntityClasses{};
+
+	static Scene* s_Scene = nullptr;
+
 	// TODO: Better error messages in the scripting engine
 	static char* ReadFile(std::string filename, uint32_t& filesize)
 	{
@@ -44,11 +56,18 @@ namespace Cherry
 		}
 		
 		m_RootDomain = domain;
+		ScriptAPI::Init();
 
 		m_AppDomain = mono_domain_create_appdomain("AppDomain", nullptr);
 		mono_domain_set(m_AppDomain, true);
 
-		ScriptAPI::Init();
+
+		m_CoreAssembly = LoadAssembly("Assets/CoreScripts/ScriptLib.dll");
+		m_GameAssembly = m_CoreAssembly;
+
+		m_EntityClass = m_CoreAssembly->GetClassByName("Entity", "Cherry");
+
+		LoadEntityClasses();
 	}
 
 	void ScriptEngine::Shutdown()
@@ -56,7 +75,7 @@ namespace Cherry
 		mono_jit_cleanup(m_RootDomain);
 	}
 
-	Shared<Script> ScriptEngine::LoadScript(std::string path)
+	Shared<Assembly> ScriptEngine::LoadAssembly(std::string path)
 	{
 		CH_PROFILE_FUNC();
 
@@ -74,7 +93,79 @@ namespace Cherry
 		CH_VALIDATE(assembly);
 
 		delete[] filedata;
-		return new Script(assembly, m_AppDomain);
+		return new Assembly(assembly, m_AppDomain);
+	}
+
+	void ScriptEngine::InitScriptedEntity(Entity entity)
+	{
+		if (!entity.HasComponent<ScriptComponent>())
+			return;
+
+		ScriptComponent& comp = entity.GetComponent<ScriptComponent>();
+
+		if (!m_EntityClasses.count(comp.Name))
+		{
+			CH_ASSERT(false, "Invalid class name! Script doesn't exist");
+			return;
+		}
+
+		EntityClass& c = m_EntityClasses[comp.Name];
+		comp.ScriptClass = c.klass;
+		comp.OnCreate = c.OnCreate;
+		comp.OnUpdate = c.OnUpdate;
+		comp.OnDestroy = c.OnDestroy;
+
+		comp.Instance = c.klass->Instantiate();
+
+		Shared<Method> constructor = m_EntityClass->GetMethod(".ctor", 1);
+		uint32_t handle = entity.GetHandle();
+		constructor->Invoke(comp.Instance, handle);
+	}
+
+	bool ScriptEngine::IsScriptClass(const char* name)
+	{
+		return m_EntityClasses.count(std::string(name));
+	}
+
+	Scene* ScriptEngine::GetRuntimeScene()
+	{
+		return s_Scene;
+	}
+
+	void ScriptEngine::OnRuntimeStart(Scene* scene)
+	{
+		s_Scene = scene;
+	}
+
+	void ScriptEngine::OnRuntimeStop()
+	{
+		s_Scene = nullptr;
+	}
+
+	void ScriptEngine::LoadEntityClasses()
+	{
+		auto image = m_GameAssembly->m_Image;
+
+		for (uint32_t i = 0; i < m_GameAssembly->m_TypeDefinitions.Size; i++)
+		{
+			uint32_t columns[MONO_TYPEDEF_SIZE];
+			mono_metadata_decode_row(m_GameAssembly->m_TypeDefinitions.Table, i, columns, MONO_TYPEDEF_SIZE);
+
+			const char* name = mono_metadata_string_heap(image, columns[MONO_TYPEDEF_NAME]);
+			const char* nameSpace = mono_metadata_string_heap(image, columns[MONO_TYPEDEF_NAMESPACE]);
+
+			MonoClass* monoClass = mono_class_from_name(image, nameSpace, name);
+			if (mono_class_is_subclass_of(monoClass, m_EntityClass->GetMonoClass(), false))
+			{
+				EntityClass c{};
+				c.klass = new Class(monoClass, m_AppDomain);
+				c.OnCreate = c.klass->GetMethodIfExists("OnCreate", 0);
+				c.OnUpdate = c.klass->GetMethodIfExists("OnUpdate", 1);
+				c.OnDestroy = c.klass->GetMethodIfExists("OnDestroy", 0);
+
+				m_EntityClasses.emplace(std::string(name), c);
+			}
+		}
 	}
 
 }

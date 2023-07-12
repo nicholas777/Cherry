@@ -20,7 +20,10 @@ namespace Cherry
 
 		Shared<Object> Instantiate();
 		Shared<Method> GetMethod(const char* name, int params);
+		Shared<Method> GetMethodIfExists(const char* name, int params);
 		Shared<Field> GetField(const char* name);
+
+		MonoClass* GetMonoClass() { return m_Class; };
 
 	private:
 		MonoClass* m_Class = nullptr;
@@ -34,6 +37,8 @@ namespace Cherry
 		Object(MonoObject* obj, MonoClass* c)
 			: m_Object(obj), m_Class(c) {};
 		~Object();
+
+		MonoObject* GetMonoObject() { return m_Object; };
 
 	private:
 		MonoObject* m_Object;
@@ -50,10 +55,10 @@ namespace Cherry
 			: m_Method(method), m_ParamCount(paramCount) {};
 		~Method();
 
-		template <typename... Args>
-		void Invoke(Shared<Object> obj, Args... args)
+		template <typename Arg, typename... Args>
+		void Invoke(Shared<Object> obj, Arg arg, Args... args)
 		{
-			void* data = reinterpret_cast<void*>(std::addressof(args)...);
+			void* data = &arg;
 
 			MonoObject* exception = nullptr;
 			mono_runtime_invoke(m_Method, obj.Get(), &data, &exception);

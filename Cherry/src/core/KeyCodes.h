@@ -2,7 +2,7 @@
 
 namespace Cherry
 {
-	enum Key
+	enum Key : uint32_t
 	{
 		 Space = 32,
 		 Apostrophe = 39,  

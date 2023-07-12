@@ -10,7 +10,7 @@ namespace Cherry
 	class SceneSerializer
 	{
 	public:
-		static void Serialize(Shared<Scene> scene, const std::string& filepath);
+		static void Serialize(Scene* scene, const std::string& filepath);
 		static Scene* Deserialize(const std::string& filepath);
 	};
 }

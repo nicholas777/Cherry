@@ -7,7 +7,7 @@
 
 namespace Cherry
 {
-    SceneHierarchyPanel::SceneHierarchyPanel(Shared<Scene> scene)
+    SceneHierarchyPanel::SceneHierarchyPanel(Scene* scene)
         : m_Scene(scene)
     {
 
@@ -18,7 +18,7 @@ namespace Cherry
         
     }
 
-    void SceneHierarchyPanel::SetScene(Shared<Scene> scene)
+    void SceneHierarchyPanel::SetScene(Scene* scene)
     {
         m_Scene = scene;
     }
@@ -31,7 +31,7 @@ namespace Cherry
 
         m_Scene->m_Registry.each([&](auto EntityID)
         {
-            Entity entity = Entity(EntityID, m_Scene.Get());
+            Entity entity = Entity(EntityID, m_Scene);
 
             auto& name = entity.GetComponent<NameComponent>();
 

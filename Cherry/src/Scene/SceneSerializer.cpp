@@ -127,7 +127,7 @@ namespace Cherry
         out << YAML::EndMap;
     }
     
-    void SceneSerializer::Serialize(Shared<Scene> scene, const std::string& filepath)
+    void SceneSerializer::Serialize(Scene* scene, const std::string& filepath)
     {
         CH_PROFILE_FUNC();
 
@@ -143,7 +143,7 @@ namespace Cherry
 
         scene->m_Registry.each([&](auto entity)
         {
-            SerializeEntity(Entity(entity, scene.Get()), out);
+            SerializeEntity(Entity(entity, scene), out);
         });
         
         out << YAML::EndSeq;

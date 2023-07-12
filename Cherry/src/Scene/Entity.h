@@ -75,6 +75,8 @@ namespace Cherry
 			return m_Handle != entt::null && m_Scene != nullptr;
 		}
 
+		uint32_t GetHandle() { return (uint32_t)m_Handle; };
+
 		static void Delete(const Entity& entity)
 		{
 			entity.m_Scene->DeleteEntity(entity);

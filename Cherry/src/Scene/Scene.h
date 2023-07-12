@@ -21,6 +21,9 @@ namespace Cherry
 		Entity CreateEntity(const std::string& name);
 		void DeleteEntity(const Entity& entity);
 
+		void OnRuntimeStart();
+		void OnRuntimeStop();
+
 		void OnUpdate(const Timestep& delta);
 		void OnUpdate(const Timestep& delta, const StaticCamera& camera);
 
@@ -29,7 +32,7 @@ namespace Cherry
 	private:
 		entt::registry m_Registry;
 
-		friend class Script;
+		friend class NativeScript;
 		friend class Entity;
 		friend class SceneSerializer;
 		friend class SceneHierarchyPanel;

@@ -9,13 +9,13 @@
 namespace Cherry
 {
 	
-	class Script
+	class Assembly
 	{
 	public:
-		Script()
+		Assembly()
 			: m_TypeDefinitions(TypeDefinitionsTable()) {};
-		Script(MonoAssembly* assembly, MonoDomain* appDomain);
-		~Script();
+		Assembly(MonoAssembly* assembly, MonoDomain* appDomain);
+		~Assembly();
 
 		void PrintTypedefs();
 		Shared<Class> GetClassByName(const char* name, const char* nameSpace = "");
@@ -38,5 +38,6 @@ namespace Cherry
 		};
 		TypeDefinitionsTable m_TypeDefinitions;
 
+		friend class ScriptEngine;
 	};
 }

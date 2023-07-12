@@ -25,7 +25,7 @@
 	#define CH_INFO(...) Cherry::Log::GetClientLogger()->info(__VA_ARGS__)
 	#define CH_WARNING(...) Cherry::Log::GetClientLogger()->warn(__VA_ARGS__)
 	#define CH_ERROR(...) Cherry::Log::GetClientLogger()->error(__VA_ARGS__)
-	#define CH_FATAL(...) Cherry::Log::GetClientLogger()->fatal(__VA_ARGS__)
+	#define CH_FATAL(...) Cherry::Log::GetClientLogger()->critical(__VA_ARGS__)
 #else
 	#define CH_TRACE(...)
 	#define CH_INFO(...)

@@ -13,6 +13,7 @@
 
 namespace Cherry
 {
+	static bool IsEngineRunning = true;
 	// TODO: Fix warnings
 	Application* Application::s_Application;
 
@@ -21,12 +22,9 @@ namespace Cherry
 		CH_PROFILE_FUNC();
 
 		Log::Init();
-		EventListener::InitEventListenerSystem();
 
 		Configuration = ApplicationConfig();
 		m_LayerStack = new LayerStack;
-
-		m_ImGuiRenderer = new ImGuiRenderer;
 
 		s_Application = this;
 	}
@@ -35,8 +33,10 @@ namespace Cherry
 	{
 		CH_PROFILE_FUNC();
 
-		delete m_LayerStack;
 		delete m_Window;
+		delete m_LayerStack;
+
+		IsEngineRunning = false;
 	}
 
 	void Application::Startup()
@@ -44,6 +44,10 @@ namespace Cherry
 		CH_PROFILE_FUNC();
 
 		m_Running = true;
+
+		EventListener::InitEventListenerSystem();
+
+		m_ImGuiRenderer = new ImGuiRenderer;
 
 		ScriptEngine::Init();
 
@@ -95,6 +99,9 @@ namespace Cherry
 	void Application::OnEvent(Event& e)
 	{
 		CH_PROFILE_FUNC();
+		
+		if (!IsEngineRunning)
+			return;
 
 		for (auto listener : EventListener::EventListeners[e.Type])
 		{
