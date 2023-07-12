@@ -11,6 +11,8 @@ namespace Cherry
 	Scoped<PropertiesPanel> EditorLayer::m_PropertiesPanel;
 	Scoped<ContentBrowserPanel> EditorLayer::m_ContentBrowserPanel;
 	Scene* EditorLayer::m_Scene = nullptr;
+	std::string EditorLayer::m_ScenePath = "";
+
 	Entity EditorLayer::m_SelectedEntity = Entity();
 
 	std::vector<ReversableAction*> EditorLayer::m_ActionsToUndo = std::vector<ReversableAction*>();
@@ -422,9 +424,10 @@ namespace Cherry
 		m_PropertiesPanel->SetAsset(asset);
 	}
 
-	void EditorLayer::SelectScene(Scene* asset)
+	void EditorLayer::SelectScene(Scene* asset, std::string path)
 	{
 		m_Scene = asset;
+		m_ScenePath = path;
 		m_SceneHierarchyPanel->SetScene(asset);
 	}
 
@@ -514,7 +517,7 @@ namespace Cherry
 				return;
 			}
 
-			m_ScenePath = path;
+			m_ScenePath = path.string();
 			m_Scene = SceneSerializer::Deserialize(path.string());
 			m_SceneHierarchyPanel->SetScene(m_Scene);
 		}
@@ -525,20 +528,20 @@ namespace Cherry
 		if (m_ScenePath.empty())
 			SaveFileAs();
 		else
-			SceneSerializer::Serialize(m_Scene, m_ScenePath.string());
+			SceneSerializer::Serialize(m_Scene, m_ScenePath);
 	}
 
 	void EditorLayer::SaveFileAs()
 	{
 		std::filesystem::path path = FileDialogManager::SaveFile("Cherry Scene (.chs)\0*.chs\0\0)");
-		m_ScenePath = path;
+		m_ScenePath = path.string();
 
 		if (path.extension() != ".chs")
 		{
 			CH_ERROR("File is not a .chs file");
 		}
 
-		SceneSerializer::Serialize(m_Scene, m_ScenePath.string());
+		SceneSerializer::Serialize(m_Scene, m_ScenePath);
 	}
 
 }

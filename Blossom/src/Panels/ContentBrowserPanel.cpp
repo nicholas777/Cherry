@@ -127,7 +127,7 @@ namespace Cherry
 
 					if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
 					{
-						EditorLayer::SelectScene(asset.second.ptr);
+						EditorLayer::SelectScene(asset.second.ptr, asset.second.filepath);
 					}
 
 					ImGui::TableSetColumnIndex(1);
