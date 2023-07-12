@@ -43,7 +43,7 @@ Scene:
       NameComponent:
         name: Smiley
       TransformComponent:
-        translation: [-3.99999928, 2]
+        translation: [-2.00000119, 2]
         rotation: 0
         scale: [1, 1]
       ScriptComponent:

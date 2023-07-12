@@ -64,7 +64,6 @@ namespace Cherry
 		int m_GizmoType = 0;
 		Vector2f m_GizmosPrevTranslation;
 
-		void NewFile();
 		void OpenFile();
 		void SaveFile();
 		void SaveFileAs();

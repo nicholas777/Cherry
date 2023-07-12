@@ -22,6 +22,9 @@ namespace Cherry
 	{
 		float x = 0, y = 0;
 
+		if (Input::GetKeyPressed(Key::Control))
+			return Vector2f(0, 0);
+
 		if (Input::GetKeyPressed(Key::W))
 		{
 			y -= 0.01f;
@@ -41,47 +44,6 @@ namespace Cherry
 
 		return Vector2f(x * delta.GetMilliseconds(), y * delta.GetMilliseconds());
 	}
-
-	class CameraControllerScript : public NativeScript
-	{
-	public:
-		void OnCreate()
-		{
-
-		}
-
-		void OnUpdate(const Timestep& delta)
-		{
-			float x = 0, y = 0;
-
-			if (Input::GetKeyPressed(Key::W))
-			{
-				y += 0.01f;
-			}
-			if (Input::GetKeyPressed(Key::S))
-			{
-				y -= 0.01f;
-			}
-			if (Input::GetKeyPressed(Key::A))
-			{
-				x -= 0.01f;
-			}
-			if (Input::GetKeyPressed(Key::D))
-			{
-				x += 0.01f;
-			}
-
-			if (!(x == 0 && y == 0))
-			{
-				GetComponent<TransformComponent>().Translation += Vector2f(-x * delta.GetMilliseconds(), -y * delta.GetMilliseconds());
-			}
-		}
-
-		void OnDestroy()
-		{
-
-		}
-	};
 
 	void EditorLayer::OnAttach()
 	{
@@ -215,6 +177,24 @@ namespace Cherry
 					RedoAction();
 				}
 			}
+			else if (event.Keycode == Key::S)
+			{
+				if (Input::GetKeyPressed(Key::Control) && Input::GetKeyPressed(Key::Shift))
+				{
+					SaveFileAs();
+				}
+				else if (Input::GetKeyPressed(Key::Control))
+				{
+					SaveFile();
+				}
+			}
+			else if (event.Keycode == Key::O)
+			{
+				if (Input::GetKeyPressed(Key::Control))
+				{
+					OpenFile();
+				}
+			}
 		}
 
 		else if (e.Type == EventType::MouseScrollEvent)
@@ -327,10 +307,6 @@ namespace Cherry
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
-				{
-					NewFile();
-				}
 				if (ImGui::MenuItem("Open Scene", "Ctrl+O"))
 				{
 					OpenFile();
@@ -496,13 +472,6 @@ namespace Cherry
 			m_ActionsToRedo.pop_back();
 			m_ActionsToUndo.push_back(reversed);
 		}
-	}
-
-	void EditorLayer::NewFile()
-	{
-		m_Scene = new Scene();
-		m_SceneHierarchyPanel->SetScene(m_Scene);
-		m_ScenePath = "";
 	}
 
 	void EditorLayer::OpenFile()
