@@ -181,6 +181,7 @@ namespace Cherry
 		void Free()
 		{
 			delete _Value;
+			_Value = nullptr;
 		}
 
 		int GetRepCount() {

@@ -80,18 +80,9 @@ namespace Cherry
 	{
 		std::string Name;
 
-		Shared<Class> ScriptClass;
-		Shared<Method> OnCreate;
-		Shared<Method> OnUpdate;
-		Shared<Method> OnDestroy;
-
-		Shared<Object> Instance;
-
 		ScriptComponent() = default;
 		ScriptComponent(std::string name)
-		{
-			Name = name;
-		}
+			: Name(name) {};
 	};
 
 	struct NativeScriptComponent
@@ -119,4 +110,17 @@ namespace Cherry
 			OnUpdateFn  = [](NativeScript* executor, Timestep delta) { ((T*)executor)->OnUpdate(delta); };
 		}
 	};
+
+	template <typename... T>
+	struct ComponentList
+	{
+
+	};
+
+	using AllComponents = ComponentList<NameComponent, TransformComponent, SpriteComponent,
+										CameraComponent, NativeScriptComponent, ScriptComponent>;
+
+	using OptionalComponents = ComponentList<TransformComponent, SpriteComponent,
+											 CameraComponent, NativeScriptComponent, 
+											 ScriptComponent>;
 }

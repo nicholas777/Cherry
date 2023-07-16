@@ -86,6 +86,7 @@ namespace Cherry
 		entt::entity m_Handle;
 		Scene* m_Scene;
 
+		friend class Scene;
 		friend class EntityDeleteAction;
 	};
 

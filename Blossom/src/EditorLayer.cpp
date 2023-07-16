@@ -11,7 +11,9 @@ namespace Cherry
 	Scoped<PropertiesPanel> EditorLayer::m_PropertiesPanel;
 	Scoped<ContentBrowserPanel> EditorLayer::m_ContentBrowserPanel;
 	Scene* EditorLayer::m_Scene = nullptr;
+	Scene* EditorLayer::m_RuntimeScene = nullptr;
 	std::string EditorLayer::m_ScenePath = "";
+	EditorState EditorLayer::m_State = EditorState::None;
 
 	Entity EditorLayer::m_SelectedEntity = Entity();
 
@@ -53,6 +55,8 @@ namespace Cherry
 
 		m_ScenePath = "";
 		m_Scene = new Scene;
+		m_RuntimeScene = new Scene;
+		m_State = EditorState::Edit;
 
 		FramebufferData data;
 		data.width = WINDOW_WIDTH;
@@ -72,7 +76,6 @@ namespace Cherry
 		m_GreenArrow = Texture::Create("assets/GreenArrow.png");
 
 		RenderCommand::SetClearColor({ 1, 0, 0, 1 });
-
 	}
 
 	void EditorLayer::OnDetach()
@@ -87,7 +90,7 @@ namespace Cherry
 		m_Framebuffer->Bind();
 		if (m_IsRuntime)
 		{
-			m_Scene->OnUpdate(delta);
+			m_RuntimeScene->OnUpdate(delta);
 		}
 		else
 		{
@@ -338,11 +341,14 @@ namespace Cherry
 			m_IsRuntime = !m_IsRuntime;
 			if (m_IsRuntime)
 			{
-				m_Scene->OnRuntimeStart();
+				m_State = EditorState::Runtime;
+				Scene::Copy(m_RuntimeScene, m_Scene);
+				m_RuntimeScene->OnRuntimeStart();
 			}
 			else
 			{
-				m_Scene->OnRuntimeStop();
+				m_State = EditorState::Edit;
+				m_RuntimeScene->OnRuntimeStop();
 			}
 		}
 		if (ImGui::IsItemHovered())

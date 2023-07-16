@@ -17,6 +17,7 @@ namespace Cherry
 	Shared<Assembly> ScriptEngine::m_GameAssembly = nullptr;
 	Shared<Class> ScriptEngine::m_EntityClass = nullptr;
 
+	std::vector<ScriptEngine::ScriptedEntity> ScriptEngine::m_ScriptedEntities{};
 	std::unordered_map<std::string, ScriptEngine::EntityClass> ScriptEngine::m_EntityClasses{};
 
 	static Scene* s_Scene = nullptr;
@@ -110,16 +111,32 @@ namespace Cherry
 		}
 
 		EntityClass& c = m_EntityClasses[comp.Name];
-		comp.ScriptClass = c.klass;
-		comp.OnCreate = c.OnCreate;
-		comp.OnUpdate = c.OnUpdate;
-		comp.OnDestroy = c.OnDestroy;
+		ScriptedEntity se{};
+		se.OnCreate = c.OnCreate;
+		se.OnUpdate = c.OnUpdate;
+		se.OnDestroy = c.OnDestroy;
 
-		comp.Instance = c.klass->Instantiate();
-
+		se.Instance = c.klass->Instantiate();
+		
 		Shared<Method> constructor = m_EntityClass->GetMethod(".ctor", 1);
 		uint32_t handle = entity.GetHandle();
-		constructor->Invoke(comp.Instance, handle);
+		constructor->Invoke(se.Instance, handle);
+
+		if (se.OnCreate)
+			se.OnCreate->Invoke(se.Instance);
+
+		m_ScriptedEntities.push_back(se);
+	}
+
+	void ScriptEngine::UnloadScriptedEntities()
+	{
+		for (auto& entity : m_ScriptedEntities)
+		{
+			if (entity.OnDestroy)
+				entity.OnDestroy->Invoke(entity.Instance);
+		}
+
+		m_ScriptedEntities.clear();
 	}
 
 	bool ScriptEngine::IsScriptClass(const char* name)
@@ -140,6 +157,15 @@ namespace Cherry
 	void ScriptEngine::OnRuntimeStop()
 	{
 		s_Scene = nullptr;
+		UnloadScriptedEntities();
+	}
+
+	void ScriptEngine::UpdateScriptedEntities(float delta)
+	{
+		for (auto& entity : m_ScriptedEntities)
+		{
+			entity.OnUpdate->Invoke(entity.Instance, delta);
+		}
 	}
 
 	void ScriptEngine::LoadEntityClasses()

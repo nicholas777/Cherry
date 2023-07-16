@@ -10,7 +10,13 @@
 
 namespace Cherry
 {
-	
+	enum class EditorState
+	{
+		None = 0,
+		Edit,
+		Runtime
+	};
+
 	class EditorLayer : public Layer
 	{
 	public:
@@ -44,7 +50,9 @@ namespace Cherry
 		static Scoped<ContentBrowserPanel> m_ContentBrowserPanel;
 
 		static Scene* m_Scene;
+		static Scene* m_RuntimeScene;
 		static std::string m_ScenePath;
+		static EditorState m_State;
 
 		Scoped<Framebuffer> m_Framebuffer;
 		bool m_EditorChanged = true;

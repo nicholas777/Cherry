@@ -26,6 +26,19 @@ namespace Cherry
 		static void OnRuntimeStart(Scene* scene);
 		static void OnRuntimeStop();
 
+		static void UpdateScriptedEntities(float delta);
+	private:
+		struct ScriptedEntity
+		{
+			Shared<Method> OnCreate = nullptr;
+			Shared<Method> OnUpdate = nullptr;
+			Shared<Method> OnDestroy = nullptr;
+			Shared<Object> Instance = nullptr;
+		};
+
+		static std::vector<ScriptedEntity> m_ScriptedEntities;
+
+		static void UnloadScriptedEntities();
 	private:
 		static void LoadEntityClasses();
 

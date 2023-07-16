@@ -29,6 +29,8 @@ namespace Cherry
 
 		Entity GetPrimaryCamera();
 		Entity GetEntityByName(const std::string& name);
+
+		static void Copy(Scene* dest, Scene* src);
 	private:
 		entt::registry m_Registry;
 

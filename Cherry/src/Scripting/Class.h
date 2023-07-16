@@ -61,13 +61,13 @@ namespace Cherry
 			void* data = &arg;
 
 			MonoObject* exception = nullptr;
-			mono_runtime_invoke(m_Method, obj.Get(), &data, &exception);
+			mono_runtime_invoke(m_Method, obj->GetMonoObject(), &data, &exception);
 		}
 
 		void Invoke(Shared<Object> obj) 
 		{
 			MonoObject* exception = nullptr;
-			mono_runtime_invoke(m_Method, obj.Get(), nullptr, &exception);
+			mono_runtime_invoke(m_Method, obj->GetMonoObject(), nullptr, &exception);
 		}
 
 	private:

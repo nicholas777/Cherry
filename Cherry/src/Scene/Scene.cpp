@@ -42,24 +42,11 @@ namespace Cherry
 		m_Registry.view<ScriptComponent>().each([=](auto entity, auto& script)
 		{
 			ScriptEngine::InitScriptedEntity(Entity(entity, this));
-
-			if (script.OnCreate)
-			{
-				script.OnCreate->Invoke(script.Instance);
-			}
 		});
 	}
 
 	void Scene::OnRuntimeStop()
 	{
-		m_Registry.view<ScriptComponent>().each([=](auto entity, auto& script)
-		{
-			if (script.OnDestroy)
-			{
-				script.OnDestroy->Invoke(script.Instance);
-			}
-		});
-
 		ScriptEngine::OnRuntimeStop();
 	}
 
@@ -87,15 +74,7 @@ namespace Cherry
 			});
 		}
 
-		{
-			m_Registry.view<ScriptComponent>().each([=](auto entity, auto& script)
-			{
-				if (script.OnUpdate)
-				{
-					script.OnUpdate->Invoke(script.Instance, delta.GetMilliseconds());
-				}
-			});
-		}
+		ScriptEngine::UpdateScriptedEntities(delta.GetMilliseconds());
 
 		{
 			auto view = m_Registry.view<TransformComponent, CameraComponent>();
@@ -213,5 +192,38 @@ namespace Cherry
 		}
 
 		return Entity();
+	}
+
+	template <typename... Components>
+	static void CopyComponents(ComponentList<Components...>, entt::registry& src, entt::registry& dest, std::unordered_map<std::string, entt::entity>& entities)
+	{
+		([&]
+		{
+			auto view = src.view<Components>(); 
+			for (auto entity : view)
+			{
+				auto DestEntity = entities[src.get<NameComponent>(entity).Name];
+				auto comp = src.get<Components>(entity);
+
+				dest.emplace_or_replace<Components>(DestEntity, comp);
+			}
+		} (), ...);
+	}
+
+	void Scene::Copy(Scene* dest, Scene* src)
+	{
+		// Creating the entities
+		dest->m_Registry.clear();
+
+		std::unordered_map<std::string, entt::entity> entities{};
+		auto& nameView = src->m_Registry.view<NameComponent>();
+		for (auto e : nameView)
+		{
+			const std::string& name = src->m_Registry.get<NameComponent>(e).Name;
+			Entity entity = dest->CreateEntity(name);
+			entities[name] = entity;
+		}
+
+		CopyComponents(OptionalComponents{}, src->m_Registry, dest->m_Registry, entities);
 	}
 }

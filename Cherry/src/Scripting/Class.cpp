@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "Class.h"
+#include "core/Log.h"
 
 namespace Cherry
 {
@@ -62,8 +63,9 @@ namespace Cherry
 
 	Object::~Object()
 	{
-		m_Object = nullptr;
-		m_Class = nullptr;
+		//m_Object = nullptr;
+		//m_Class = nullptr;
+		CH_TRACE("Object deletion");
 	}
 
 	Field::Field(MonoClassField* field, MonoClass* c)
