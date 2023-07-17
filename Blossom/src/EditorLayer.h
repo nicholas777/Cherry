@@ -35,6 +35,7 @@ namespace Cherry
 		static void SelectEntity(const Entity& entity);
 		static void SelectAsset(Asset* asset);
 		static void SelectScene(Scene* asset, std::string path);
+		static void ToggleRuntime();
 
 		static void RegisterAction(ReversableAction* action);
 		static void UndoAction();
@@ -61,7 +62,7 @@ namespace Cherry
 		Vector2f m_ViewportPanelPos;
 
 		bool m_EntitySelected = false;
-		bool m_IsRuntime = false;
+		static bool m_IsRuntime;
 		StaticCamera m_EditorCamera;
 
 		static Entity m_SelectedEntity;

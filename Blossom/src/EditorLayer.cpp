@@ -14,6 +14,7 @@ namespace Cherry
 	Scene* EditorLayer::m_RuntimeScene = nullptr;
 	std::string EditorLayer::m_ScenePath = "";
 	EditorState EditorLayer::m_State = EditorState::None;
+	bool EditorLayer::m_IsRuntime = false;
 
 	Entity EditorLayer::m_SelectedEntity = Entity();
 
@@ -338,18 +339,7 @@ namespace Cherry
 		ImGui::Begin("Scene bar", &IsOpen, ImGuiWindowFlags_NoTitleBar);
 		if (ImGui::Button("Play"))
 		{
-			m_IsRuntime = !m_IsRuntime;
-			if (m_IsRuntime)
-			{
-				m_State = EditorState::Runtime;
-				Scene::Copy(m_RuntimeScene, m_Scene);
-				m_RuntimeScene->OnRuntimeStart();
-			}
-			else
-			{
-				m_State = EditorState::Edit;
-				m_RuntimeScene->OnRuntimeStop();
-			}
+			ToggleRuntime();
 		}
 		if (ImGui::IsItemHovered())
 		{
@@ -411,6 +401,24 @@ namespace Cherry
 		m_Scene = asset;
 		m_ScenePath = path;
 		m_SceneHierarchyPanel->SetScene(asset);
+	}
+
+	void EditorLayer::ToggleRuntime()
+	{
+		m_IsRuntime = !m_IsRuntime;
+		if (m_IsRuntime)
+		{
+			m_State = EditorState::Runtime;
+			Scene::Copy(m_RuntimeScene, m_Scene);
+			m_SceneHierarchyPanel->SetScene(m_RuntimeScene);
+			m_RuntimeScene->OnRuntimeStart();
+		}
+		else
+		{
+			m_State = EditorState::Edit;
+			m_RuntimeScene->OnRuntimeStop();
+			m_SceneHierarchyPanel->SetScene(m_Scene);
+		}
 	}
 
 	void EditorLayer::RegisterAction(ReversableAction* action)

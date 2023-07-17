@@ -24,7 +24,7 @@ namespace Cherry
             }
             set
             {
-                Internal.SetEntityTranslation(__Entity_ID, ref value);
+                Internal.SetEntityTranslation(__Entity_ID, ref value.x, ref value.y);
             }
         }
     }

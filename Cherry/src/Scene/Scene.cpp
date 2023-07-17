@@ -128,8 +128,8 @@ namespace Cherry
 		Renderer2D::Begin(camera.GetProjection(), camera.GetTransform());
 
 		{
-			m_Registry.view<NativeScriptComponent>();/* .each([=](auto entity, auto& scriptExecutor)
-			/* {
+			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& scriptExecutor)
+			{
 				if (!scriptExecutor.script)
 				{
 					scriptExecutor.CreateInstanceFn();
@@ -138,7 +138,7 @@ namespace Cherry
 				}
 
 				scriptExecutor.OnUpdateFn(scriptExecutor.script, delta);
-			});*/
+			});
 		}
 
 		{

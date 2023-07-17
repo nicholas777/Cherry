@@ -6,6 +6,8 @@ namespace Cherry
     {
         public float x, y;
 
+        public static readonly Vector2 Zero = new Vector2(0f, 0f);
+
         public Vector2()
         {
             x = 0;
@@ -22,11 +24,43 @@ namespace Cherry
         {
             return (float)Math.Sqrt(x * x + y * y);
         }
+
+        public static Vector2 operator +(Vector2 value, float scalar)
+        {
+            return new Vector2(scalar + value.x, scalar + value.y);
+        }
+
+        public static Vector2 operator +(Vector2 value, Vector2 scalar)
+        {
+            return new Vector2(scalar.x + value.x, scalar.y + value.y);
+        }
+
+        public static Vector2 operator *(Vector2 value, float scalar)
+        {
+            return new Vector2(scalar * value.x, scalar * value.y);
+        }
+
+        public static Vector2 operator *(Vector2 value, Vector2 scalar)
+        {
+            return new Vector2(scalar.x * value.x, scalar.y * value.y);
+        }
+
+        public static Vector2 operator -(Vector2 value, float scalar)
+        {
+            return new Vector2(scalar + value.x, scalar + value.y);
+        }
+
+        public static Vector2 operator -(Vector2 value, Vector2 scalar)
+        {
+            return new Vector2(scalar.x - value.x, scalar.y - value.y);
+        }
     }
 
     public class Vector3
     {
         public float x, y, z;
+
+        public static Vector3 Zero = new Vector3(0f, 0f, 0f);
 
         public Vector3()
         {
@@ -52,6 +86,8 @@ namespace Cherry
     {
         public float x, y, z, w;
 
+        public static Vector4 Zero = new Vector4(0f, 0f, 0f, 0f);
+
         public Vector4()
         {
             x = 0;
@@ -72,5 +108,6 @@ namespace Cherry
         {
             return (float)Math.Sqrt(x * x + y * y + z * z + w * w);
         }
+
     }
 }

@@ -45,10 +45,10 @@ namespace Cherry
 		*y = translation.y;
 	}
 
-	static void SetEntityTranslation(uint32_t id, Vector2f vec)
+	static void SetEntityTranslation(uint32_t id, float x, float y)
 	{
 		Scene* scene = ScriptEngine::GetRuntimeScene();
-		Entity((entt::entity)id, scene).GetComponent<TransformComponent>().Translation = vec;
+		Entity((entt::entity)id, scene).GetComponent<TransformComponent>().Translation = Vector2f(x, y);
 	}
 
 	class ScriptAPI

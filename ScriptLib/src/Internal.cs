@@ -19,7 +19,7 @@ namespace Cherry
         extern public static void GetEntityTranslation(uint id, out float x, out float y);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        extern public static void SetEntityTranslation(uint id, ref Vector2 vec);
+        extern public static void SetEntityTranslation(uint id, ref float x, ref float y);
         
     }
 }
