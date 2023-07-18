@@ -9,7 +9,7 @@ namespace Cherry
 	enum class AssetType
 	{
 		Unknown = 0,
-		Texture, Scene
+		Texture, Scene, Script
 	};
 
 	struct Asset
@@ -34,7 +34,14 @@ namespace Cherry
 		Scene* ptr;
 		std::string filepath;
 
-		SceneAsset() : Asset(AssetType::Scene) {}
+		SceneAsset() : Asset(AssetType::Scene), ptr(nullptr) {}
+	};
+
+	struct ScriptAsset : public Asset
+	{
+		std::string filepath;
+
+		ScriptAsset() : Asset(AssetType::Script) {}
 	};
 
 	class AssetManager
@@ -57,8 +64,18 @@ namespace Cherry
 
 		static SceneAsset& GetScene(uint32_t id);
 		static std::unordered_map<uint32_t, SceneAsset>& GetScenes();
+
+		static uint32_t CreateScript(const std::string& filepath);
+		static uint32_t CreateScript(uint32_t ID, const std::string& filepath);
+
+		static void CreateScriptIfNotExists(const std::string& filepath);
+		static void CreateScriptIfNotExists(uint32_t ID, const std::string& filepath);
+
+		static ScriptAsset& GetScript(uint32_t id);
+		static std::unordered_map<uint32_t, ScriptAsset>& GetScripts();
 	private:
 		static std::unordered_map<uint32_t, TextureAsset> m_Textures;
 		static std::unordered_map<uint32_t, SceneAsset> m_Scenes;
+		static std::unordered_map<uint32_t, ScriptAsset> m_Scripts;
 	};
 }

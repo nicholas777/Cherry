@@ -28,8 +28,9 @@ namespace Cherry
 		if (std::filesystem::exists(directory) && std::filesystem::is_directory(directory))
 		{
 			m_ProjectRoot = std::filesystem::path(directory);
-			m_CurrentDir = m_ProjectRoot;
-			Assetmap::Load(m_AssetmapPath);
+			m_AssetRoot = std::filesystem::path(directory + "/Assets");
+			m_CurrentDir = m_AssetRoot;
+			Assetmap::Load(m_ProjectRoot);
 		}
 		else
 		{
@@ -58,7 +59,7 @@ namespace Cherry
 			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
-			if (m_CurrentDir != m_ProjectRoot)
+			if (m_CurrentDir != m_AssetRoot)
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
@@ -76,6 +77,7 @@ namespace Cherry
 			{
 				if (entry.is_directory())
 				{
+
 					ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(0);
 
@@ -128,6 +130,24 @@ namespace Cherry
 					if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
 					{
 						EditorLayer::SelectScene(asset.second.ptr, asset.second.filepath);
+					}
+
+					ImGui::TableSetColumnIndex(1);
+					ImGui::Text("Scene");
+
+				}
+			}
+
+			for (std::pair<const uint32_t, ScriptAsset>& asset : AssetManager::GetScripts())
+			{
+				if (std::filesystem::path(asset.second.filepath).parent_path() == m_CurrentDir)
+				{
+					ImGui::TableNextRow();
+
+					ImGui::TableSetColumnIndex(0);
+					if (ImGui::Selectable(std::filesystem::path(asset.second.filepath).filename().string().c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+					{
+						EditorLayer::SelectAsset(&asset.second);
 					}
 
 					ImGui::TableSetColumnIndex(1);

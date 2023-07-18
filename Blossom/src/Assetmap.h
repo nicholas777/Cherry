@@ -15,7 +15,7 @@ namespace Cherry
 		{
 			CH_PROFILE_FUNC();
 
-			YAML::Node map = YAML::LoadFile(filepath.generic_u8string());
+			YAML::Node map = YAML::LoadFile(filepath.generic_u8string() + "/assetmap.yaml");
 
 			if (map["Textures"])
 			{
@@ -48,9 +48,25 @@ namespace Cherry
 					);
 				}
 			}
-			
-			for (auto& entry : std::filesystem::recursive_directory_iterator(filepath.parent_path()))
+
+			if (map["Scripts"] && map["Scripts"].IsSequence())
 			{
+				for (int i = 0; i < map["Scripts"].size(); i++)
+				{
+					YAML::Node script = map["Scripts"][i];
+
+					AssetManager::CreateScriptIfNotExists(
+						script["ID"].as<uint32_t>(),
+						script["File"].as<std::string>()
+					);
+				}
+			}
+			
+			std::vector<std::string> scenes{};
+
+			for (auto& entry : std::filesystem::recursive_directory_iterator(filepath.string() + "/Assets"))
+			{
+
 				if (entry.path().extension() == ".png")
 				{
 					AssetManager::CreateTextureIfNotExists(entry.path().string());
@@ -59,9 +75,23 @@ namespace Cherry
 
 				if (entry.path().extension() == ".chs")
 				{
-					AssetManager::CreateSceneIfNotExists(entry.path().string());
+					scenes.push_back(entry.path().string());
 					continue;
 				}
+
+				if (entry.path().extension() == ".cs")
+				{
+					auto test1 = entry.path().parent_path().filename();
+
+					AssetManager::CreateScriptIfNotExists(entry.path().string());
+					continue;
+				}
+
+			}
+
+			for (auto& str : scenes)
+			{
+				AssetManager::CreateSceneIfNotExists(str);
 			}
 			
 		}
@@ -133,6 +163,24 @@ namespace Cherry
 
 			out << YAML::EndSeq; // Textures
 
+			out << YAML::Key << "Scripts";
+			out << YAML::Value << YAML::BeginSeq; // Scripts
+
+			for (std::pair<const uint32_t, ScriptAsset>& asset : AssetManager::GetScripts())
+			{
+				out << YAML::BeginMap; // Asset
+
+				out << YAML::Key << "ID";
+				out << YAML::Value << asset.first;
+
+				out << YAML::Key << "File";
+				out << YAML::Value << asset.second.filepath;
+
+				out << YAML::EndMap; // Asset
+			}
+
+			out << YAML::EndSeq; // Scripts
+
 			out << YAML::EndMap; // Root
 
 			std::ofstream stream(file, std::fstream::out);
@@ -154,6 +202,12 @@ namespace Cherry
 				if (entry.path().extension() == ".chs")
 				{
 					AssetManager::CreateScene(entry.path().generic_string());
+					continue;
+				}
+
+				if (entry.path().extension() == ".cs")
+				{
+					AssetManager::CreateScript(entry.path().generic_string());
 					continue;
 				}
 			}

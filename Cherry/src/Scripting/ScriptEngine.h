@@ -27,6 +27,9 @@ namespace Cherry
 		static void OnRuntimeStop();
 
 		static void UpdateScriptedEntities(float delta);
+
+		static MonoImage* GetMonoCoreImage() { return m_CoreAssembly->m_Image; };
+		static MonoDomain* GetMonoAppDomain() { return m_AppDomain; };
 	private:
 		struct ScriptedEntity
 		{

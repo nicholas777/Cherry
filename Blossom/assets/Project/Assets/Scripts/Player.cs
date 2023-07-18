@@ -1,8 +1,14 @@
 ﻿using Cherry;
 using System;
 
-public class Movement : Entity
+public class Player : Entity
 {
+    public TransformComponent transform;
+    public void OnCreate()
+    {
+        transform = GetComponent<TransformComponent>();
+    }
+
     public void OnUpdate(float delta)
     {
         Vector2 velocity = new Vector2(0, 0);
@@ -26,8 +32,6 @@ public class Movement : Entity
             velocity.y -= speed;
         }
 
-        Vector2 translation = Translation;
-        translation += velocity * delta;
-        Translation = translation;
+        transform.Translation += velocity * delta;
     }
 }

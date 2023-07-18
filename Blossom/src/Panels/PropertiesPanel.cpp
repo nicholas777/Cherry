@@ -638,86 +638,105 @@ namespace Cherry
 
         ImGui::Begin("Properties");
 
-        if (m_Asset->type == AssetType::Texture)
-        {
-            TextureAsset* asset = (TextureAsset*)m_Asset;
-
-            const char* items[] = { "Repeat", "Mirrored Repeat", "Clamp to Edge", "Clamp to Border" };
-            if (ImGui::BeginCombo("Wrap", items[(int)asset->params.wrap - 1]))
-            {
-                for (int i = 0; i < IM_ARRAYSIZE(items); i++)
-                {
-                    bool selected = i == (int)asset->params.wrap - 1;
-                    if (ImGui::Selectable(items[i], selected))
-                    {
-                        asset->params.wrap = static_cast<TextureWrap>(i + 1);
-                        asset->ptr->ResetParams(asset->params);
-                    }
-
-                    if (selected)
-                        ImGui::SetItemDefaultFocus();
-                }
-                ImGui::EndCombo();
-            }
-
-            const char* items3[] = { "Nearest", "Linear" };
-            if (ImGui::BeginCombo("Min-Filter", items3[(int)asset->params.minFilter - 1]))
-            {
-                for (int i = 0; i < IM_ARRAYSIZE(items3); i++)
-                {
-                    bool selected = i == (int)asset->params.minFilter - 1;
-                    if (ImGui::Selectable(items3[i], selected))
-                    {
-                        asset->params.minFilter = static_cast<TextureFilter>(i + 1);
-                        asset->ptr->ResetParams(asset->params);
-                    }
-
-                    if (selected)
-                        ImGui::SetItemDefaultFocus();
-                }
-                ImGui::EndCombo();
-            }
-
-            const char* items4[] = { "Nearest", "Linear" };
-            if (ImGui::BeginCombo("Mag-Filter", items4[(int)asset->params.magFilter - 1]))
-            {
-                for (int i = 0; i < IM_ARRAYSIZE(items4); i++)
-                {
-                    bool selected = i == (int)asset->params.magFilter - 1;
-                    if (ImGui::Selectable(items4[i], selected))
-                    {
-                        asset->params.magFilter = static_cast<TextureFilter>(i + 1);
-                        asset->ptr->ResetParams(asset->params);
-                    }
-
-                    if (selected)
-                        ImGui::SetItemDefaultFocus();
-                }
-                ImGui::EndCombo();
-            }
-
-            const char* items2[] = { "RGBA", "RGB", "Luminance", "Luminance with Alpha", "Depth24Stencil8", "Auto" };
-            if (ImGui::BeginCombo("Format", items2[(int)asset->params.format - 1]))
-            {
-                for (int i = 0; i < IM_ARRAYSIZE(items2); i++)
-                {
-                    bool selected = i == (int)asset->params.format - 1;
-                    if (ImGui::Selectable(items2[i], selected))
-                    {
-                        asset->params.format = static_cast<TextureFormat>(i + 1);
-                        asset->ptr = Texture::Create(asset->filepath, asset->params);
-                    }
-
-                    if (selected)
-                        ImGui::SetItemDefaultFocus();
-                }
-
-                ImGui::EndCombo();
-            }
-
-        }
+        if (m_Asset->type == AssetType::Scene)
+            DrawSceneAsset();
+        else if (m_Asset->type == AssetType::Script)
+            DrawScriptAsset();
+        else if (m_Asset->type == AssetType::Texture)
+            DrawTextureAsset();
 
         ImGui::End();
     }
 
+    void PropertiesPanel::DrawSceneAsset()
+    {
+        SceneAsset* asset = (SceneAsset*)m_Asset;
+        ImGui::Text("Scene path:");
+        ImGui::Text(asset->filepath.c_str());
+    }
+
+    void PropertiesPanel::DrawScriptAsset()
+    {
+        ScriptAsset* asset = (ScriptAsset*)m_Asset;
+        ImGui::Text("Script path:");
+        ImGui::Text(asset->filepath.c_str());
+    }
+
+    void PropertiesPanel::DrawTextureAsset()
+    {
+        TextureAsset* asset = (TextureAsset*)m_Asset;
+
+        const char* items[] = { "Repeat", "Mirrored Repeat", "Clamp to Edge", "Clamp to Border" };
+        if (ImGui::BeginCombo("Wrap", items[(int)asset->params.wrap - 1]))
+        {
+            for (int i = 0; i < IM_ARRAYSIZE(items); i++)
+            {
+                bool selected = i == (int)asset->params.wrap - 1;
+                if (ImGui::Selectable(items[i], selected))
+                {
+                    asset->params.wrap = static_cast<TextureWrap>(i + 1);
+                    asset->ptr->ResetParams(asset->params);
+                }
+
+                if (selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+
+        const char* items3[] = { "Nearest", "Linear" };
+        if (ImGui::BeginCombo("Min-Filter", items3[(int)asset->params.minFilter - 1]))
+        {
+            for (int i = 0; i < IM_ARRAYSIZE(items3); i++)
+            {
+                bool selected = i == (int)asset->params.minFilter - 1;
+                if (ImGui::Selectable(items3[i], selected))
+                {
+                    asset->params.minFilter = static_cast<TextureFilter>(i + 1);
+                    asset->ptr->ResetParams(asset->params);
+                }
+
+                if (selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+
+        const char* items4[] = { "Nearest", "Linear" };
+        if (ImGui::BeginCombo("Mag-Filter", items4[(int)asset->params.magFilter - 1]))
+        {
+            for (int i = 0; i < IM_ARRAYSIZE(items4); i++)
+            {
+                bool selected = i == (int)asset->params.magFilter - 1;
+                if (ImGui::Selectable(items4[i], selected))
+                {
+                    asset->params.magFilter = static_cast<TextureFilter>(i + 1);
+                    asset->ptr->ResetParams(asset->params);
+                }
+
+                if (selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+
+        const char* items2[] = { "RGBA", "RGB", "Luminance", "Luminance with Alpha", "Depth24Stencil8", "Auto" };
+        if (ImGui::BeginCombo("Format", items2[(int)asset->params.format - 1]))
+        {
+            for (int i = 0; i < IM_ARRAYSIZE(items2); i++)
+            {
+                bool selected = i == (int)asset->params.format - 1;
+                if (ImGui::Selectable(items2[i], selected))
+                {
+                    asset->params.format = static_cast<TextureFormat>(i + 1);
+                    asset->ptr = Texture::Create(asset->filepath, asset->params);
+                }
+
+                if (selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+
+            ImGui::EndCombo();
+        }
+    }
 }

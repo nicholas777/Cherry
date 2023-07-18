@@ -22,6 +22,7 @@ namespace Cherry
 	private:
 		std::filesystem::path m_AssetmapPath;
 		std::filesystem::path m_ProjectRoot = "";
+		std::filesystem::path m_AssetRoot = "";
 		std::filesystem::path m_CurrentDir = m_ProjectRoot;
 
 		std::filesystem::path FindAssetmap(std::filesystem::path dir);

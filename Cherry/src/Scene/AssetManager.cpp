@@ -11,6 +11,7 @@ namespace Cherry
 	// TODO: Proper ID system
 	std::unordered_map<uint32_t, TextureAsset> AssetManager::m_Textures;
 	std::unordered_map<uint32_t, SceneAsset> AssetManager::m_Scenes;
+	std::unordered_map<uint32_t, ScriptAsset> AssetManager::m_Scripts;
 
 	uint32_t AssetManager::CreateTexture(const std::string& filepath, TextureParams params)
 	{
@@ -149,6 +150,67 @@ namespace Cherry
 	std::unordered_map<uint32_t, SceneAsset>& AssetManager::GetScenes()
 	{
 		return m_Scenes;
+	}
+
+	uint32_t AssetManager::CreateScript(const std::string& filepath)
+	{
+		CH_PROFILE_FUNC();
+
+		ScriptAsset asset;
+		asset.filepath = filepath;
+
+		m_Scripts.insert(std::make_pair((uint32_t)m_Scripts.size(), std::move(asset)));
+
+		return m_Scripts.size() - 1;
+	}
+
+	uint32_t AssetManager::CreateScript(uint32_t id, const std::string& filepath)
+	{
+		CH_PROFILE_FUNC();
+
+		ScriptAsset asset;
+		asset.filepath = filepath;
+
+		m_Scripts.insert(std::make_pair(id, std::move(asset)));
+
+		return id;
+	}
+
+	void AssetManager::CreateScriptIfNotExists(const std::string& filepath)
+	{
+		CH_PROFILE_FUNC();
+
+		for (auto& asset : m_Scenes)
+		{
+			if (asset.second.filepath == filepath)
+				return;
+		}
+
+		CreateScript(filepath);
+	}
+
+	void AssetManager::CreateScriptIfNotExists(uint32_t id, const std::string& filepath)
+	{
+		CH_PROFILE_FUNC();
+
+		for (auto& asset : m_Scenes)
+		{
+			if (asset.first == id)
+				return;
+		}
+
+		CreateScript(id, filepath);
+	}
+
+	ScriptAsset& AssetManager::GetScript(uint32_t id)
+	{
+		CH_ASSERT(m_Scripts.find(id) != m_Scripts.end(), "Asset not found");
+		return m_Scripts[id];
+	}
+
+	std::unordered_map<uint32_t, ScriptAsset>& AssetManager::GetScripts()
+	{
+		return m_Scripts;
 	}
 
 }

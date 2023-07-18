@@ -6,6 +6,9 @@
 #include "Scene/Scene.h"
 #include "Scene/Entity.h"
 
+// TODO: Temporary
+#define USER_PROJ_DLL_PATH "assets/Project/ScriptsBin/UserProject.dll"
+
 namespace Cherry
 {
 
@@ -57,16 +60,16 @@ namespace Cherry
 		}
 		
 		m_RootDomain = domain;
-		ScriptAPI::Init();
 
 		m_AppDomain = mono_domain_create_appdomain("AppDomain", nullptr);
 		mono_domain_set(m_AppDomain, true);
 
-
-		m_CoreAssembly = LoadAssembly("Assets/CoreScripts/ScriptLib.dll");
-		m_GameAssembly = m_CoreAssembly;
+		m_CoreAssembly = LoadAssembly("assets/CoreScripts/ScriptLib.dll");
+		m_GameAssembly = LoadAssembly(USER_PROJ_DLL_PATH);
 
 		m_EntityClass = m_CoreAssembly->GetClassByName("Entity", "Cherry");
+
+		ScriptAPI::Init();
 
 		LoadEntityClasses();
 	}

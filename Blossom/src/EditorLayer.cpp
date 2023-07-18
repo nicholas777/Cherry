@@ -136,6 +136,7 @@ namespace Cherry
 			// TODO: Renderer2D::RenderRect() defaults entityID parameter to -1 which in editor activates gizmos
 			if ((id == -1 || id == -2) && m_SelectedEntity)
 			{
+				
 				m_GizmoType = id;
 				m_GizmoSelected = true;
 				m_GizmoStart = Vector2i(mouseX, mouseY);

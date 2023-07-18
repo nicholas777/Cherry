@@ -1,31 +1,34 @@
 Scenes:
   - ID: 0
-    File: assets/Project\example.chs
+    File: assets/Project/Assets\a\level2.chs
   - ID: 1
-    File: assets/Project\level1.chs
+    File: assets/Project/Assets\example.chs
   - ID: 2
-    File: assets/Project\a\level2.chs
+    File: assets/Project/Assets\level1.chs
   - ID: 3
-    File: assets/Project\Test.chs
+    File: assets/Project/Assets\Test.chs
 Textures:
   - ID: 0
-    File: assets/Project\Smile.png
+    File: assets/Project/Assets\Smile.png
     Params:
       Format: 2
       MinFilter: 2
       MagFilter: 1
       Wrap: 1
   - ID: 1
-    File: assets/Project\tilemap_packed.png
+    File: assets/Project/Assets\Smile2.png
     Params:
       Format: 2
       MinFilter: 1
       MagFilter: 2
       Wrap: 1
   - ID: 2
-    File: assets/Project\Smile2.png
+    File: assets/Project/Assets\tilemap_packed.png
     Params:
-      Format: 2
-      MinFilter: 2
-      MagFilter: 1
+      Format: 1
+      MinFilter: 1
+      MagFilter: 2
       Wrap: 1
+Scripts:
+  - ID: 0
+    File: assets/Project/Assets\Scripts\Player.cs

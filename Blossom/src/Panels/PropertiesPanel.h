@@ -23,5 +23,9 @@ namespace Cherry
 
 		void DrawEntity();
 		void DrawAsset();
+
+		void DrawTextureAsset();
+		void DrawSceneAsset();
+		void DrawScriptAsset();
 	};
 }

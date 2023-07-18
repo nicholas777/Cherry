@@ -2,28 +2,31 @@
 # Calling c# from c++
 # Calling c++ from c#
 # Attaching c# to entities
-- C# api
+# C# api
 - Editing fields in editor
 - Hot reloading
 
 Minor improvments
 - Create systems for paths (not just "assets/" or "../Cherry/src/")
 - Rewrite GetMousePos() functions
+- Give all entities transform z component to determine rendering order
 
 Bug fixes
 - Camera component viewpoint is offset
 - When zooming in editor zooms towards the bottom of the screen
+- When resetting texture params you need to reapply the texture to all objects using it
 
 Release 0.1
 # Profiling
+# Proper scene runtime system
 - C# Scripting
 - Minor improvments
 - Improved logging system
 	- Ability to log Cherry specific types
 - Extended Gizmos system
 - Proper undo/redo system
-- Proper scene runtime system
 - Bug fixes
+- Project system
 - Sound system
 
 Release 0.2

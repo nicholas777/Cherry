@@ -1,6 +1,8 @@
 outputDir = "bin/"
 outputPath = "%{cfg.platform}.%{cfg.buildcfg}.%{cfg.architecture}"
 
+projectDir = "Blossom/assets/Project"
+
 workspace "Cherry"
 	architecture "x64"
 	startproject "Blossom"
@@ -15,6 +17,9 @@ workspace "Cherry"
     include "Cherry"
     include "Blossom"
     include "ScriptLib"
+
+	-- Game
+	include (projectDir)
 
     -- Dependencies
 	group "Dependencies"
