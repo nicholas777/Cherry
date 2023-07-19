@@ -15,6 +15,7 @@ namespace Cherry
 	std::string EditorLayer::m_ScenePath = "";
 	EditorState EditorLayer::m_State = EditorState::None;
 	bool EditorLayer::m_IsRuntime = false;
+	std::string EditorLayer::m_ProjectPath{};
 
 	Entity EditorLayer::m_SelectedEntity = Entity();
 
@@ -52,12 +53,17 @@ namespace Cherry
 	{
 		CH_PROFILE_FUNC();
 
-		m_ContentBrowserPanel = new ContentBrowserPanel("assets/Project");
+		m_ProjectPath = "assets/Project";
+
+		m_ContentBrowserPanel = new ContentBrowserPanel(m_ProjectPath);
 
 		m_ScenePath = "";
 		m_Scene = new Scene;
 		m_RuntimeScene = new Scene;
 		m_State = EditorState::Edit;
+
+		m_PlayButton = Texture::Create("assets/PlayButton.png");
+		m_PauseButton = Texture::Create("assets/PauseButton.png");
 
 		FramebufferData data;
 		data.width = WINDOW_WIDTH;
@@ -100,23 +106,26 @@ namespace Cherry
 			m_Scene->OnUpdate(delta, m_EditorCamera);
 
 			// Gizmos
-			if (m_SelectedEntity && !m_IsRuntime && m_SelectedEntity.HasComponent<TransformComponent>())
+			if (m_SelectedEntity.IsValid())
 			{
-				TransformComponent& tc = m_SelectedEntity.GetComponent<TransformComponent>();
-				Matrix4x4f transform = Matrix4x4f::Identity();
-				Translate(&transform, tc.Translation.x, tc.Translation.y);
+				if (m_SelectedEntity && !m_IsRuntime && m_SelectedEntity.HasComponent<TransformComponent>())
+				{
+					TransformComponent& tc = m_SelectedEntity.GetComponent<TransformComponent>();
+					Matrix4x4f transform = Matrix4x4f::Identity();
+					Translate(&transform, tc.Translation.x, tc.Translation.y);
 
-				Renderer2D::Begin(m_EditorCamera.GetProjection(), m_EditorCamera.GetTransform());
-				
-				Translate(&transform, 0.75f, 0);
-				Renderer2D::DrawRect(transform, m_RedArrow, {1, 1, 1, 1}, -1);
+					Renderer2D::Begin(m_EditorCamera.GetProjection(), m_EditorCamera.GetTransform());
 
-				Translate(&transform, -0.75f, 0.75f);
-				Rotate(&transform, -90);
-				Renderer2D::DrawRect(transform, m_GreenArrow, { 1, 1, 1, 1 }, -2);
+					Translate(&transform, 0.75f, 0);
+					Renderer2D::DrawRect(transform, m_RedArrow, { 1, 1, 1, 1 }, -1);
 
-				Renderer2D::End();
+					Translate(&transform, -0.75f, 0.75f);
+					Rotate(&transform, -90);
+					Renderer2D::DrawRect(transform, m_GreenArrow, { 1, 1, 1, 1 }, -2);
 
+					Renderer2D::End();
+
+				}
 			}
 			
 		}
@@ -198,6 +207,13 @@ namespace Cherry
 				if (Input::GetKeyPressed(Key::Control))
 				{
 					OpenFile();
+				}
+			}
+			else if (event.Keycode == Key::R)
+			{
+				if (Input::GetKeyPressed(Key::Control))
+				{
+					ReloadAssets();
 				}
 			}
 		}
@@ -313,17 +329,13 @@ namespace Cherry
 			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("Open Scene", "Ctrl+O"))
-				{
 					OpenFile();
-				}
 				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
-				{
 					SaveFile();
-				}
 				if (ImGui::MenuItem("Save Scene As", "Ctrl+Shift+S"))
-				{
 					SaveFileAs();
-				}
+				if (ImGui::MenuItem("Reload Assets", "Ctrl+R"))
+					ReloadAssets();
 
 				ImGui::EndMenu();
 			}
@@ -337,8 +349,14 @@ namespace Cherry
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
-		ImGui::Begin("Scene bar", &IsOpen, ImGuiWindowFlags_NoTitleBar);
-		if (ImGui::Button("Play"))
+		ImGui::Begin("Scene Viewport", &IsOpen, ImGuiWindowFlags_NoTitleBar);
+
+		ImVec2 ButtonSize = ImVec2(32.0f, 32.0f);
+		ImVec4 bg_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f); 
+		ImVec4 tint_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+		uint32_t texID = m_IsRuntime ? m_PauseButton->GetTextureID() : m_PlayButton->GetTextureID();
+		if (ImGui::ImageButton((void*)texID, ButtonSize))
 		{
 			ToggleRuntime();
 		}
@@ -346,22 +364,7 @@ namespace Cherry
 		{
 			ImGui::SetTooltip("Play scene");
 		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Reload"))
-		{
-			m_ContentBrowserPanel->WriteAssetmap();
-			m_ContentBrowserPanel->SetDirectory("assets/Project");
-		}
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::SetTooltip("Save and reload assets");
-		}
-
-		ImGui::End();
-
-		ImGui::Begin("Scene Viewport");
+		
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		ImVec2 viewportPos = ImGui::GetWindowContentRegionMin();
 		ImVec2 viewportOffset = ImGui::GetWindowPos();
@@ -412,6 +415,7 @@ namespace Cherry
 			m_State = EditorState::Runtime;
 			Scene::Copy(m_RuntimeScene, m_Scene);
 			m_SceneHierarchyPanel->SetScene(m_RuntimeScene);
+			//m_PropertiesPanel->SetEntity(Entity());
 			m_RuntimeScene->OnRuntimeStart();
 		}
 		else
@@ -526,6 +530,12 @@ namespace Cherry
 		}
 
 		SceneSerializer::Serialize(m_Scene, m_ScenePath);
+	}
+
+	void EditorLayer::ReloadAssets()
+	{
+		m_ContentBrowserPanel->WriteAssetmap();
+		m_ContentBrowserPanel->SetDirectory(m_ProjectPath);
 	}
 
 }

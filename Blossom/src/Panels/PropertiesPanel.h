@@ -10,6 +10,8 @@ namespace Cherry
 		PropertiesPanel();
 		
 		void SetEntity(const Entity& e);
+		Entity GetEntity() { return m_Current; };
+
 		void SetAsset(Asset* a);
 		void OnUpdate();
 

@@ -10,11 +10,14 @@ Minor improvments
 - Create systems for paths (not just "assets/" or "../Cherry/src/")
 - Rewrite GetMousePos() functions
 - Give all entities transform z component to determine rendering order
+- Rework viewport resize code
+- Show camera location in editor
 
 Bug fixes
 - Camera component viewpoint is offset
 - When zooming in editor zooms towards the bottom of the screen
 - When resetting texture params you need to reapply the texture to all objects using it
+- If textures are loaded with more channels than they actually have, engine crashes (ex. RGB loaded as RGBA)
 
 Release 0.1
 # Profiling

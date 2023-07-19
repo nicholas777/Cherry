@@ -25,10 +25,16 @@ Textures:
   - ID: 2
     File: assets/Project/Assets\tilemap_packed.png
     Params:
-      Format: 1
+      Format: 2
       MinFilter: 1
       MagFilter: 2
       Wrap: 1
 Scripts:
   - ID: 0
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 1
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 2
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 3
     File: assets/Project/Assets\Scripts\Player.cs

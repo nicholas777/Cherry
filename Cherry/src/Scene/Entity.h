@@ -25,7 +25,9 @@ namespace Cherry
 
 		bool IsValid()
 		{
-			return m_Scene->m_Registry.valid(m_Handle);
+			if (m_Scene)
+				return m_Scene->m_Registry.valid(m_Handle);
+			return false;
 		}
 
 		template <typename T>

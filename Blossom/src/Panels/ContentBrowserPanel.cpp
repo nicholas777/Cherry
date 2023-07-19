@@ -7,7 +7,6 @@
 namespace Cherry
 {
 
-
 	ContentBrowserPanel::ContentBrowserPanel(const std::string& directory)
 	{
 		// TODO: Project system

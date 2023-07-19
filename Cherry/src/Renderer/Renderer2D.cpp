@@ -1,6 +1,7 @@
 #include "epch.h"
 #include "Renderer2D.h"
 #include "Debug/Profiler.h"
+#include <Math/Algorithm.h>
 
 namespace Cherry
 {
@@ -119,7 +120,7 @@ namespace Cherry
 
 		s_Data->TextureShader->Bind();
 
-		Matrix4x4f VP = proj * transform; // TODO: Inverse this
+		Matrix4x4f VP = proj * transform;
 
 		s_Data->TextureShader->SetMat4("VPMatrix", VP);
 		NewBatch();

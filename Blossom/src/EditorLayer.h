@@ -50,6 +50,8 @@ namespace Cherry
 		static Scoped<PropertiesPanel> m_PropertiesPanel;
 		static Scoped<ContentBrowserPanel> m_ContentBrowserPanel;
 
+		static std::string m_ProjectPath;
+
 		static Scene* m_Scene;
 		static Scene* m_RuntimeScene;
 		static std::string m_ScenePath;
@@ -64,6 +66,7 @@ namespace Cherry
 		bool m_EntitySelected = false;
 		static bool m_IsRuntime;
 		StaticCamera m_EditorCamera;
+		Shared<Texture> m_PlayButton, m_PauseButton;
 
 		static Entity m_SelectedEntity;
 
@@ -76,5 +79,7 @@ namespace Cherry
 		void OpenFile();
 		void SaveFile();
 		void SaveFileAs();
+
+		void ReloadAssets();
 	};
 }
