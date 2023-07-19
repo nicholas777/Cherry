@@ -86,7 +86,13 @@ namespace Cherry
 				if (camera.IsPrimary)
 				{
 					mainCamera = &camera.camera;
-					cameraTransform = transform.GetMatrix();
+
+					// (0, 0) is automatically in the top-right corner,
+					// So we apply this correction to center it
+					Vector2f correction = camera.camera.GetTransformCorrection();
+					Matrix4x4f view = transform.GetMatrix();
+					Translate(&view, correction.x, correction.y);
+					cameraTransform = view;
 					break;
 				}
 			}

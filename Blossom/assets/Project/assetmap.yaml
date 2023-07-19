@@ -32,9 +32,3 @@ Textures:
 Scripts:
   - ID: 0
     File: assets/Project/Assets\Scripts\Player.cs
-  - ID: 1
-    File: assets/Project/Assets\Scripts\Player.cs
-  - ID: 2
-    File: assets/Project/Assets\Scripts\Player.cs
-  - ID: 3
-    File: assets/Project/Assets\Scripts\Player.cs

@@ -63,9 +63,7 @@ namespace Cherry
 
 	Object::~Object()
 	{
-		//m_Object = nullptr;
-		//m_Class = nullptr;
-		CH_TRACE("Object deletion");
+
 	}
 
 	Field::Field(MonoClassField* field, MonoClass* c)

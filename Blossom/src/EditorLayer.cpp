@@ -2,9 +2,6 @@
 #include "System/FileDialogs.h"
 #include <entt.hpp>
 
-// BUG: Zooming doesn't zoom into the center of the screen, rather it zooms towards the bottom
-// TODO: Support for gizoms rotating and scaling
-
 namespace Cherry
 {
 	Scoped<SceneHierarchyPanel> EditorLayer::m_SceneHierarchyPanel;
