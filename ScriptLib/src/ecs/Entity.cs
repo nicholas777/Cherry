@@ -14,6 +14,15 @@ namespace Cherry
             __Entity_ID = id;
         }
 
+        public Entity GetEntityByName(string name)
+        {
+            Entity result = new Entity(Internal.Scene_GetEntityByName(name, out bool valid));
+            if (!valid)
+                return null;
+
+            return result;
+        }
+
         public bool HasComponent<T>() where T : Component
         {
             Internal.Entity_HasComponent(__Entity_ID, typeof(T), out bool result);

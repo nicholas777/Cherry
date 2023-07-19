@@ -30,5 +30,59 @@ Textures:
       MagFilter: 2
       Wrap: 1
 Scripts:
-  - ID: 0
+  - ID: 4
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 5
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 6
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 7
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 8
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 9
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 10
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 11
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 12
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 13
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 14
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 15
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 16
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 17
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 18
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 19
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 20
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 21
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 22
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 23
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 24
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 25
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 26
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 27
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 28
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 29
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 30
+    File: assets/Project/Assets\Scripts\Player.cs
+  - ID: 31
     File: assets/Project/Assets\Scripts\Player.cs

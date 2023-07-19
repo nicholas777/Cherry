@@ -28,6 +28,7 @@ namespace Cherry
 
 		static void UpdateScriptedEntities(float delta);
 
+		static void ReloadAssemblies();
 		static MonoImage* GetMonoCoreImage() { return m_CoreAssembly->m_Image; };
 		static MonoDomain* GetMonoAppDomain() { return m_AppDomain; };
 	private:
@@ -55,6 +56,8 @@ namespace Cherry
 		static std::unordered_map<std::string, EntityClass> m_EntityClasses;
 	private:
 
+		static const char* m_GameDLLPath;
+
 		static MonoDomain* m_RootDomain;
 		static MonoDomain* m_AppDomain;
 
@@ -62,5 +65,11 @@ namespace Cherry
 		static Shared<Assembly> m_GameAssembly;
 
 		static Shared<Class> m_EntityClass;
+
+		static void InitScriptingSystem();
+
+		static void CreateAppDomain();
+		static void UnloadAppDomain();
+
 	};
 }

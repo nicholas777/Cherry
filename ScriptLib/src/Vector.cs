@@ -45,6 +45,11 @@ namespace Cherry
             return new Vector2(scalar.x * value.x, scalar.y * value.y);
         }
 
+        public static Vector2 operator -(Vector2 value)
+        {
+            return new Vector2(-value.x, -value.y);
+        }
+
         public static Vector2 operator -(Vector2 value, float scalar)
         {
             return new Vector2(scalar + value.x, scalar + value.y);

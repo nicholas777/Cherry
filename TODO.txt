@@ -12,12 +12,14 @@ Minor improvments
 - Give all entities transform z component to determine rendering order
 - Rework viewport resize code
 - Show camera location in editor
+- Invert view matrix in renderer, not game logic
 
 Bug fixes
-- Camera component viewpoint is offset
+# Camera component viewpoint is offset
 - When zooming in editor zooms towards the bottom of the screen
 - When resetting texture params you need to reapply the texture to all objects using it
 - If textures are loaded with more channels than they actually have, engine crashes (ex. RGB loaded as RGBA)
+- Lagspike on second frame of runtime
 
 Release 0.1
 # Profiling

@@ -126,12 +126,12 @@ namespace Cherry
 	}
 
 	// TODO: Proper system for scene rendering
-	void Scene::OnUpdate(const Timestep& delta, const StaticCamera& camera)
+	void Scene::OnUpdate(const Timestep& delta, const Matrix4x4f& view, const Matrix4x4f& proj)
 	{
 		CH_PROFILE_FUNC();
 
 		RenderCommand::Clear();
-		Renderer2D::Begin(camera.GetProjection(), camera.GetTransform());
+		Renderer2D::Begin(proj, view);
 
 		{
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& scriptExecutor)

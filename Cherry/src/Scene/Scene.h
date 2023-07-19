@@ -25,7 +25,7 @@ namespace Cherry
 		void OnRuntimeStop();
 
 		void OnUpdate(const Timestep& delta);
-		void OnUpdate(const Timestep& delta, const StaticCamera& camera);
+		void OnUpdate(const Timestep& delta, const Matrix4x4f& view, const Matrix4x4f& proj);
 
 		Entity GetPrimaryCamera();
 		Entity GetEntityByName(const std::string& name);

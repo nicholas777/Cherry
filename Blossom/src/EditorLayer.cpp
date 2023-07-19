@@ -99,8 +99,13 @@ namespace Cherry
 		else
 		{
 			Vector2f xy = GetCameraOffsets(delta);
+			Vector2f correction = m_EditorCamera.GetTransformCorrection();
+
 			Translate(&m_EditorCamera.GetTransform(), xy.x, xy.y);
-			m_Scene->OnUpdate(delta, m_EditorCamera);
+
+			Matrix4x4f mat = m_EditorCamera.GetTransform();
+			Translate(&mat, correction.x, correction.y);
+			m_Scene->OnUpdate(delta, mat, m_EditorCamera.GetProjection());
 
 			// Gizmos
 			if (m_SelectedEntity.IsValid())
@@ -210,7 +215,10 @@ namespace Cherry
 			{
 				if (Input::GetKeyPressed(Key::Control))
 				{
-					ReloadAssets();
+					if (Input::GetKeyPressed(Key::Shift) && !m_IsRuntime)
+						ScriptEngine::ReloadAssemblies();
+					else
+						ReloadAssets();
 				}
 			}
 		}

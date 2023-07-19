@@ -18,6 +18,9 @@ namespace Cherry
         // Entities
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        extern public static uint Scene_GetEntityByName(string name, out bool valid);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         extern public static void Entity_HasComponent(uint entity, Type type, out bool result);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

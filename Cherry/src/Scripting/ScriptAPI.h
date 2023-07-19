@@ -41,6 +41,13 @@ namespace Cherry
 		return Vector2f(vec.x, vec.y);
 	}
 
+	static uint32_t Scene_GetEntityByName(MonoString* name, bool* success)
+	{
+		Entity e = ScriptEngine::GetRuntimeScene()->GetEntityByName(ToString(name));
+		*success = e.IsValid();
+		return e;
+	}
+
 	static void Entity_HasComponent(uint32_t entity, MonoReflectionType* type, bool* result)
 	{
 		*result = HasComponentFuncs[mono_reflection_type_get_type(type)](entity);
@@ -117,6 +124,8 @@ namespace Cherry
 			ADD_INTERNAL_CALL(InputIsKeyDown);
 			ADD_INTERNAL_CALL(InputIsMouseDown);
 			ADD_INTERNAL_CALL(InputGetMousePos);
+
+			ADD_INTERNAL_CALL(Scene_GetEntityByName);
 
 			ADD_INTERNAL_CALL(Entity_HasComponent);
 			ADD_INTERNAL_CALL(Entity_AddComponent);

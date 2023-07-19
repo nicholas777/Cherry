@@ -4,10 +4,9 @@
 
 namespace Cherry
 {
-	Class::Class(MonoClass* c, MonoDomain* appDomain)
+	Class::Class(MonoClass* c)
 	{
 		m_Class = c;
-		m_AppDomain = appDomain;
 	}
 
 	Class::~Class()
@@ -16,9 +15,9 @@ namespace Cherry
 	}
 
 	// TODO: Generating from non-default constructors 
-	Shared<Object> Class::Instantiate()
+	Shared<Object> Class::Instantiate(MonoDomain* domain)
 	{
-		MonoObject* obj = mono_object_new(m_AppDomain, m_Class);
+		MonoObject* obj = mono_object_new(domain, m_Class);
 		CH_VALIDATE(obj);
 
 		mono_runtime_object_init(obj);

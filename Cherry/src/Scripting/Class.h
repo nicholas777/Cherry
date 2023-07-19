@@ -15,10 +15,10 @@ namespace Cherry
 	{
 	public:
 		Class() = default;
-		Class(MonoClass* c, MonoDomain* appDomain);
+		Class(MonoClass* c);
 		~Class();
 
-		Shared<Object> Instantiate();
+		Shared<Object> Instantiate(MonoDomain* domain);
 		Shared<Method> GetMethod(const char* name, int params);
 		Shared<Method> GetMethodIfExists(const char* name, int params);
 		Shared<Field> GetField(const char* name);
@@ -27,7 +27,6 @@ namespace Cherry
 
 	private:
 		MonoClass* m_Class = nullptr;
-		MonoDomain* m_AppDomain = nullptr;
 	};
 
 	class Object

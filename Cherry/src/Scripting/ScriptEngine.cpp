@@ -20,6 +20,8 @@ namespace Cherry
 	Shared<Assembly> ScriptEngine::m_GameAssembly = nullptr;
 	Shared<Class> ScriptEngine::m_EntityClass = nullptr;
 
+	const char* ScriptEngine::m_GameDLLPath = "";
+
 	std::vector<ScriptEngine::ScriptedEntity> ScriptEngine::m_ScriptedEntities{};
 	std::unordered_map<std::string, ScriptEngine::EntityClass> ScriptEngine::m_EntityClasses{};
 
@@ -50,6 +52,8 @@ namespace Cherry
 	{
 		CH_PROFILE_FUNC();
 
+		m_GameDLLPath = USER_PROJ_DLL_PATH;
+
 		mono_set_assemblies_path("assets/mono/lib");
 		
 		MonoDomain* domain = mono_jit_init("ScriptingRuntime");
@@ -60,18 +64,9 @@ namespace Cherry
 		}
 		
 		m_RootDomain = domain;
-
-		m_AppDomain = mono_domain_create_appdomain("AppDomain", nullptr);
-		mono_domain_set(m_AppDomain, true);
-
-		m_CoreAssembly = LoadAssembly("assets/CoreScripts/ScriptLib.dll");
-		m_GameAssembly = LoadAssembly(USER_PROJ_DLL_PATH);
-
-		m_EntityClass = m_CoreAssembly->GetClassByName("Entity", "Cherry");
-
+		InitScriptingSystem();
 		ScriptAPI::Init();
 
-		LoadEntityClasses();
 	}
 
 	void ScriptEngine::Shutdown()
@@ -119,7 +114,7 @@ namespace Cherry
 		se.OnUpdate = c.OnUpdate;
 		se.OnDestroy = c.OnDestroy;
 
-		se.Instance = c.klass->Instantiate();
+		se.Instance = c.klass->Instantiate(m_AppDomain);
 		
 		Shared<Method> constructor = m_EntityClass->GetMethod(".ctor", 1);
 		uint32_t handle = entity.GetHandle();
@@ -171,6 +166,15 @@ namespace Cherry
 		}
 	}
 
+	// Reloads the core and game assembly. Used for hot reloading.
+	void ScriptEngine::ReloadAssemblies()
+	{
+		UnloadAppDomain();
+		CreateAppDomain();
+		InitScriptingSystem();
+	}
+
+	// Loads user script classes
 	void ScriptEngine::LoadEntityClasses()
 	{
 		auto image = m_GameAssembly->m_Image;
@@ -187,7 +191,7 @@ namespace Cherry
 			if (mono_class_is_subclass_of(monoClass, m_EntityClass->GetMonoClass(), false))
 			{
 				EntityClass c{};
-				c.klass = new Class(monoClass, m_AppDomain);
+				c.klass = new Class(monoClass);
 				c.OnCreate = c.klass->GetMethodIfExists("OnCreate", 0);
 				c.OnUpdate = c.klass->GetMethodIfExists("OnUpdate", 1);
 				c.OnDestroy = c.klass->GetMethodIfExists("OnDestroy", 0);
@@ -195,6 +199,29 @@ namespace Cherry
 				m_EntityClasses.emplace(std::string(name), c);
 			}
 		}
+	}
+
+	void ScriptEngine::InitScriptingSystem()
+	{
+		CreateAppDomain();
+
+		m_CoreAssembly = LoadAssembly("assets/CoreScripts/ScriptLib.dll");
+		m_GameAssembly = LoadAssembly(m_GameDLLPath);
+
+		m_EntityClass = m_CoreAssembly->GetClassByName("Entity", "Cherry");
+		LoadEntityClasses();
+	}
+
+	void ScriptEngine::CreateAppDomain()
+	{
+		m_AppDomain = mono_domain_create_appdomain("AppDomain", nullptr);
+		mono_domain_set(m_AppDomain, true);
+	}
+
+	void ScriptEngine::UnloadAppDomain()
+	{
+		mono_domain_set(m_RootDomain, true);
+		mono_domain_unload(m_AppDomain);
 	}
 
 }

@@ -42,7 +42,7 @@ namespace Cherry
 		MonoClass* monoClass = mono_class_from_name(m_Image, nameSpace, name);
 		CH_ASSERT(monoClass, "Unable to generate class");
 
-		return new Class(monoClass, m_AppDomain);
+		return new Class(monoClass);
 	}
 
 	void Assembly::LoadTables()

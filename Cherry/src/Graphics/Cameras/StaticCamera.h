@@ -29,6 +29,11 @@ namespace Cherry
 			m_Projection = ortho(-m_Span * aspect, m_Span * aspect, m_Span, -m_Span, m_Far, m_Near);
 		}
 
+		Vector2f GetTransformCorrection(float aspect = WINDOW_WIDTH / WINDOW_HEIGHT)
+		{
+			return Vector2f((-m_Span * aspect) / 2, -m_Span / 2);
+		}
+
 		float GetSpan() { return m_Span; }
 		float GetNear() { return m_Near; }
 		float GetFar() { return m_Far; }
