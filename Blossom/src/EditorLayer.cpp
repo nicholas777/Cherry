@@ -80,10 +80,21 @@ namespace Cherry
 		m_GreenArrow = Texture::Create("assets/GreenArrow.png");
 
 		RenderCommand::SetClearColor({ 1, 0, 0, 1 });
+
+		// File watcher
+
+		m_Watcher = new filewatch::FileWatch<std::string>(
+			"C:/Users/Nicholas/source/repos/gameEngine/Blossom/assets/Project/ScriptsBin/UserProject.dll",
+			[&](const std::string& path, const filewatch::Event event) {
+			if (event == filewatch::Event::modified && !m_IsRuntime)
+				CH_TRACE("Modified");
+			//ScriptEngine::ReloadAssemblies();
+		});
 	}
 
 	void EditorLayer::OnDetach()
 	{
+		delete m_Watcher;
 		m_ContentBrowserPanel.Free();
 	}
 
@@ -349,7 +360,7 @@ namespace Cherry
 		}
 
 		m_SceneHierarchyPanel->OnUpdate();
-		m_PropertiesPanel->OnUpdate();
+		m_PropertiesPanel->OnUpdate(m_IsRuntime);
 		m_ContentBrowserPanel->OnUpdate();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -420,13 +431,14 @@ namespace Cherry
 			m_State = EditorState::Runtime;
 			Scene::Copy(m_RuntimeScene, m_Scene);
 			m_SceneHierarchyPanel->SetScene(m_RuntimeScene);
-			//m_PropertiesPanel->SetEntity(Entity());
+			m_PropertiesPanel->SetEntity(Entity());
 			m_RuntimeScene->OnRuntimeStart();
 		}
 		else
 		{
 			m_State = EditorState::Edit;
 			m_RuntimeScene->OnRuntimeStop();
+			m_PropertiesPanel->SetEntity(Entity());
 			m_SceneHierarchyPanel->SetScene(m_Scene);
 		}
 	}

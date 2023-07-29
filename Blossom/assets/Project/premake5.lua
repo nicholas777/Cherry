@@ -1,3 +1,18 @@
+
+EngineRoot = "../../.."
+
+include (EngineRoot .. "/premake-customization.lua")
+
+workspace "Project"
+
+	architecture "x64"
+
+	configurations {
+		"debug",
+		"release",
+		"dist"
+	}
+
 project "UserProject"
 	kind "SharedLib"
     language "C#"
@@ -7,7 +22,7 @@ project "UserProject"
     objdir ("ScriptsBin/Int")
 
     files {
-        "**.cs"
+        "Assets/**.cs"
     }
 
     links {
@@ -25,3 +40,7 @@ project "UserProject"
     filter "configurations:Dist"
         optimize "Full"
         symbols "Off"
+
+group "Cherry"
+    include (EngineRoot .. "/ScriptLib")
+group ""

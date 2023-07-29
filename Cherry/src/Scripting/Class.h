@@ -11,6 +11,10 @@ namespace Cherry
 	class Method;
 	class Field;
 
+	typedef void (*OnCreateFunc)(MonoObject*, MonoException**);
+	typedef void (*OnUpdateFunc)(MonoObject* , float, MonoException**);
+	typedef void (*OnDestroyFunc)(MonoObject*, MonoException**);
+	
 	class Class
 	{
 	public:
@@ -54,6 +58,8 @@ namespace Cherry
 			: m_Method(method), m_ParamCount(paramCount) {};
 		~Method();
 
+		void* GetMethodThunk();
+
 		template <typename Arg, typename... Args>
 		void Invoke(Shared<Object> obj, Arg arg, Args... args)
 		{
@@ -74,7 +80,7 @@ namespace Cherry
 		int m_ParamCount = -1;
 	};
 
-	enum class Accessibility : uint8_t
+	enum Accessibility : uint8_t
 	{
 		None		= 0,
 		Private		= (1 << 0),
@@ -83,17 +89,68 @@ namespace Cherry
 		Public		= (1 << 3)
 	};
 
+	enum class ScriptFieldType
+	{
+		None = 0,
+		Int, UInt, Float, Double, Short, UShort, Byte, Long, ULong, Bool,
+		Vector2, Vector3, Vector4, String
+	};
+
 	class Field
 	{
 	public:
 		Field() = default;
 		Field(MonoClassField* field, MonoClass* c);
+
+		const char* GetName() { return m_Name; };
+		uint8_t GetAccessibility() { return m_Access; };
+		ScriptFieldType GetType() { return m_Type; };
+		MonoType* GetMonoType() { return m_MonoType; };
+
+		bool IsIntegralType();
+
+		template <typename T>
+		void GetData(Shared<Object> obj, T* value) 
+		{
+			mono_field_get_value(obj->GetMonoObject(), m_Field, (void*)value);
+		}
+
+		void GetData(Shared<Object> obj, const char** value)
+		{
+			MonoString* str;
+			mono_field_get_value(obj->GetMonoObject(), m_Field, &str);
+			char* temp = mono_string_to_utf8(str);
+			if (temp == nullptr)
+			{
+				*value = "";
+				return;
+			}
+
+			strcpy((char*)*value, temp);
+			mono_free(temp);
+		}
+
+		template <typename T>
+		void SetData(Shared<Object> obj, const T& data)
+		{
+			mono_field_set_value(obj->GetMonoObject(), m_Field, (void*)&data);
+		}
+		
+		void SetData(Shared<Object> obj, const char* data)
+		{
+			MonoString* str = mono_string_new(mono_object_get_domain(obj->GetMonoObject()), data);
+			mono_field_set_value(obj->GetMonoObject(), m_Field, str);
+		}
+
 	private:
 		MonoClassField* m_Field = nullptr;
 		MonoClass* m_Class = nullptr;
 
-		Accessibility m_Access = Accessibility::None;
+		// Field info
 
-		void GetAccessibility();
+		uint8_t m_Access = Accessibility::None;
+		const char* m_Name;
+		ScriptFieldType m_Type;
+		MonoType* m_MonoType;
 	};
 }

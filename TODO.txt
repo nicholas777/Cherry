@@ -3,8 +3,8 @@
 # Calling c++ from c#
 # Attaching c# to entities
 # C# api
-- Editing fields in editor
-- Hot reloading
+# Hot reloading
+# Editing fields in editor
 
 Minor improvments
 - Create systems for paths (not just "assets/" or "../Cherry/src/")
@@ -12,7 +12,7 @@ Minor improvments
 - Give all entities transform z component to determine rendering order
 - Rework viewport resize code
 - Show camera location in editor
-- Invert view matrix in renderer, not game logic
+- Support for editing script fields in editor of types UInt, Short, UShort, Long, ULong, Byte
 
 Bug fixes
 # Camera component viewpoint is offset
@@ -20,11 +20,13 @@ Bug fixes
 - When resetting texture params you need to reapply the texture to all objects using it
 - If textures are loaded with more channels than they actually have, engine crashes (ex. RGB loaded as RGBA)
 - Lagspike on second frame of runtime
+- Running winGenProjects.bat doesn't include ScriptLib in Project solution
 
 Release 0.1
 # Profiling
 # Proper scene runtime system
 - C# Scripting
+- Cherry visual studio extension
 - Minor improvments
 - Improved logging system
 	- Ability to log Cherry specific types

@@ -23,7 +23,7 @@ namespace Cherry
 			m_Scene = entity.m_Scene;
 		};
 
-		bool IsValid()
+		bool IsValid() const
 		{
 			if (m_Scene)
 				return m_Scene->m_Registry.valid(m_Handle);

@@ -1,4 +1,4 @@
-﻿using Cherry;
+using Cherry;
 using System;
 
 public class Player : Entity
@@ -11,6 +11,23 @@ public class Player : Entity
     public float jumpCoefficient;
     public float startCoefficient = 0.09f;
     public float gravity = 0.0003f;
+
+    public string str;
+
+    int i;
+    uint ui;
+    float f;
+    double d;
+    public bool b = true;
+    short s;
+    ushort us;
+    long l;
+    ulong ul;
+    byte by;
+
+    Vector2 vec2;
+    Vector3 vec3;
+    Vector4 vec4;
 
     public void OnCreate()
     {

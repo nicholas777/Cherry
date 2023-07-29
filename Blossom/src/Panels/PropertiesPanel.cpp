@@ -11,7 +11,12 @@ namespace Cherry
     void PropertiesPanel::SetEntity(const Entity& e)
     {
         m_Current = e;
-        if (m_Current.HasComponent<SpriteComponent>())
+
+        if (!e.IsValid())
+        {
+            m_UseTexture = false;
+        }
+        else if (m_Current.HasComponent<SpriteComponent>())
         {
             m_UseTexture = m_Current.GetComponent<SpriteComponent>().UseTexture;
         }
@@ -25,18 +30,76 @@ namespace Cherry
         m_Mode = 1;
     }
 
-    void PropertiesPanel::OnUpdate()
+    void PropertiesPanel::OnUpdate(bool runtime)
     {
         if (m_Mode == 0)
-            DrawEntity();
+            DrawEntity(runtime);
         else
             DrawAsset();
     }
 
-    void PropertiesPanel::DrawEntity()
+    static void DisplayScriptField(Field* field, Entity entity, bool runtime)
+    {
+        if (!entity.HasComponent<ScriptComponent>())
+            return;
+        
+        if (!runtime)
+            return;
+        
+        if (field->GetType() == ScriptFieldType::Int)
+        {
+            int data;
+            field->GetData(ScriptEngine::GetScriptedEntity(entity), &data);
+
+            if (ImGui::InputInt(field->GetName(), &data))
+                field->SetData(ScriptEngine::GetScriptedEntity(entity), data);
+        }
+        else if (field->GetType() == ScriptFieldType::Float)
+        {
+            float data;
+            field->GetData(ScriptEngine::GetScriptedEntity(entity), &data);
+
+            if (ImGui::InputFloat(field->GetName(), &data, 0, 0, "%.8f"))
+                field->SetData(ScriptEngine::GetScriptedEntity(entity), data);
+        }
+        else if (field->GetType() == ScriptFieldType::Double)
+        {
+            double data;
+            field->GetData(ScriptEngine::GetScriptedEntity(entity), &data);
+
+            if (ImGui::InputDouble(field->GetName(), &data, 0, 0, "%.16f"))
+                field->SetData(ScriptEngine::GetScriptedEntity(entity), data);
+        }
+        else if (field->GetType() == ScriptFieldType::Bool)
+        {
+            bool data;
+            field->GetData(ScriptEngine::GetScriptedEntity(entity), &data);
+
+            if (ImGui::RadioButton(field->GetName(), data))
+                field->SetData(ScriptEngine::GetScriptedEntity(entity), !data);
+        }
+
+        else if (field->GetType() == ScriptFieldType::String)
+        {
+            char* data = new char[256];
+            memset(data, 0, sizeof(data));
+            char* buff = new char[256];
+            field->GetData(ScriptEngine::GetScriptedEntity(entity), (const char**)&data);
+            memset(buff, 0, sizeof(buff));
+            strcpy(buff, data);
+
+            if (ImGui::InputText(field->GetName(), (char*)buff, 256, ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+                field->SetData(ScriptEngine::GetScriptedEntity(entity), (const char*)buff);
+            }
+        }
+
+    }
+
+    void PropertiesPanel::DrawEntity(bool runtime)
     {
         CH_PROFILE_FUNC();
-
+        
         if (!m_Current)
         {
             ImGui::Begin("Properties");
@@ -218,7 +281,7 @@ namespace Cherry
 
             if (opened)
             {
-                char str[128];
+                char str[256];
                 memset(str, 0, sizeof(str));
                 strcpy(str, comp.Name.c_str());
 
@@ -227,9 +290,23 @@ namespace Cherry
                     comp.Name = str;
                 }
 
-                if (!ScriptEngine::IsScriptClass(str))
+                bool valid = ScriptEngine::IsScriptClass(str);
+
+                if (!valid)
                     ImGui::TextColored({ 1, 0, 0, 1 }, "Invalid class name");
 
+                if (valid)
+                {
+                    auto fields = ScriptEngine::ScriptClassGetFields(str);
+
+                    for (auto& field : *fields)
+                    {
+                        DisplayScriptField(field.Get(), m_Current, runtime);
+                        
+                    }
+                }
+
+                ImGui::NewLine();
                 ImGui::TreePop();
             }
 

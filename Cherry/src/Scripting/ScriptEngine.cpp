@@ -95,6 +95,8 @@ namespace Cherry
 		return new Assembly(assembly, m_AppDomain);
 	}
 
+	
+
 	void ScriptEngine::InitScriptedEntity(Entity entity)
 	{
 		if (!entity.HasComponent<ScriptComponent>())
@@ -114,24 +116,36 @@ namespace Cherry
 		se.OnUpdate = c.OnUpdate;
 		se.OnDestroy = c.OnDestroy;
 
+		se.entity = entity;
+
 		se.Instance = c.klass->Instantiate(m_AppDomain);
 		
 		Shared<Method> constructor = m_EntityClass->GetMethod(".ctor", 1);
 		uint32_t handle = entity.GetHandle();
 		constructor->Invoke(se.Instance, handle);
 
+		MonoException* exception = nullptr;
 		if (se.OnCreate)
-			se.OnCreate->Invoke(se.Instance);
+			se.OnCreate(se.Instance->GetMonoObject(), &exception);
 
 		m_ScriptedEntities.push_back(se);
 	}
 
+	const std::vector<Shared<Field>>* ScriptEngine::ScriptClassGetFields(const char* c)
+	{
+		if (!IsScriptClass(c))
+			return nullptr;
+
+		return &m_EntityClasses.at(c).fields;
+	}
+
 	void ScriptEngine::UnloadScriptedEntities()
 	{
+		MonoException* exception = nullptr;
 		for (auto& entity : m_ScriptedEntities)
 		{
 			if (entity.OnDestroy)
-				entity.OnDestroy->Invoke(entity.Instance);
+				entity.OnDestroy(entity.Instance->GetMonoObject(), &exception);
 		}
 
 		m_ScriptedEntities.clear();
@@ -140,6 +154,19 @@ namespace Cherry
 	bool ScriptEngine::IsScriptClass(const char* name)
 	{
 		return m_EntityClasses.count(std::string(name));
+	}
+
+	Shared<Object> ScriptEngine::GetScriptedEntity(Entity entity)
+	{
+		for (auto& se : m_ScriptedEntities)
+		{
+			if (se.entity == entity)
+			{
+				return se.Instance;
+			}
+		}
+
+		return nullptr;
 	}
 
 	Scene* ScriptEngine::GetRuntimeScene()
@@ -160,9 +187,10 @@ namespace Cherry
 
 	void ScriptEngine::UpdateScriptedEntities(float delta)
 	{
+		MonoException* exception;
 		for (auto& entity : m_ScriptedEntities)
 		{
-			entity.OnUpdate->Invoke(entity.Instance, delta);
+			entity.OnUpdate(entity.Instance->GetMonoObject(), delta, &exception);
 		}
 	}
 
@@ -174,7 +202,6 @@ namespace Cherry
 		InitScriptingSystem();
 	}
 
-	// Loads user script classes
 	void ScriptEngine::LoadEntityClasses()
 	{
 		auto image = m_GameAssembly->m_Image;
@@ -190,12 +217,31 @@ namespace Cherry
 			MonoClass* monoClass = mono_class_from_name(image, nameSpace, name);
 			if (mono_class_is_subclass_of(monoClass, m_EntityClass->GetMonoClass(), false))
 			{
+				// Methods
 				EntityClass c{};
 				c.klass = new Class(monoClass);
-				c.OnCreate = c.klass->GetMethodIfExists("OnCreate", 0);
-				c.OnUpdate = c.klass->GetMethodIfExists("OnUpdate", 1);
-				c.OnDestroy = c.klass->GetMethodIfExists("OnDestroy", 0);
+				if (auto onCreate = c.klass->GetMethodIfExists("OnCreate", 0))
+					c.OnCreate = (OnCreateFunc)onCreate->GetMethodThunk();
+				if (auto onUpdate = c.klass->GetMethodIfExists("OnUpdate", 1))
+					c.OnUpdate = (OnUpdateFunc)onUpdate->GetMethodThunk();
+				if (auto onDestroy = c.klass->GetMethodIfExists("OnDestroy", 0))
+					c.OnDestroy = (OnDestroyFunc)onDestroy->GetMethodThunk();
 
+				// Fields
+
+				CH_INFO("Class: {}", name);
+
+				void* iterator = nullptr;
+				while (MonoClassField* monoField = mono_class_get_fields(monoClass, &iterator))
+				{
+					Shared<Field> field = new Field(monoField, monoClass);
+
+					ScriptFieldType type = field->GetType();
+
+					if (field->GetAccessibility() & Accessibility::Public && type != ScriptFieldType::None)
+						c.fields.push_back(field);
+				}
+				
 				m_EntityClasses.emplace(std::string(name), c);
 			}
 		}

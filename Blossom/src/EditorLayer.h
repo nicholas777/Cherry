@@ -6,6 +6,8 @@
 #include "Panels/ContentBrowserPanel.h"
 #include "EditorAction.h"
 
+#include <FileWatch.hpp>
+
 #include <filesystem>
 
 namespace Cherry
@@ -67,6 +69,8 @@ namespace Cherry
 		static bool m_IsRuntime;
 		StaticCamera m_EditorCamera;
 		Shared<Texture> m_PlayButton, m_PauseButton;
+
+		filewatch::FileWatch<std::string>* m_Watcher;
 
 		static Entity m_SelectedEntity;
 

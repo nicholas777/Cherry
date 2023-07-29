@@ -6,6 +6,8 @@
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 
+#include <entt.hpp>
+
 namespace Cherry 
 {
 	class Entity;
@@ -20,7 +22,10 @@ namespace Cherry
 		static Shared<Assembly> LoadAssembly(std::string path);
 
 		static void InitScriptedEntity(Entity entity);
+		static const std::vector<Shared<Field>>* ScriptClassGetFields(const char* c);
 		static bool IsScriptClass(const char* name);
+		static Shared<Object> GetScriptedEntity(Entity entity);
+		static void RegisterScriptedEntity(Entity entity);
 
 		static Scene* GetRuntimeScene();
 		static void OnRuntimeStart(Scene* scene);
@@ -34,10 +39,11 @@ namespace Cherry
 	private:
 		struct ScriptedEntity
 		{
-			Shared<Method> OnCreate = nullptr;
-			Shared<Method> OnUpdate = nullptr;
-			Shared<Method> OnDestroy = nullptr;
+			OnCreateFunc OnCreate = nullptr;
+			OnUpdateFunc OnUpdate = nullptr;
+			OnDestroyFunc OnDestroy = nullptr;
 			Shared<Object> Instance = nullptr;
+			entt::entity entity;
 		};
 
 		static std::vector<ScriptedEntity> m_ScriptedEntities;
@@ -49,9 +55,11 @@ namespace Cherry
 		struct EntityClass
 		{
 			Shared<Class> klass = nullptr;
-			Shared<Method> OnCreate = nullptr;
-			Shared<Method> OnUpdate = nullptr;
-			Shared<Method> OnDestroy = nullptr;
+			OnCreateFunc OnCreate = nullptr;
+			OnUpdateFunc OnUpdate = nullptr;
+			OnDestroyFunc OnDestroy = nullptr;
+
+			std::vector<Shared<Field>> fields{};
 		};
 		static std::unordered_map<std::string, EntityClass> m_EntityClasses;
 	private:

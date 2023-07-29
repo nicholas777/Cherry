@@ -3,6 +3,8 @@ outputPath = "%{cfg.platform}.%{cfg.buildcfg}.%{cfg.architecture}"
 
 projectDir = "Blossom/assets/Project"
 
+include "premake-customization.lua"
+
 workspace "Cherry"
 	architecture "x64"
 	startproject "Blossom"
@@ -18,9 +20,6 @@ workspace "Cherry"
     include "Blossom"
     include "ScriptLib"
 
-	-- Game
-	include (projectDir)
-
     -- Dependencies
 	group "Dependencies"
 		include "Cherry/vendor/GLFW"
@@ -29,3 +28,8 @@ workspace "Cherry"
 		include "Cherry/vendor/FreetypeGL"
 		include "Cherry/vendor/imgui"
 		include "Cherry/vendor/yaml-cpp"
+
+	group ""
+
+-- Game
+include (projectDir)

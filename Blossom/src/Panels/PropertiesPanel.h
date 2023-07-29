@@ -13,7 +13,7 @@ namespace Cherry
 		Entity GetEntity() { return m_Current; };
 
 		void SetAsset(Asset* a);
-		void OnUpdate();
+		void OnUpdate(bool runtime);
 
 	private:
 		Entity m_Current;
@@ -23,7 +23,7 @@ namespace Cherry
 
 		bool m_UseTexture;
 
-		void DrawEntity();
+		void DrawEntity(bool runtime);
 		void DrawAsset();
 
 		void DrawTextureAsset();

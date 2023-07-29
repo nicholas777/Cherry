@@ -8,7 +8,7 @@ project "Blossom"
 
 	files {
 		"src/**.h",
-		"src/**.cpp"
+		"src/**.cpp",
 	}
 
 	includedirs {
@@ -20,7 +20,8 @@ project "Blossom"
 		"../Cherry/vendor/imgui",
 		"../Cherry/vendor/yaml-cpp/include",
         "../Cherry/vendor/mono/include",
-		"src"
+		"src",
+        "vendor/filewatch"
 	}
 
 	filter "system:windows"
