@@ -1,4 +1,3 @@
-#include <vector>
 #include <GLFW/glfw3.h>
 
 #include "events/input.h"
@@ -9,10 +8,10 @@
 
 namespace Cherry
 {
-    class WindowsInput : public Input
+    class LinuxInput : public Input
     {
     public:
-        WindowsInput()
+        LinuxInput()
         {
             m_Window = static_cast<GLFWwindow*>(Application::GetApplication()
                  .GetWindow()
@@ -71,6 +70,6 @@ namespace Cherry
 
     void Cherry::Input::Init()
     {
-        m_Instance = new WindowsInput();
+        m_Instance = new LinuxInput();
     }
 }

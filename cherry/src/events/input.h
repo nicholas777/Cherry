@@ -51,16 +51,16 @@ namespace Cherry
 
 	protected:
 
-		virtual bool GetKeyPressedImpl(Key keycode);
-		virtual bool GetMousePressedImpl(MouseButton mousecode);
+		virtual bool GetKeyPressedImpl(Key keycode) = 0;
+		virtual bool GetMousePressedImpl(MouseButton mousecode) = 0;
 
-		virtual Vector2f GetMousePosImpl();
-		virtual Vector2i GetMousePosRawImpl();
+		virtual Vector2f GetMousePosImpl() = 0;
+		virtual Vector2i GetMousePosRawImpl() = 0;
 
-		virtual float GetMouseXImpl();
-		virtual float GetMouseYImpl();
+		virtual float GetMouseXImpl() = 0;
+		virtual float GetMouseYImpl() = 0;
 
-		virtual bool GetMouseDownImpl(MouseButton button);
+		virtual bool GetMouseDownImpl(MouseButton button) = 0;
 
 		static Input* m_Instance;
 	};

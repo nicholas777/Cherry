@@ -56,8 +56,6 @@ endif()
 # TODO: Allow user to specify this through cmd line
 add_compile_definitions(CH_DEBUG_MODE)
 
-# LIBRARIES TO ADD: freetype
-
 set(freetype-gl_WITH_GLAD ON CACHE BOOL "Enable glad")
 set(freetype-gl_WITH_GLEW OFF CACHE BOOL "Enable glew")
 set(freetype-gl_BUILD_APIDOC OFF CACHE BOOL "Build doc")

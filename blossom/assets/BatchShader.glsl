@@ -16,11 +16,11 @@ uniform mat4 VPMatrix;
 
 void main() 
 {
-	o_UV = a_UV;
-	o_Color = a_Color;
-	o_TexSlot = a_TexSlot;
-	o_EntityID = a_EntityID;
-	gl_Position = VPMatrix * vec4(a_Position, 0.0, 1.0);
+    o_UV = a_UV;
+    o_Color = a_Color;
+    o_TexSlot = a_TexSlot;
+    o_EntityID = a_EntityID;
+    gl_Position = VPMatrix * vec4(a_Position, 0.0, 1.0);
 }
 
 @shader fragment
@@ -38,6 +38,6 @@ uniform sampler2D u_Samplers[16];
 
 void main() 
 {
-	color = texture(u_Samplers[int(o_TexSlot)], o_UV) * o_Color;
-	color2 = int(o_EntityID);
+    color = texture(u_Samplers[0], o_UV) * o_Color;
+    color2 = int(o_EntityID);
 }

@@ -17,7 +17,11 @@ namespace Cherry
     {
         glfwMakeContextCurrent(m_Window);
         int success = gladLoadGL(glfwGetProcAddress);
-        CH_ASSERT(success, "failed to load GLAD");
+        if (!success) {
+            CH_ERROR("Glad failed to load OpenGL");
+            CH_ASSERT(success, "failed to load GLAD");
+            return;
+        }
     }
 
     void OpenGLContext::SwapBuffers()

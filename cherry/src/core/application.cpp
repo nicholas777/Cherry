@@ -10,108 +10,108 @@
 
 namespace Cherry
 {
-	// TODO: Fix warnings
-	Application* Application::s_Application;
+    // TODO: Fix warnings
+    Application* Application::s_Application;
 
-	Application::Application()
-	{
-		EventListener::InitEventListenerSystem();
+    Application::Application()
+    {
+        EventListener::InitEventListenerSystem();
 
-		Configuration = ApplicationConfig();
-		m_LayerStack = new LayerStack;
+        Configuration = ApplicationConfig();
+        m_LayerStack = new LayerStack;
 
-		m_ImGuiRenderer = new ImGuiRenderer;
+        m_ImGuiRenderer = new ImGuiRenderer;
 
-		s_Application = this;
-	}
+        s_Application = this;
+    }
 
-	Application::~Application()
-	{
-		delete m_LayerStack;
-		delete m_Window;
-		Renderer2D::Shutdown();
-	}
+    Application::~Application()
+    {
+        delete m_LayerStack;
+        delete m_Window;
+        Renderer2D::Shutdown();
+    }
 
-	void Application::Run()
-	{
-		m_Running = true;
+    void Application::Run()
+    {
+        m_Running = true;
 
-		Log::Init(Configuration.Name);
+        Log::Init(Configuration.Name);
 
-		m_Window = Window::Create({ Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.IsVSync });
-		Renderer2D::Init();
-		RenderCommand::Init();
+        m_Window = Window::Create({ Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.IsVSync });
+        Renderer2D::Init();
+        RenderCommand::Init();
 
-		Input::Init();
+        Input::Init();
 
-		m_ImGuiRenderer->OnInit();
+        m_ImGuiRenderer->OnInit();
 
-		for (auto layer : *m_LayerStack)
-		{
-			layer->OnAttach();
-		}
+        for (auto layer : *m_LayerStack)
+        {
+            layer->OnAttach();
+        }
 
-		RenderCommand::Init();
+        RenderCommand::Init();
 
-		Timestep DeltaTime;
+        Timestep DeltaTime;
 
-		while (m_Running)
-		{
-			float time = (float)m_Window->GetTime();
-			DeltaTime = Timestep(time - m_LastFrame);
-			m_LastFrame = time;
+        while (m_Running)
+        {
+            float time = (float)m_Window->GetTime();
+            DeltaTime = Timestep(time - m_LastFrame);
+            m_LastFrame = time;
 
-			m_Window->OnUpdate();
+            m_Window->OnUpdate();
 
-			for (Layer* layer : *m_LayerStack)
-				layer->OnUpdate(DeltaTime);
+            for (Layer* layer : *m_LayerStack)
+                layer->OnUpdate(DeltaTime);
 
-			m_ImGuiRenderer->Begin();
-			for (Layer* layer : *m_LayerStack)
-				layer->OnImGuiRender();
-			m_ImGuiRenderer->End();
-		}
+            m_ImGuiRenderer->Begin();
+            for (Layer* layer : *m_LayerStack)
+                layer->OnImGuiRender();
+            m_ImGuiRenderer->End();
+        }
 
-		m_ImGuiRenderer->OnShutdown();
-		delete m_ImGuiRenderer;
-	}
+        m_ImGuiRenderer->OnShutdown();
+        delete m_ImGuiRenderer;
+    }
 
-	void Application::OnEvent(Event& e)
-	{
-		for (auto listener : EventListener::EventListeners[e.Type])
-		{
-			listener->OnEvent(e);
+    void Application::OnEvent(const Event& e)
+    {
+        for (auto listener : EventListener::EventListeners[e.Type])
+        {
+            listener->OnEvent(e);
 
-			if (e.handled)
-				break;
-		}
+            if (e.handled)
+                break;
+        }
 
-		for (auto it = (*m_LayerStack).end(); it != (*m_LayerStack).begin();)
-		{
-			(**--it).OnEvent(e);
+        for (auto it = (*m_LayerStack).end(); it != (*m_LayerStack).begin();)
+        {
+            (**--it).OnEvent(e);
 
-			if (e.handled)
-				break;
-		}
-	}
-	                                          
-	void Application::OnWindowResize(int width, int height)
-	{
-		RenderCommand::SetViewport(0, 0, width, height);
-	}
+            if (e.handled)
+                break;
+        }
+    }
+                                              
+    void Application::OnWindowResize(int width, int height)
+    {
+        RenderCommand::SetViewport(0, 0, width, height);
+    }
 
-	void Application::OnWindowClose()
-	{
-		m_Running = false;
-	}
+    void Application::OnWindowClose()
+    {
+        m_Running = false;
+    }
 
-	Application& Application::GetApplication()
-	{
-		return *s_Application;
-	}
+    Application& Application::GetApplication()
+    {
+        return *s_Application;
+    }
 
-	Window* Application::GetWindow()
-	{
-		return m_Window;
-	}
+    Window* Application::GetWindow()
+    {
+        return m_Window;
+    }
 }

@@ -22,7 +22,7 @@ namespace Cherry
 		virtual void OnDetach() override;
 		virtual void OnUpdate(const Timestep& delta) override;
 
-		virtual void OnEvent(Event& e) override;
+		virtual void OnEvent(const Event& e) override;
 
 		virtual void OnImGuiRender() override;
 
