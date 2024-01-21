@@ -4,10 +4,8 @@
 *.sln
 .vs/
 bin/
-Cherry/vendor/Freetype/bin
-Cherry/vendor/FreetypeGL/bin
-Cherry/vendor/FreetypeGL/obj
-Cherry/vendor/GLAD/bin
-Cherry/vendor/GLFW/bin
-Cherry/vendor/imgui/bin
+build/
 Blossom/assets/CoreScripts
+*.o
+*.a
+*.so

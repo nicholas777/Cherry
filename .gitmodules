@@ -1,0 +1,18 @@
+[submodule "cherry/vendor/spdlog"]
+	path = cherry/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "cherry/vendor/glfw"]
+	path = cherry/vendor/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "cherry/vendor/imgui"]
+	path = cherry/vendor/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "cherry/vendor/entt"]
+	path = cherry/vendor/entt
+	url = https://github.com/skypjack/entt.git
+[submodule "cherry/vendor/yaml_cpp"]
+	path = cherry/vendor/yaml_cpp
+	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "cherry/vendor/freetype_gl"]
+	path = cherry/vendor/freetype_gl
+	url = https://github.com/rougier/freetype-gl.git
