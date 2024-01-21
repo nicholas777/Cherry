@@ -18,8 +18,8 @@ namespace Cherry
         ImGuiIO& io = ImGui::GetIO();
 
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-        // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         // TODO: Customization of loaded fonts
         io.Fonts->AddFontFromFileTTF("assets/Fonts/OpenSans-Bold.ttf", 18);
@@ -29,12 +29,12 @@ namespace Cherry
 
         ImGui::StyleColorsDark();
 
-        /*ImGuiStyle& style = ImGui::GetStyle();
+        ImGuiStyle& style = ImGui::GetStyle();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             style.WindowRounding = 0.0f;
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-        }*/
+        }
 
         // TODO: Make this function be called from the client and optional customization
 
@@ -98,8 +98,8 @@ namespace Cherry
         // if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             GLFWwindow* Context = glfwGetCurrentContext();
-            // ImGui::UpdatePlatformWindows();
-            // ImGui::RenderPlatformWindowsDefault();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(Context);
         }
     }

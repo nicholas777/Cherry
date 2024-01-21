@@ -1,7 +1,5 @@
 #pragma once
 
-#include "epch.h"
-
 #include "core/log.h"
 #include "core/pointer.h"
 
