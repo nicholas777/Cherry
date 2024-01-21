@@ -494,15 +494,15 @@ namespace Cherry
                 break;
             }
         }
-            if (s_Data->TextureSlotIndex >= RendererData::MaxTextureSlots)
-            {
-                Flush();
-                NewBatch();
-            }
 
-            s_Data->TextureSlots[s_Data->TextureSlotIndex] = ptr;
-            s_Data->TextureSlotIndex++;
-            return s_Data->TextureSlotIndex - 1;
+        if (s_Data->TextureSlotIndex >= RendererData::MaxTextureSlots)
+        {
+            Flush();
+            NewBatch();
+        }
+
+        s_Data->TextureSlots[s_Data->TextureSlotIndex] = ptr;
+        return s_Data->TextureSlotIndex++;
     }
 
 }

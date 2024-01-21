@@ -37,15 +37,7 @@ namespace Cherry
 
     void PropertiesPanel::DrawEntity()
     {
-        if (!m_Current)
-        {
-            ImGui::Begin("Properties");
-            ImGui::Text("No entity selected!");
-            ImGui::End();
-            return;
-        }
-
-        if (!m_Current.IsValid())
+        if (!m_Current || !m_Current.IsValid())
         {
             ImGui::Begin("Properties");
             ImGui::Text("No entity selected!");
@@ -219,7 +211,7 @@ namespace Cherry
             {
                 SpriteComponent& sprite = m_Current.GetComponent<SpriteComponent>();
                 
-                int useTexture;
+                int useTexture = (int)sprite.UseTexture;
                 if (ImGui::RadioButton("Use color", &useTexture, 0))
                 {
                     auto action = new SpriteComponentEditAction();

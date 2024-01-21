@@ -16,7 +16,7 @@ namespace Cherry
     void OpenGLContext::Init()
     {
         glfwMakeContextCurrent(m_Window);
-        int success = gladLoadGL(glfwGetProcAddress);
+        int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         if (!success) {
             CH_ERROR("Glad failed to load OpenGL");
             CH_ASSERT(success, "failed to load GLAD");

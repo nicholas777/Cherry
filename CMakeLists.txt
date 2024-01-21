@@ -17,7 +17,7 @@ add_compile_definitions(IMGUI_IMPL_OPENGL_LOADER_GLAD)
 add_library(imgui ${IMGUI_SOURCES})
 
 # Same with glad
-add_library(glad cherry/vendor/glad/src/gl.c)
+add_library(glad cherry/vendor/glad/src/glad.c)
 include_directories(cherry/vendor/glad/include)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
