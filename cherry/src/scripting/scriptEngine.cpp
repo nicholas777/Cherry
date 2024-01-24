@@ -1,10 +1,10 @@
 #include "epch.h"
-#include "ScriptEngine.h"
-#include "core/Log.h"
-#include "ScriptAPI.h"
-#include "Debug/Profiler.h"
-#include "Scene/Scene.h"
-#include "Scene/Entity.h"
+#include "scriptEngine.h"
+#include "core/log.h"
+#include "scriptAPI.h"
+#include "debug/profiler.h"
+#include "scene/scene.h"
+#include "scene/entity.h"
 
 // TODO: Temporary
 #define USER_PROJ_DLL_PATH "assets/Project/ScriptsBin/UserProject.dll"

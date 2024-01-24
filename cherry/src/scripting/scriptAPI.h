@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/Core.h"
-#include "Events/Input.h"
-#include "Scene/Entity.h"
-#include "Scene/Component.h"
+#include "core/core.h"
+#include "events/input.h"
+#include "scene/entity.h"
+#include "scene/component.h"
 
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>

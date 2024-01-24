@@ -1,6 +1,7 @@
 #include "epch.h"
-#include "Class.h"
-#include "core/Log.h"
+
+#include "class.h"
+#include "core/log.h"
 
 #include <mono/metadata/tabledefs.h>
 

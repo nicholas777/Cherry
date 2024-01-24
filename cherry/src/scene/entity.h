@@ -17,12 +17,6 @@ namespace Cherry
 		Entity(entt::entity handle, Scene* scene)
 			: m_Handle(handle), m_Scene(scene) {}
 
-		Entity(const Entity& entity)
-		{
-			m_Handle = entity.m_Handle;
-			m_Scene = entity.m_Scene;
-		};
-
 		bool IsValid() const
 		{
 			if (m_Scene)

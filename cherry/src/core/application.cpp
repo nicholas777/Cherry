@@ -4,9 +4,11 @@
 #include "events/eventType.h"
 #include "platform/windows/windowsInput.h"
 #include "events/input.h"
+#include "scripting/scriptEngine.h"
 #include "timestep.h"
 #include "renderer/renderer2D.h"
 #include "renderer/renderCommand.h"
+#include "debug/profiler.h"
 
 namespace Cherry
 {
@@ -15,7 +17,7 @@ namespace Cherry
 
     Application::Application()
     {
-        EventListener::InitEventListenerSystem();
+        CH_PROFILE_FUNC();
 
         Configuration = ApplicationConfig();
         m_LayerStack = new LayerStack;
@@ -27,16 +29,21 @@ namespace Cherry
 
     Application::~Application()
     {
+        CH_PROFILE_FUNC();
         delete m_LayerStack;
         delete m_Window;
         Renderer2D::Shutdown();
     }
 
-    void Application::Run()
-    {
+    void Application::Startup() {
+        CH_PROFILE_FUNC();
+
         m_Running = true;
 
         Log::Init(Configuration.Name);
+        EventListener::InitEventListenerSystem();
+
+        ScriptEngine::Init();
 
         m_Window = Window::Create({ Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.IsVSync });
         Renderer2D::Init();
@@ -52,6 +59,11 @@ namespace Cherry
         }
 
         RenderCommand::Init();
+    }
+
+    void Application::Run()
+    {
+        CH_PROFILE_FUNC();
 
         Timestep DeltaTime;
 
@@ -78,6 +90,7 @@ namespace Cherry
 
     void Application::OnEvent(const Event& e)
     {
+        CH_PROFILE_FUNC();
         for (auto listener : EventListener::EventListeners[e.Type])
         {
             listener->OnEvent(e);

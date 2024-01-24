@@ -2,14 +2,20 @@
 
 #include "core/pointer.h"
 
-#include <mono/metadata/assembly.h>
-#include <mono/jit/jit.h>
-
 namespace Cherry
 {
 	class Object;
 	class Method;
 	class Field;
+
+    class MonoObject;
+    class MonoException;
+    class MonoClass;
+    class MonoObject;
+    class MonoMethod;
+    class MonoDomain;
+    class MonoType;
+    class MonoClassField;
 
 	typedef void (*OnCreateFunc)(MonoObject*, MonoException**);
 	typedef void (*OnUpdateFunc)(MonoObject* , float, MonoException**);
@@ -61,19 +67,9 @@ namespace Cherry
 		void* GetMethodThunk();
 
 		template <typename Arg, typename... Args>
-		void Invoke(Shared<Object> obj, Arg arg, Args... args)
-		{
-			void* data = &arg;
+		void Invoke(Shared<Object> obj, Arg arg, Args... args);
 
-			MonoObject* exception = nullptr;
-			mono_runtime_invoke(m_Method, obj->GetMonoObject(), &data, &exception);
-		}
-
-		void Invoke(Shared<Object> obj) 
-		{
-			MonoObject* exception = nullptr;
-			mono_runtime_invoke(m_Method, obj->GetMonoObject(), nullptr, &exception);
-		}
+		void Invoke(Shared<Object> obj);
 
 	private:
 		MonoMethod* m_Method = nullptr;
@@ -110,37 +106,12 @@ namespace Cherry
 		bool IsIntegralType();
 
 		template <typename T>
-		void GetData(Shared<Object> obj, T* value) 
-		{
-			mono_field_get_value(obj->GetMonoObject(), m_Field, (void*)value);
-		}
-
-		void GetData(Shared<Object> obj, const char** value)
-		{
-			MonoString* str;
-			mono_field_get_value(obj->GetMonoObject(), m_Field, &str);
-			char* temp = mono_string_to_utf8(str);
-			if (temp == nullptr)
-			{
-				*value = "";
-				return;
-			}
-
-			strcpy((char*)*value, temp);
-			mono_free(temp);
-		}
+		void GetData(Shared<Object> obj, T* value);
+		void GetData(Shared<Object> obj, const char** value);
 
 		template <typename T>
-		void SetData(Shared<Object> obj, const T& data)
-		{
-			mono_field_set_value(obj->GetMonoObject(), m_Field, (void*)&data);
-		}
-		
-		void SetData(Shared<Object> obj, const char* data)
-		{
-			MonoString* str = mono_string_new(mono_object_get_domain(obj->GetMonoObject()), data);
-			mono_field_set_value(obj->GetMonoObject(), m_Field, str);
-		}
+		void SetData(Shared<Object> obj, const T& data);
+		void SetData(Shared<Object> obj, const char* data);
 
 	private:
 		MonoClassField* m_Field = nullptr;

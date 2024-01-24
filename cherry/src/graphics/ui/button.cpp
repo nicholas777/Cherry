@@ -1,5 +1,7 @@
 #include "epch.h"
+
 #include "button.h"
+#include "debug/profiler.h"
 
 namespace Cherry
 {
@@ -16,6 +18,7 @@ namespace Cherry
 
     void Button::OnEvent(const Event& e)
     {
+        CH_PROFILE_FUNC();
         // TODO: Coordinates for Renderer2D::DrawRect are the center of the rect
         MouseClickEvent& event = static_cast<MouseClickEvent&>(e);
 
@@ -35,6 +38,7 @@ namespace Cherry
 
     void Button::OnUpdate()
     {
+        CH_PROFILE_FUNC();
         Renderer2D::DrawRect(m_Position, m_Size, m_Color);
         m_Label->OnUpdate();
     }

@@ -87,11 +87,16 @@ include_directories(cherry/vendor/glfw/include)
 link_libraries(imgui)
 include_directories(cherry/vendor/imgui)
 
+include(cherry/vendor/lua.cmake)
+link_libraries(lua)
+include_directories(cherry/vendor/lua)
+
 file(GLOB BLOSSOM_SOURCES blossom/src/*.cpp blossom/src/panels/*.cpp)
 
 add_executable(blossom ${BLOSSOM_SOURCES})
-include_directories(cherry/src blossom/src)
+target_include_directories(blossom PRIVATE cherry/src blossom/src)
 target_link_libraries(blossom cherry imgui glfw)
+target_include_directories(blossom PRIVATE blossom/vendor/filewatch)
 
 if(BUILD_EXAMPLE)
     add_executable(example tests/src/hello.cpp) 

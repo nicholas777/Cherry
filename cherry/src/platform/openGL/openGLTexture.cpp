@@ -1,6 +1,7 @@
 #include "epch.h"
 
-#include "core/core.h"
+#include "core/log.h"
+#include "debug/profiler.h"
 #include "openGLTexture.h"
 
 #include "stb_image.h"
@@ -63,6 +64,7 @@ namespace Cherry
 
     OpenGLTexture::OpenGLTexture(std::string path)
     {
+        CH_PROFILE_FUNC();
         int width, height, channels;
 
         stbi_set_flip_vertically_on_load(true);
@@ -99,6 +101,7 @@ namespace Cherry
     OpenGLTexture::OpenGLTexture(uint32_t width, uint32_t height)
         :m_Width(width), m_Height(height), m_Format(GL_RGBA), m_InternalFormat(GL_RGBA8)
     {
+        CH_PROFILE_FUNC();
 
         glGenTextures(1, &m_TextureID);
         glBindTexture(GL_TEXTURE_2D, m_TextureID);
@@ -111,6 +114,7 @@ namespace Cherry
 
     OpenGLTexture::OpenGLTexture(std::string path, TextureParams params)
     {
+        CH_PROFILE_FUNC();
 
         int width, height, channels;
 
@@ -177,6 +181,7 @@ namespace Cherry
     OpenGLTexture::OpenGLTexture(uint32_t width, uint32_t height, TextureParams params)
         : m_Width(width), m_Height(height)
     {
+        CH_PROFILE_FUNC();
         if (params.format == TextureFormat::Auto)
         {
             CH_ASSERT(false, "Auto texture format not allowed in this function");
@@ -221,6 +226,7 @@ namespace Cherry
 
     void OpenGLTexture::ResetParams(TextureParams params)
     {
+        CH_PROFILE_FUNC();
         Bind();
 
         glTextureParameteri(m_TextureID, GL_TEXTURE_MIN_FILTER, ToGLFormat(params.minFilter));

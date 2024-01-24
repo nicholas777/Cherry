@@ -1,8 +1,8 @@
 #include "epch.h"
-#include "Script.h"
-#include "core/Log.h"
-#include "ScriptEngine.h"
-#include "Debug/Profiler.h"
+#include "script.h"
+#include "core/log.h"
+#include "scriptEngine.h"
+#include "debug/profiler.h"
 
 namespace Cherry
 {

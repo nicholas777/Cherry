@@ -38,6 +38,10 @@
 #include "scene/sceneSerializer.h"
 #include "scene/assetManager.h"
 
+#include "scripting/scriptEngine.h"
+#include "scripting/class.h"
+#include "scripting/script.h"
+
 #include "graphics/cameras/camera.h"
 #include "graphics/cameras/sceneCamera.h"
 #include "graphics/cameras/staticCamera.h"

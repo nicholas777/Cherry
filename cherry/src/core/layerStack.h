@@ -1,6 +1,5 @@
 #pragma once
 
-#include "epch.h"
 #include "layer.h"
 
 namespace Cherry

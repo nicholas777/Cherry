@@ -1,6 +1,8 @@
 #include "epch.h"
+
 #include "imGuiRenderer.h"
 #include "core/application.h"
+#include "debug/profiler.h"
 
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -12,6 +14,8 @@ namespace Cherry
 {
     void ImGuiRenderer::OnInit()
     {
+        CH_PROFILE_FUNC();
+
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
@@ -74,6 +78,7 @@ namespace Cherry
 
     void ImGuiRenderer::OnShutdown()
     {
+        CH_PROFILE_FUNC();
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -81,6 +86,7 @@ namespace Cherry
 
     void ImGuiRenderer::Begin()
     {
+        CH_PROFILE_FUNC();
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -88,6 +94,7 @@ namespace Cherry
 
     void ImGuiRenderer::End()
     {
+        CH_PROFILE_FUNC();
         ImGuiIO& io = ImGui::GetIO();
         Application& app = Application::GetApplication();
         io.DisplaySize = ImVec2((float)app.GetWindow()->GetWidth(), (float)app.GetWindow()->GetHeight());

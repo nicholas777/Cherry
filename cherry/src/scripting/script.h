@@ -1,13 +1,15 @@
 #pragma once
 
-#include "core/Pointer.h"
-#include "Class.h"
-
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
+#include "core/pointer.h"
+#include "class.h"
 
 namespace Cherry
 {
+
+    class MonoAssembly;
+    class MonoDomain;
+    class MonoImage;
+    class MonoTableInfo;
 	
 	class Assembly
 	{

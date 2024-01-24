@@ -7,6 +7,7 @@
 # Editing fields in editor
 
 Minor improvments
+- Profiling in the scripting engine
 - Create systems for paths (not just "assets/" or "../Cherry/src/")
 - Rewrite GetMousePos() functions
 - Give all entities transform z component to determine rendering order
@@ -29,7 +30,7 @@ Release 0.1
 - Cherry visual studio extension
 - Minor improvments
 - Improved logging system
-	- Ability to log Cherry specific types
+    - Ability to log Cherry specific types
 - Extended Gizmos system
 - Proper undo/redo system
 - Bug fixes

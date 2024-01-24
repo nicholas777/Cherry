@@ -1,4 +1,6 @@
 #include "editorLayer.h"
+#include "debug/profiler.h"
+#include "scene/nativeScript.h"
 #include "system/fileDialogs.h"
 
 #include <entt/entt.hpp>
@@ -12,7 +14,14 @@ namespace Cherry
     Scoped<SceneHierarchyPanel> EditorLayer::m_SceneHierarchyPanel;
     Scoped<PropertiesPanel> EditorLayer::m_PropertiesPanel;
     Scoped<ContentBrowserPanel> EditorLayer::m_ContentBrowserPanel;
-    Shared<Scene> EditorLayer::m_Scene = Shared<Scene>(nullptr);
+
+    Scene* EditorLayer::m_Scene = nullptr;
+    Scene* EditorLayer::m_RuntimeScene = nullptr;
+    std::string EditorLayer::m_ScenePath = "";
+    EditorState EditorLayer::m_State = EditorState::None;
+    bool EditorLayer::m_IsRuntime = false;
+    std::string EditorLayer::m_ProjectPath{};
+
     Entity EditorLayer::m_SelectedEntity = Entity();
 
     std::vector<ReversableAction*> EditorLayer::m_ActionsToUndo = std::vector<ReversableAction*>();
@@ -42,7 +51,7 @@ namespace Cherry
         return Vector2f(x * delta.GetMilliseconds(), y * delta.GetMilliseconds());
     }
 
-    class CameraControllerScript : public Script
+    class CameraControllerScript : public NativeScript
     {
     public:
         void OnCreate()
@@ -83,16 +92,24 @@ namespace Cherry
         }
     };
 
-    EditorLayer::~EditorLayer()
-    {
+    EditorLayer::~EditorLayer() {
+
     }
 
     void EditorLayer::OnAttach()
     {
+        CH_PROFILE_FUNC();
+
+        m_ProjectPath = "assets/Project";
         m_ContentBrowserPanel = new ContentBrowserPanel("assets/Project");
 
         m_ScenePath = "";
         m_Scene = new Scene;
+        m_RuntimeScene = new Scene;
+        m_State = EditorState::Edit;
+
+        m_PlayButton = Texture::Create("assets/PlayButton.png");
+        m_PauseButton = Texture::Create("assets/PauseButton.png");
 
         FramebufferData data;
         data.width = WINDOW_WIDTH;
@@ -121,16 +138,23 @@ namespace Cherry
 
     void EditorLayer::OnUpdate(const Timestep& delta)
     {
+        CH_PROFILE_FUNC();
+
         m_Framebuffer->Bind();
         if (m_IsRuntime)
         {
-            m_Scene->OnUpdate(delta);
+            m_RuntimeScene->OnUpdate(delta);
         }
         else
         {
             Vector2f xy = GetCameraOffsets(delta);
+            Vector2f correction = m_EditorCamera.GetTransformCorrection();
             Translate(&m_EditorCamera.GetTransform(), xy.x, xy.y);
-            m_Scene->OnUpdate(delta, m_EditorCamera);
+
+            Matrix4x4f mat = m_EditorCamera.GetTransform();
+            Translate(&mat, correction.x, correction.y);
+
+            m_Scene->OnUpdate(delta, mat, m_EditorCamera.GetProjection());
 
             // Gizmos
             if (m_SelectedEntity && !m_IsRuntime && m_SelectedEntity.HasComponent<TransformComponent>())
@@ -180,7 +204,7 @@ namespace Cherry
                 return;
             }
 
-            Entity entity = Entity((entt::entity)id, m_Scene.Get());
+            Entity entity = Entity((entt::entity)id, m_Scene);
             m_EntitySelected = false;
             if (!entity.IsValid())
                 return;
@@ -194,6 +218,8 @@ namespace Cherry
 
     void EditorLayer::OnEvent(const Event& e)
     {
+        CH_PROFILE_FUNC();
+
         if (e.Type == EventType::KeyPressEvent)
         {
             const KeyPressEvent& event = static_cast<const KeyPressEvent&>(e);
@@ -212,6 +238,35 @@ namespace Cherry
                     RedoAction();
                 }
             }
+            else if (event.Keycode == Key::S)
+            {
+                if (Input::GetKeyPressed(Key::Control) && Input::GetKeyPressed(Key::Shift))
+                {
+                    SaveFileAs();
+                }
+                else if (Input::GetKeyPressed(Key::Control))
+                {
+                    SaveFile();
+                }
+            }
+            else if (event.Keycode == Key::O)
+            {
+                if (Input::GetKeyPressed(Key::Control))
+                {
+                    OpenFile();
+                }
+            }
+            else if (event.Keycode == Key::R)
+            {
+                if (Input::GetKeyPressed(Key::Control))
+                {
+                    if (Input::GetKeyPressed(Key::Shift) && !m_IsRuntime)
+                        ScriptEngine::ReloadAssemblies();
+                    else
+                        ReloadAssets();
+                }
+            }
+
         }
 
         else if (e.Type == EventType::MouseScrollEvent)
@@ -278,6 +333,7 @@ namespace Cherry
     
     void EditorLayer::OnImGuiRender()
     {
+        CH_PROFILE_FUNC();
         static bool IsOpen = true;
         static bool opt_fullscreen = true;
         static bool opt_padding = false;
@@ -346,7 +402,7 @@ namespace Cherry
         }
 
         m_SceneHierarchyPanel->OnUpdate();
-        m_PropertiesPanel->OnUpdate();
+        m_PropertiesPanel->OnUpdate(m_IsRuntime);
         m_ContentBrowserPanel->OnUpdate();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -411,10 +467,11 @@ namespace Cherry
         m_PropertiesPanel->SetAsset(asset);
     }
 
-    void EditorLayer::SelectScene(Shared<Scene> asset)
+    void EditorLayer::SelectScene(Scene* asset, const std::string& path)
     {
         m_Scene = asset;
         m_SceneHierarchyPanel->SetScene(asset);
+        m_ScenePath = path;
     }
 
     void EditorLayer::RegisterAction(ReversableAction* action)
@@ -499,8 +556,8 @@ namespace Cherry
                 return;
             }
 
-            m_ScenePath = path;
-            m_Scene = SceneSerializer::Deserialize(path.string());
+            m_ScenePath = path.string();
+            m_Scene = SceneSerializer::Deserialize(m_ScenePath);
             m_SceneHierarchyPanel->SetScene(m_Scene);
         }
     }
@@ -510,20 +567,20 @@ namespace Cherry
         if (m_ScenePath.empty())
             SaveFileAs();
         else
-            SceneSerializer::Serialize(m_Scene, m_ScenePath.string());
+            SceneSerializer::Serialize(m_Scene, m_ScenePath);
     }
 
     void EditorLayer::SaveFileAs()
     {
         std::filesystem::path path = FileDialogManager::SaveFile("Cherry Scene (.chs)\0*.chs\0\0)");
-        m_ScenePath = path;
+        m_ScenePath = path.string();
 
         if (path.extension() != ".chs")
         {
             CH_ERROR("File is not a .chs file");
         }
 
-        SceneSerializer::Serialize(m_Scene, m_ScenePath.string());
+        SceneSerializer::Serialize(m_Scene, m_ScenePath);
     }
 
 }

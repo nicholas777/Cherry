@@ -31,6 +31,7 @@ namespace Cherry
         LayerStack& GetLayerStack() { return *m_LayerStack; };
         void PushLayer(Layer* layer) { m_LayerStack->PushLayer(layer); };
         
+        void Startup();
         void Run();
 
         void OnEvent(const Event& e);

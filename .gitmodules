@@ -16,3 +16,9 @@
 [submodule "cherry/vendor/freetype_gl"]
 	path = cherry/vendor/freetype_gl
 	url = https://github.com/rougier/freetype-gl.git
+[submodule "cherry/vendor/lua"]
+	path = cherry/vendor/lua
+	url = https://github.com/lua/lua
+[submodule "blossom/vendor/filewatch"]
+	path = blossom/vendor/filewatch
+	url = https://github.com/ThomasMonkman/filewatch.git

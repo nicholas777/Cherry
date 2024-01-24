@@ -23,7 +23,7 @@ namespace Cherry
 	public:
 		EditorLayer()
 			: Layer("EditorLayer") {};
-		virtual ~EditorLayer() override {};
+		virtual ~EditorLayer() override;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
@@ -35,7 +35,7 @@ namespace Cherry
 
 		static void SelectEntity(const Entity& entity);
 		static void SelectAsset(Asset* asset);
-		static void SelectScene(Scene* asset, std::string path);
+		static void SelectScene(Scene* asset, const std::string& path);
 		static void ToggleRuntime();
 
 		static void RegisterAction(ReversableAction* action);
@@ -79,6 +79,7 @@ namespace Cherry
 		int m_GizmoType = 0;
 		Vector2f m_GizmosPrevTranslation;
 
+        void NewFile();
 		void OpenFile();
 		void SaveFile();
 		void SaveFileAs();

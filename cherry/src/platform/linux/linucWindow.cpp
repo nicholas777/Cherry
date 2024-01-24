@@ -60,7 +60,7 @@ namespace Cherry
     {
         Application::GetApplication().OnEvent(WindowCloseEvent());
         Application::GetApplication().OnWindowClose();
-        CH_CORE_INFO("window closing");
+        CH_INFO("window closing");
     }
 
     void LinuxWindow::WindowResizeCallback(GLFWwindow* window, int width, int height)
