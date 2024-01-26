@@ -1,11 +1,11 @@
 #pragma once
 
-namespace Cherry
-{
+namespace Cherry {
     class FileDialogManager
     {
     public:
         static std::string OpenFile(const char* filter) { return m_Instance->OpenFileImpl(filter); }
+
         static std::string SaveFile(const char* filter) { return m_Instance->SaveFileImpl(filter); }
 
     protected:

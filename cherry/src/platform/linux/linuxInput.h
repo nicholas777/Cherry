@@ -1,63 +1,49 @@
-#include <GLFW/glfw3.h>
-
-#include "events/input.h"
 #include "core/application.h"
 #include "core/keyCodes.h"
 #include "core/mouseButtonCodes.h"
+#include "events/input.h"
 #include "math/vector.h"
 
-namespace Cherry
-{
+#include <GLFW/glfw3.h>
+
+namespace Cherry {
     class LinuxInput : public Input
     {
     public:
-        LinuxInput()
-        {
-            m_Window = static_cast<GLFWwindow*>(Application::GetApplication()
-                 .GetWindow()
-                ->GetNativeWindow());
+        LinuxInput() {
+            m_Window = static_cast<GLFWwindow*>(
+                Application::GetApplication().GetWindow()->GetNativeWindow());
         }
     protected:
 
-        virtual bool GetKeyPressedImpl(Key keycode) override
-        {
+        virtual bool GetKeyPressedImpl(Key keycode) override {
             return glfwGetKey(m_Window, static_cast<int32_t>(keycode)) == GLFW_PRESS;
         };
 
-        virtual bool GetMousePressedImpl(MouseButton mousecode) override
-        { 
+        virtual bool GetMousePressedImpl(MouseButton mousecode) override {
             return glfwGetMouseButton(m_Window, static_cast<int32_t>(mousecode)) == GLFW_PRESS;
         };
 
         // TODO: Make this function return screen space coords and have separate convertion function
-        virtual Vector2f GetMousePosImpl() override
-        { 
+        virtual Vector2f GetMousePosImpl() override {
             double x, y;
             glfwGetCursorPos(m_Window, &x, &y);
 
             return { (float)x / WINDOW_WIDTH * 2 - 1, -((float)y / WINDOW_HEIGHT * 2 - 1) };
         };
 
-        virtual Vector2i GetMousePosRawImpl() override
-        {
+        virtual Vector2i GetMousePosRawImpl() override {
             double x, y;
             glfwGetCursorPos(m_Window, &x, &y);
 
             return Vector2i((int)x, (int)y);
         }
 
-        virtual float GetMouseXImpl() override
-        { 
-            return GetMousePosImpl()[0];
-        };
+        virtual float GetMouseXImpl() override { return GetMousePosImpl()[0]; };
 
-        virtual float GetMouseYImpl() override
-        { 
-            return GetMousePosImpl()[1];
-        };
+        virtual float GetMouseYImpl() override { return GetMousePosImpl()[1]; };
 
-        virtual bool GetMouseDownImpl(MouseButton button)
-        {
+        virtual bool GetMouseDownImpl(MouseButton button) {
             return glfwGetMouseButton(m_Window, (int)button) == GLFW_PRESS;
         }
 
@@ -68,8 +54,7 @@ namespace Cherry
         friend void Cherry::Input::Init();
     };
 
-    void Cherry::Input::Init()
-    {
+    void Cherry::Input::Init() {
         m_Instance = new LinuxInput();
     }
 }

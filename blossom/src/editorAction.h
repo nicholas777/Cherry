@@ -1,241 +1,221 @@
 #pragma once
 
-#include <scene/component.h>
 #include <scene/assetManager.h>
+#include <scene/component.h>
 
-namespace Cherry
-{
+namespace Cherry {
 
-	class ReversableAction
-	{
-	public:
-		virtual void Reverse() = 0;
-		virtual ReversableAction* ToReversed() = 0;
+    class ReversableAction
+    {
+    public:
+        virtual void Reverse() = 0;
+        virtual ReversableAction* ToReversed() = 0;
 
-		bool IsEntityCreateAction = false;
-	};
+        bool IsEntityCreateAction = false;
+    };
 
-	class EntityCreateAction : public ReversableAction
-	{
-	public:
-		virtual void Reverse() override
-		{
-			Entity::Delete(entity);
-			IsEntityCreateAction = true;
-		}
+    class EntityCreateAction : public ReversableAction
+    {
+    public:
+        virtual void Reverse() override {
+            Entity::Delete(entity);
+            IsEntityCreateAction = true;
+        }
 
-		virtual ReversableAction* ToReversed() override
-		{
-			return nullptr;
-		}
+        virtual ReversableAction* ToReversed() override { return nullptr; }
 
-		Entity entity;
+        Entity entity;
+    };
 
-	};
+    class EntityDeleteAction : public ReversableAction
+    {
+    public:
+        virtual void Reverse() override {
+            Entity e = entity.m_Scene->CreateEntity(name == nullptr ? "Entity" : name->Name);
 
-	class EntityDeleteAction : public ReversableAction
-	{
-	public:
-		virtual void Reverse() override
-		{
-			Entity e = entity.m_Scene->CreateEntity(name == nullptr ? "Entity" : name->Name);
+            if (transform)
+                e.AddComponent<TransformComponent>(transform->Translation, transform->Rotation,
+                                                   transform->Scale);
 
-			if (transform)
-				e.AddComponent<TransformComponent>(transform->Translation, transform->Rotation, transform->Scale);
+            if (sprite)
+                e.AddComponent<SpriteComponent>(sprite->Color).SpriteTexture =
+                    sprite->SpriteTexture;
 
-			if (sprite)
-				e.AddComponent<SpriteComponent>(sprite->Color).SpriteTexture = sprite->SpriteTexture;
+            if (camera)
+                e.AddComponent<CameraComponent>(camera->camera, camera->IsPrimary);
 
-			if (camera)
-				e.AddComponent<CameraComponent>(camera->camera, camera->IsPrimary);
+            delete name;
+            delete transform;
+            delete sprite;
+            delete camera;
+        }
 
-			delete name;
-			delete transform;
-			delete sprite;
-			delete camera;
-		}
+        virtual ReversableAction* ToReversed() override {
+            EntityCreateAction* action = new EntityCreateAction;
+            action->entity = entity;
+            return action;
+        }
 
-		virtual ReversableAction* ToReversed() override
-		{
-			EntityCreateAction* action = new EntityCreateAction;
-			action->entity = entity;
-			return action;
-		}
+        Entity entity;
+        NameComponent* name = nullptr;
+        TransformComponent* transform = nullptr;
+        SpriteComponent* sprite = nullptr;
+        CameraComponent* camera = nullptr;
+    };
 
-		Entity entity;
-		NameComponent* name = nullptr;
-		TransformComponent* transform = nullptr;
-		SpriteComponent* sprite = nullptr;
-		CameraComponent* camera = nullptr;
-	};
+    class NameComponentEditAction : public ReversableAction
+    {
+    public:
+        virtual void Reverse() override { entity.GetComponent<NameComponent>().Name = oldName; }
 
-	class NameComponentEditAction : public ReversableAction
-	{
-	public:
-		virtual void Reverse() override
-		{
-			entity.GetComponent<NameComponent>().Name = oldName;
-		}
+        virtual ReversableAction* ToReversed() override {
+            NameComponentEditAction* action = new NameComponentEditAction;
+            action->entity = entity;
+            action->oldName = newName;
+            action->newName = oldName;
 
-		virtual ReversableAction* ToReversed() override
-		{
-			NameComponentEditAction* action = new NameComponentEditAction;
-			action->entity = entity;
-			action->oldName = newName;
-			action->newName = oldName;
+            return action;
+        }
 
-			return action;
-		}
+        Entity entity;
+        std::string oldName, newName;
+    };
 
-		Entity entity;
-		std::string oldName, newName;
-	};
+    class TransformComponentEditAction : public ReversableAction
+    {
+    public:
+        virtual void Reverse() override {
+            TransformComponent& comp = entity.GetComponent<TransformComponent>();
+            comp.Translation = oldPos;
+            comp.Rotation = oldRot;
+            comp.Scale = oldSize;
+        }
 
-	class TransformComponentEditAction : public ReversableAction
-	{
-	public:
-		virtual void Reverse() override
-		{
-			TransformComponent& comp = entity.GetComponent<TransformComponent>();
-			comp.Translation = oldPos;
-			comp.Rotation = oldRot;
-			comp.Scale = oldSize;
-		}
+        virtual ReversableAction* ToReversed() override {
+            TransformComponentEditAction* action = new TransformComponentEditAction;
+            action->entity = entity;
 
-		virtual ReversableAction* ToReversed() override
-		{
-			TransformComponentEditAction* action = new TransformComponentEditAction;
-			action->entity = entity;
+            action->oldPos = newPos;
+            action->newPos = oldPos;
 
-			action->oldPos = newPos;
-			action->newPos = oldPos;
+            action->oldSize = newSize;
+            action->newSize = oldSize;
 
-			action->oldSize = newSize;
-			action->newSize = oldSize;
+            action->oldRot = newRot;
+            action->newRot = oldRot;
 
-			action->oldRot = newRot;
-			action->newRot = oldRot;
+            return action;
+        }
 
-			return action;
-		}
+        Entity entity;
+        Vector2f oldPos, newPos, oldSize, newSize;
+        float oldRot, newRot;
+    };
 
-		Entity entity;
-		Vector2f oldPos, newPos, oldSize, newSize;
-		float oldRot, newRot;
-	};
+    class SpriteComponentEditAction : public ReversableAction
+    {
+    public:
+        virtual void Reverse() override {
+            SpriteComponent& comp = entity.GetComponent<SpriteComponent>();
+            comp.SpriteTexture = new SubTexture(oldTexture);
+            comp.Color = oldColor;
+            comp.UseTexture = oldUseTexture;
+        }
 
-	class SpriteComponentEditAction : public ReversableAction
-	{
-	public:
-		virtual void Reverse() override
-		{
-			SpriteComponent& comp = entity.GetComponent<SpriteComponent>();
-			comp.SpriteTexture = new SubTexture(oldTexture);
-			comp.Color = oldColor;
-			comp.UseTexture = oldUseTexture;
-		}
+        virtual ReversableAction* ToReversed() override {
+            SpriteComponentEditAction* action = new SpriteComponentEditAction;
+            action->entity = entity;
 
-		virtual ReversableAction* ToReversed() override
-		{
-			SpriteComponentEditAction* action = new SpriteComponentEditAction;
-			action->entity = entity;
+            action->oldColor = newColor;
+            action->newColor = oldColor;
 
-			action->oldColor = newColor;
-			action->newColor = oldColor;
+            action->oldTexture = newTexture;
+            action->newTexture = oldTexture;
 
-			action->oldTexture = newTexture;
-			action->newTexture = oldTexture;
+            action->oldUseTexture = newUseTexture;
+            action->newUseTexture = oldUseTexture;
 
-			action->oldUseTexture = newUseTexture;
-			action->newUseTexture = oldUseTexture;
+            return action;
+        }
 
-			return action;
-		}
+        Entity entity;
+        SubTexture oldTexture, newTexture;
+        Vector4f oldColor, newColor;
+        bool oldUseTexture, newUseTexture;
+    };
 
-		Entity entity;
-		SubTexture oldTexture, newTexture;
-		Vector4f oldColor, newColor;
-		bool oldUseTexture, newUseTexture;
+    class CameraComponentEditAction : public ReversableAction
+    {
+    public:
+        virtual void Reverse() override {
+            CameraComponent& comp = entity.GetComponent<CameraComponent>();
 
-	};
+            comp.camera = oldCamera;
+            comp.IsPrimary = oldPrimary;
+        }
 
-	class CameraComponentEditAction : public ReversableAction
-	{
-	public:
-		virtual void Reverse() override
-		{
-			CameraComponent& comp = entity.GetComponent<CameraComponent>();
+        virtual ReversableAction* ToReversed() override {
+            CameraComponentEditAction* action = new CameraComponentEditAction;
+            action->entity = entity;
 
-			comp.camera = oldCamera;
-			comp.IsPrimary = oldPrimary;
-		}
+            action->oldCamera = newCamera;
+            action->newCamera = oldCamera;
 
-		virtual ReversableAction* ToReversed() override
-		{
-			CameraComponentEditAction* action = new CameraComponentEditAction;
-			action->entity = entity;
+            action->oldPrimary = newPrimary;
+            action->newPrimary = oldPrimary;
 
-			action->oldCamera = newCamera;
-			action->newCamera = oldCamera;
+            return action;
+        }
 
-			action->oldPrimary = newPrimary;
-			action->newPrimary = oldPrimary;
+        Entity entity;
+        SceneCamera oldCamera, newCamera;
+        bool oldPrimary, newPrimary;
+    };
 
-			return action;
-		}
+    class TextureAssetEditAction : public ReversableAction
+    {
+    public:
+        virtual void Reverse() override {
+            TextureAsset& asset = AssetManager::GetTexture(ID);
 
-		Entity entity;
-		SceneCamera oldCamera, newCamera;
-		bool oldPrimary, newPrimary;
-	};
+            asset.params.wrap = oldWrap;
+            asset.params.minFilter = oldMinFilter;
+            asset.params.magFilter = oldMagFilter;
 
-	class TextureAssetEditAction : public ReversableAction
-	{
-	public:
-		virtual void Reverse() override
-		{
-			TextureAsset& asset = AssetManager::GetTexture(ID);
+            if (oldFormat != asset.params.format) {
+                asset.params.format = oldFormat;
+                asset.ptr = Texture::Create(asset.filepath, asset.params);
+                return;
+            }
 
-			asset.params.wrap = oldWrap;
-			asset.params.minFilter = oldMinFilter;
-			asset.params.magFilter = oldMagFilter;
+            asset.ptr->ResetParams(asset.params);
+        }
 
-			if (oldFormat != asset.params.format)
-			{
-				asset.params.format = oldFormat;
-				asset.ptr = Texture::Create(asset.filepath, asset.params);
-				return;
-			}
+        virtual ReversableAction* ToReversed() override {
+            TextureAssetEditAction* action = new TextureAssetEditAction;
+            action->ID = ID;
 
-			asset.ptr->ResetParams(asset.params);
-		}
+            action->oldWrap = newWrap;
+            action->newWrap = oldWrap;
 
-		virtual ReversableAction* ToReversed() override
-		{
-			TextureAssetEditAction* action = new TextureAssetEditAction;
-			action->ID = ID;
+            action->oldMinFilter = newMinFilter;
+            action->newMinFilter = oldMinFilter;
 
-			action->oldWrap = newWrap;
-			action->newWrap = oldWrap;
+            action->oldMagFilter = newMagFilter;
+            action->newMagFilter = oldMagFilter;
 
-			action->oldMinFilter = newMinFilter;
-			action->newMinFilter = oldMinFilter;
+            action->oldFormat = newFormat;
+            action->newFormat = oldFormat;
 
-			action->oldMagFilter = newMagFilter;
-			action->newMagFilter = oldMagFilter;
+            return action;
+        }
 
-			action->oldFormat = newFormat;
-			action->newFormat = oldFormat;
+        uint32_t ID;
+        TextureWrap oldWrap, newWrap;
+        TextureFilter oldMinFilter, newMinFilter;
+        TextureFilter oldMagFilter, newMagFilter;
+        TextureFormat oldFormat, newFormat;
+    };
 
-			return action;
-		}
-
-		uint32_t ID;
-		TextureWrap oldWrap, newWrap;
-		TextureFilter oldMinFilter, newMinFilter;
-		TextureFilter oldMagFilter, newMagFilter;
-		TextureFormat oldFormat, newFormat;
-	};
-
-	// TODO: Adding/removing components undo/redo
-}
+    // TODO: Adding/removing components undo/redo
+} // namespace Cherry

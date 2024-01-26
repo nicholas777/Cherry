@@ -2,8 +2,7 @@
 
 #include "system/systemInfo.h"
 
-namespace Cherry
-{
+namespace Cherry {
     class LinuxSystemInfoLoader : public SystemInfoLoader
     {
     protected:

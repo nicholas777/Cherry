@@ -2,32 +2,32 @@
 
 #include <cherry.h>
 
-namespace Cherry
-{
-	class PropertiesPanel
-	{
-	public:
-		PropertiesPanel();
-		
-		void SetEntity(const Entity& e);
-		Entity GetEntity() { return m_Current; };
+namespace Cherry {
+    class PropertiesPanel
+    {
+    public:
+        PropertiesPanel();
 
-		void SetAsset(Asset* a);
-		void OnUpdate(bool runtime);
+        void SetEntity(const Entity& e);
 
-	private:
-		Entity m_Current;
-		Asset* m_Asset;
+        Entity GetEntity() { return m_Current; };
 
-		int m_Mode = 0;
+        void SetAsset(Asset* a);
+        void OnUpdate(bool runtime);
 
-		bool m_UseTexture;
+    private:
+        Entity m_Current;
+        Asset* m_Asset;
 
-		void DrawEntity(bool runtime);
-		void DrawAsset();
+        int m_Mode = 0;
 
-		void DrawTextureAsset();
-		void DrawSceneAsset();
-		void DrawScriptAsset();
-	};
-}
+        bool m_UseTexture;
+
+        void DrawEntity(bool runtime);
+        void DrawAsset();
+
+        void DrawTextureAsset();
+        void DrawSceneAsset();
+        void DrawScriptAsset();
+    };
+} // namespace Cherry

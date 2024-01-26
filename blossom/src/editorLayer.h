@@ -1,89 +1,81 @@
 #pragma once
 
 #include "cherry.h"
-#include "panels/sceneHierarchyPanel.h"
-#include "panels/propertiesPanel.h"
-#include "panels/contentBrowserPanel.h"
 #include "editorAction.h"
+#include "panels/contentBrowserPanel.h"
+#include "panels/propertiesPanel.h"
+#include "panels/sceneHierarchyPanel.h"
 
-#include <filesystem>
 #include <FileWatch.hpp>
+#include <filesystem>
 
-namespace Cherry
-{
-	enum class EditorState
-	{
-		None = 0,
-		Edit,
-		Runtime
-	};
+namespace Cherry {
+    enum class EditorState { None = 0, Edit, Runtime };
 
-	class EditorLayer : public Layer
-	{
-	public:
-		EditorLayer()
-			: Layer("EditorLayer") {};
-		virtual ~EditorLayer() override;
+    class EditorLayer : public Layer
+    {
+    public:
+        EditorLayer(): Layer("EditorLayer"){};
+        virtual ~EditorLayer() override;
 
-		virtual void OnAttach() override;
-		virtual void OnDetach() override;
-		virtual void OnUpdate(const Timestep& delta) override;
+        virtual void OnAttach() override;
+        virtual void OnDetach() override;
+        virtual void OnUpdate(const Timestep& delta) override;
 
-		virtual void OnEvent(const Event& e) override;
+        virtual void OnEvent(const Event& e) override;
 
-		virtual void OnImGuiRender() override;
+        virtual void OnImGuiRender() override;
 
-		static void SelectEntity(const Entity& entity);
-		static void SelectAsset(Asset* asset);
-		static void SelectScene(Scene* asset, const std::string& path);
-		static void ToggleRuntime();
+        static void SelectEntity(const Entity& entity);
+        static void SelectAsset(Asset* asset);
+        static void SelectScene(Scene* asset, const std::string& path);
+        static void ToggleRuntime();
 
-		static void RegisterAction(ReversableAction* action);
-		static void UndoAction();
-		static void RedoAction();
+        static void RegisterAction(ReversableAction* action);
+        static void UndoAction();
+        static void RedoAction();
 
-	private:
+    private:
+        static std::vector<ReversableAction*> m_ActionsToUndo;
+        static std::vector<ReversableAction*> m_ActionsToRedo;
 
-		static std::vector<ReversableAction*> m_ActionsToUndo;
-		static std::vector<ReversableAction*> m_ActionsToRedo;
+        static Scoped<SceneHierarchyPanel> m_SceneHierarchyPanel;
+        static Scoped<PropertiesPanel> m_PropertiesPanel;
+        static Scoped<ContentBrowserPanel> m_ContentBrowserPanel;
 
-		static Scoped<SceneHierarchyPanel> m_SceneHierarchyPanel;
-		static Scoped<PropertiesPanel> m_PropertiesPanel;
-		static Scoped<ContentBrowserPanel> m_ContentBrowserPanel;
+        static std::string m_ProjectPath;
 
-		static std::string m_ProjectPath;
+        static Scene* m_Scene;
+        static Scene* m_RuntimeScene;
+        static std::string m_ScenePath;
+        static EditorState m_State;
 
-		static Scene* m_Scene;
-		static Scene* m_RuntimeScene;
-		static std::string m_ScenePath;
-		static EditorState m_State;
+        Scoped<Framebuffer> m_Framebuffer;
+        bool m_EditorChanged = true;
 
-		Scoped<Framebuffer> m_Framebuffer;
-		bool m_EditorChanged = true;
+        Vector2f m_ViewportPanelSize;
+        Vector2f m_ViewportPanelPos;
 
-		Vector2f m_ViewportPanelSize;
-		Vector2f m_ViewportPanelPos;
+        bool m_EntitySelected = false;
+        static bool m_IsRuntime;
+        StaticCamera m_EditorCamera;
+        Shared<Texture> m_PlayButton, m_PauseButton;
 
-		bool m_EntitySelected = false;
-		static bool m_IsRuntime;
-		StaticCamera m_EditorCamera;
-		Shared<Texture> m_PlayButton, m_PauseButton;
+        filewatch::FileWatch<std::string>* m_Watcher;
 
-		filewatch::FileWatch<std::string>* m_Watcher;
+        static Entity m_SelectedEntity;
 
-		static Entity m_SelectedEntity;
-
-		Shared<Texture> m_RedArrow, m_GreenArrow;
-		Vector2i m_GizmoStart, m_GizmoOffset;
-		bool m_GizmoSelected = false;
-		int m_GizmoType = 0;
-		Vector2f m_GizmosPrevTranslation;
+        Shared<Texture> m_RedArrow, m_GreenArrow;
+        Vector2i m_GizmoStart, m_GizmoOffset;
+        bool m_GizmoSelected = false;
+        int m_GizmoType = 0;
+        Vector2f m_GizmosPrevTranslation;
 
         void NewFile();
-		void OpenFile();
-		void SaveFile();
-		void SaveFileAs();
+        void OpenFile();
+        void SaveFile();
+        void SaveFileAs();
 
-		void ReloadAssets();
-	};
-}
+        void ReloadAssets();
+    };
+} // namespace Cherry

@@ -1,10 +1,7 @@
-#include "epch.h"
 #include "linuxSystemInfoLoader.h"
 
-namespace Cherry
-{
-    void LinuxSystemInfoLoader::LoadSystemInfoImpl()
-    {
-        
-    }
+#include "epch.h"
+
+namespace Cherry {
+    void LinuxSystemInfoLoader::LoadSystemInfoImpl() {}
 }

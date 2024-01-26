@@ -1,92 +1,79 @@
-#include "epch.h"
-#include "linuxWindow.h"
-#include "core/log.h"
-#include "events/eventListener.h"
-#include "events/event.h"
 #include "core/application.h"
+#include "core/keyCodes.h"
+#include "core/log.h"
+#include "core/mouseButtonCodes.h"
+#include "epch.h"
+#include "events/event.h"
+#include "events/eventListener.h"
+#include "linuxWindow.h"
 #include "renderer/renderCommand.h"
 
-#include "core/keyCodes.h"
-#include "core/mouseButtonCodes.h"
-
-namespace Cherry
-{
+namespace Cherry {
     static bool GLFWInit = false;
 
     void LinuxWindow::ErrorCallback(int error, const char* msg) {
-        Application::GetApplication().OnEvent(GameErrorEvent((std::string("GLFW ERROR: ") + std::string(msg)).c_str()));
+        Application::GetApplication().OnEvent(
+            GameErrorEvent((std::string("GLFW ERROR: ") + std::string(msg)).c_str()));
     }
 
-    void LinuxWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-    {
-        switch (action)
-        {
-        case GLFW_PRESS:
-            Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), false));
-            break;
-        case GLFW_RELEASE:
-            Application::GetApplication().OnEvent(KeyReleaseEvent(static_cast<Key>(key)));
-            break;
-        case GLFW_REPEAT:
-            Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), true));
-            break;
+    void LinuxWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+        switch (action) {
+            case GLFW_PRESS:
+                Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), false));
+                break;
+            case GLFW_RELEASE:
+                Application::GetApplication().OnEvent(KeyReleaseEvent(static_cast<Key>(key)));
+                break;
+            case GLFW_REPEAT:
+                Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), true));
+                break;
         }
     }
 
-    void LinuxWindow::MouseMoveCallback(GLFWwindow* window, double xpos, double ypos)
-    {
+    void LinuxWindow::MouseMoveCallback(GLFWwindow* window, double xpos, double ypos) {
         Application::GetApplication().OnEvent(MouseMoveEvent(int(xpos), int(ypos)));
     }
 
-    void LinuxWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-    {
-        switch (action)
-        {
-        case GLFW_PRESS:
-            Application::GetApplication().OnEvent(MouseClickEvent(static_cast<MouseButton>(button)));
-            break;
-        case GLFW_RELEASE:
-            Application::GetApplication().OnEvent(MouseReleaseEvent(static_cast<MouseButton>(button)));
-            break;
+    void LinuxWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+        switch (action) {
+            case GLFW_PRESS:
+                Application::GetApplication().OnEvent(
+                    MouseClickEvent(static_cast<MouseButton>(button)));
+                break;
+            case GLFW_RELEASE:
+                Application::GetApplication().OnEvent(
+                    MouseReleaseEvent(static_cast<MouseButton>(button)));
+                break;
         }
     }
 
-    void LinuxWindow::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
-    {
+    void LinuxWindow::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
         Application::GetApplication().OnEvent(MouseScrollEvent((int)yoffset));
     }
 
-    void LinuxWindow::WindowCloseCallback(GLFWwindow* window)
-    {
+    void LinuxWindow::WindowCloseCallback(GLFWwindow* window) {
         Application::GetApplication().OnEvent(WindowCloseEvent());
         Application::GetApplication().OnWindowClose();
         CH_INFO("window closing");
     }
 
-    void LinuxWindow::WindowResizeCallback(GLFWwindow* window, int width, int height)
-    {
+    void LinuxWindow::WindowResizeCallback(GLFWwindow* window, int width, int height) {
         Application::GetApplication().OnEvent(WindowResizeEvent(width, height));
         Application::GetApplication().OnWindowResize(width, height);
     }
-    
-    void LinuxWindow::WindowFocusCallback(GLFWwindow* window, int focused)
-    {
-        if (focused)
-        {
+
+    void LinuxWindow::WindowFocusCallback(GLFWwindow* window, int focused) {
+        if (focused) {
             Application::GetApplication().OnEvent(WindowFocusEvent());
-        }
-        else
-        {
+        } else {
             Application::GetApplication().OnEvent(WindowUnfocusEvent());
         }
     }
 
-    LinuxWindow::LinuxWindow(WindowData data)
-    {
+    LinuxWindow::LinuxWindow(WindowData data) {
         m_Data = data;
 
-        if (!GLFWInit)
-        {
+        if (!GLFWInit) {
             int result = glfwInit();
             CH_ASSERT(result, "Couldn't initialize GLFW");
 
@@ -95,7 +82,8 @@ namespace Cherry
             GLFWInit = true;
         }
 
-        m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+        m_Window =
+            glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
         m_Context = RenderingContext::Create(m_Window);
         m_Context->Init();
 
@@ -114,33 +102,28 @@ namespace Cherry
         glfwSetWindowCloseCallback(m_Window, WindowCloseCallback);
         glfwSetWindowFocusCallback(m_Window, WindowFocusCallback);
     }
-    
-    LinuxWindow::~LinuxWindow()
-    {
+
+    LinuxWindow::~LinuxWindow() {
         delete m_Window;
     }
 
-    double LinuxWindow::GetTime()
-    {
+    double LinuxWindow::GetTime() {
         return glfwGetTime();
     }
 
-    void LinuxWindow::OnUpdate()
-    {
+    void LinuxWindow::OnUpdate() {
         glfwPollEvents();
         glfwSwapBuffers(m_Window);
     }
 
-    void LinuxWindow::OnResize(int width, int height)
-    {
+    void LinuxWindow::OnResize(int width, int height) {
         m_Data.Width = width;
         m_Data.Height = height;
 
         RenderCommand::SetViewport(0, 0, width, height);
     }
 
-    void LinuxWindow::SetVSync(bool vsync)
-    {
+    void LinuxWindow::SetVSync(bool vsync) {
         if (vsync)
             glfwSwapInterval(1);
         else
@@ -150,7 +133,6 @@ namespace Cherry
     }
 }
 
-Cherry::Window* Cherry::Window::Create(WindowData data)
-{
+Cherry::Window* Cherry::Window::Create(WindowData data) {
     return new LinuxWindow(data);
 }

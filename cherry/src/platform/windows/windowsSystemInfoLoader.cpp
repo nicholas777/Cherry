@@ -1,11 +1,9 @@
-#include "epch.h"
 #include "windowsSystemInfoLoader.h"
+
+#include "epch.h"
+
 #include <Windows.h>
 
-namespace Cherry
-{
-	void WindowsSystemInfoLoader::LoadSystemInfoImpl()
-	{
-		
-	}
+namespace Cherry {
+    void WindowsSystemInfoLoader::LoadSystemInfoImpl() {}
 }

@@ -1,15 +1,15 @@
 #include "epch.h"
-#include "systemInfo.h"
 #include "fileDialogs.h"
+#include "systemInfo.h"
 
 #ifdef CH_PLATFORM_LINUX
-#include "platform/linux/linuxSystemInfoLoader.h"
-#include "platform/linux/linuxFileDialogs.h"
+    #include "platform/linux/linuxFileDialogs.h"
+    #include "platform/linux/linuxSystemInfoLoader.h"
 #endif
 
 #ifdef CH_PLATFORM_WINDOWS
-#include "platform/windows/windowsSystemInfoLoader.h"
-#include "platform/windows/windowsFileDialogs.h"
+    #include "platform/windows/windowsFileDialogs.h"
+    #include "platform/windows/windowsSystemInfoLoader.h"
 #endif
 
 namespace Cherry {

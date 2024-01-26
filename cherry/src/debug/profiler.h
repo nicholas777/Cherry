@@ -3,8 +3,7 @@
 #include <chrono>
 #include <sstream>
 
-namespace Cherry
-{
+namespace Cherry {
 
     class Profiler
     {
@@ -14,8 +13,7 @@ namespace Cherry
 
         static void WriteInstrumentationData(const char* name, long long start, long long end);
     private:
-        struct InstrumentationSession
-        {
+        struct InstrumentationSession {
             const char* Name;
         };
 
@@ -26,26 +24,26 @@ namespace Cherry
     class InstrumentationTimer
     {
     public:
-        InstrumentationTimer(const char* name)
-        {
+        InstrumentationTimer(const char* name) {
             m_Name = name;
             m_Start = std::chrono::high_resolution_clock::now();
         }
 
-        ~InstrumentationTimer()
-        {
+        ~InstrumentationTimer() {
             if (m_Running)
                 Stop();
         }
 
-        void Stop()
-        {
+        void Stop() {
             m_Running = false;
             auto end = std::chrono::high_resolution_clock::now();
 
-
-            long long startPoint = std::chrono::time_point_cast<std::chrono::microseconds>(m_Start).time_since_epoch().count();
-            long long endPoint = std::chrono::time_point_cast<std::chrono::microseconds>(end).time_since_epoch().count();
+            long long startPoint = std::chrono::time_point_cast<std::chrono::microseconds>(m_Start)
+                                       .time_since_epoch()
+                                       .count();
+            long long endPoint = std::chrono::time_point_cast<std::chrono::microseconds>(end)
+                                     .time_since_epoch()
+                                     .count();
 
             Profiler::WriteInstrumentationData(m_Name, startPoint, endPoint);
         }
@@ -56,15 +54,16 @@ namespace Cherry
         std::chrono::high_resolution_clock::time_point m_Start;
     };
 
-    #if CH_ENABLE_PROFILER == 1
-        #define CH_PROFILE_SCOPE_LINE2(name, line) Cherry::InstrumentationTimer ch_inst_timer##line(name)
-        #define CH_PROFILE_SCOPE_LINE(name, line) CH_PROFILE_SCOPE_LINE2(name, line)
-        #define CH_PROFILE_SCOPE(name) CH_PROFILE_SCOPE_LINE(name, __LINE__)
-        #define CH_PROFILE_FUNC() CH_PROFILE_SCOPE(__PRETTY_FUNCTION__)
-    #else
-        #define CH_PROFILE_SCOPE_LINE2(name, line)
-        #define CH_PROFILE_SCOPE_LINE(name, line)
-        #define CH_PROFILE_SCOPE(name)
-        #define CH_PROFILE_FUNC()
-    #endif
+#if CH_ENABLE_PROFILER == 1
+    #define CH_PROFILE_SCOPE_LINE2(name, line) \
+        Cherry::InstrumentationTimer ch_inst_timer##line(name)
+    #define CH_PROFILE_SCOPE_LINE(name, line) CH_PROFILE_SCOPE_LINE2(name, line)
+    #define CH_PROFILE_SCOPE(name)            CH_PROFILE_SCOPE_LINE(name, __LINE__)
+    #define CH_PROFILE_FUNC()                 CH_PROFILE_SCOPE(__PRETTY_FUNCTION__)
+#else
+    #define CH_PROFILE_SCOPE_LINE2(name, line)
+    #define CH_PROFILE_SCOPE_LINE(name, line)
+    #define CH_PROFILE_SCOPE(name)
+    #define CH_PROFILE_FUNC()
+#endif
 }

@@ -1,15 +1,13 @@
-#include "epch.h"
-
 #include "log.h"
+
 #include "debug/profiler.h"
+#include "epch.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-namespace Cherry
-{
+namespace Cherry {
     std::shared_ptr<spdlog::logger> Log::m_ClientLogger;
-    
-    void Log::Init(const std::string& appName)
-    {
+
+    void Log::Init(const std::string& appName) {
         CH_PROFILE_FUNC();
 
         spdlog::set_pattern("%^[%H:%M:%S] [%l] %n: %v´%$");

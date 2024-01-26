@@ -1,15 +1,12 @@
 #pragma once
 
 #include "core/pointer.h"
+#include "freetype-gl.h"
 #include "renderer/texture.h"
 
-#include "freetype-gl.h"
+namespace Cherry {
 
-namespace Cherry
-{
-
-    struct Character
-    {
+    struct Character {
         SubTexture texture;
         Vector2f bearing;
         Vector2f size;
@@ -18,7 +15,6 @@ namespace Cherry
         Character() = default;
     };
 
-    
     class Font
     {
     public:
@@ -30,7 +26,8 @@ namespace Cherry
         float GetWidth(std::string string);
 
         void RenderText(const Vector2f& pos, const std::string& text);
-        void RenderText(const Vector2f& pos, const std::string& text, const Vector4f& color, const Vector2f& scale);
+        void RenderText(const Vector2f& pos, const std::string& text, const Vector4f& color,
+                        const Vector2f& scale);
 
     private:
         texture_atlas_t* m_FtTexture;
@@ -40,6 +37,5 @@ namespace Cherry
         std::unordered_map<char, Character> m_Characters;
 
         uint32_t m_FontSize;
-
     };
 }

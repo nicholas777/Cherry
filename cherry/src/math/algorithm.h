@@ -2,28 +2,21 @@
 
 #include "matrix.h"
 
-namespace Cherry
-{
-    template <typename T>
-    static T determinant(Matrix2x2<T> m)
-    {
+namespace Cherry {
+    template<typename T>
+    static T determinant(Matrix2x2<T> m) {
         return m[0][0] * m[1][1] - m[1][0] * m[0][1];
     }
 
-    template <typename T>
-    static T determinant(Matrix3x3<T> m)
-    {
-        return    m[0][0] * m[1][1] * m[2][2] +
-            m[1][2] * m[2][3] * m[3][1] +
-            m[1][3] * m[2][1] * m[3][2] -
-            m[1][3] * m[2][2] * m[3][1] -
-            m[1][2] * m[2][1] * m[3][3] -
-            m[1][1] * m[2][3] * m[3][2];
+    template<typename T>
+    static T determinant(Matrix3x3<T> m) {
+        return m[0][0] * m[1][1] * m[2][2] + m[1][2] * m[2][3] * m[3][1] +
+               m[1][3] * m[2][1] * m[3][2] - m[1][3] * m[2][2] * m[3][1] -
+               m[1][2] * m[2][1] * m[3][3] - m[1][1] * m[2][3] * m[3][2];
     }
 
-    template <typename T>
-    static T determinant(Matrix4x4<T> m)
-    {
+    template<typename T>
+    static T determinant(Matrix4x4<T> m) {
         T SubFactor00 = m[2][2] * m[3][3] - m[3][2] * m[2][3];
         T SubFactor01 = m[2][1] * m[3][3] - m[3][1] * m[2][3];
         T SubFactor02 = m[2][1] * m[3][2] - m[3][1] * m[2][2];
@@ -31,33 +24,25 @@ namespace Cherry
         T SubFactor04 = m[2][0] * m[3][2] - m[3][0] * m[2][2];
         T SubFactor05 = m[2][0] * m[3][1] - m[3][0] * m[2][1];
 
-        Vector4<T> DetCof(
-            +(m[1][1] * SubFactor00 - m[1][2] * SubFactor01 + m[1][3] * SubFactor02),
-            -(m[1][0] * SubFactor00 - m[1][2] * SubFactor03 + m[1][3] * SubFactor04),
-            +(m[1][0] * SubFactor01 - m[1][1] * SubFactor03 + m[1][3] * SubFactor05),
-            -(m[1][0] * SubFactor02 - m[1][1] * SubFactor04 + m[1][2] * SubFactor05));
+        Vector4<T> DetCof(+(m[1][1] * SubFactor00 - m[1][2] * SubFactor01 + m[1][3] * SubFactor02),
+                          -(m[1][0] * SubFactor00 - m[1][2] * SubFactor03 + m[1][3] * SubFactor04),
+                          +(m[1][0] * SubFactor01 - m[1][1] * SubFactor03 + m[1][3] * SubFactor05),
+                          -(m[1][0] * SubFactor02 - m[1][1] * SubFactor04 + m[1][2] * SubFactor05));
 
-        return
-            m[0][0] * DetCof[0] + m[0][1] * DetCof[1] +
-            m[0][2] * DetCof[2] + m[0][3] * DetCof[3];
+        return m[0][0] * DetCof[0] + m[0][1] * DetCof[1] + m[0][2] * DetCof[2] +
+               m[0][3] * DetCof[3];
     }
 
-    template <typename T>
-    static Matrix2x2<T> inverse(Matrix2x2<T> m)
-    {
+    template<typename T>
+    static Matrix2x2<T> inverse(Matrix2x2<T> m) {
         T OneOverDet = 1 / det(m);
 
-        return Matrix2x2<T>(
-            m[1][1] * OneOverDet,
-            -m[0][1] * OneOverDet,
-            -m[1][0] * OneOverDet,
-            m[0][0] * OneOverDet
-            );
+        return Matrix2x2<T>(m[1][1] * OneOverDet, -m[0][1] * OneOverDet, -m[1][0] * OneOverDet,
+                            m[0][0] * OneOverDet);
     }
 
-    template <typename T>
-    static Matrix3x3<T> inverse(Matrix3x3<T> m)
-    {
+    template<typename T>
+    static Matrix3x3<T> inverse(Matrix3x3<T> m) {
         T OneOverDet = 1 / det(m);
 
         Matrix3x3<T> Inverse;
@@ -72,9 +57,8 @@ namespace Cherry
         Inverse[2][2] = +(m[0][0] * m[1][1] - m[1][0] * m[0][1]) * OneOverDet;
     }
 
-    template <typename T>
-    static Matrix4x4<T> inverse(Matrix4x4<T> m)
-    {
+    template<typename T>
+    static Matrix4x4<T> inverse(Matrix4x4<T> m) {
 
         T Coef00 = m[2][2] * m[3][3] - m[3][2] * m[2][3];
         T Coef02 = m[1][2] * m[3][3] - m[3][2] * m[1][3];
@@ -134,81 +118,58 @@ namespace Cherry
     // NORMALIZE
 
     template<typename T>
-    static Vector2<T> normalize(Vector2<T> vec)
-    {
+    static Vector2<T> normalize(Vector2<T> vec) {
         return vec / mag(vec);
     }
 
     template<typename T>
-    static Vector3<float> normalize(Vector3<T> vec)
-    {
+    static Vector3<float> normalize(Vector3<T> vec) {
         return Vector3<float>((float)vec.x, (float)vec.y, (float)vec.z) / mag(vec);
     }
 
     template<typename T>
-    static Vector4<T> normalize(Vector4<T> vec)
-    {
+    static Vector4<T> normalize(Vector4<T> vec) {
         return vec / mag(vec);
     }
 
     // DOT
 
     template<typename T>
-    static T dot(Vector2<T> vec1, Vector2<T> vec2)
-    {
-        return
-            vec1.x * vec2.x +
-            vec1.y * vec2.y;
+    static T dot(Vector2<T> vec1, Vector2<T> vec2) {
+        return vec1.x * vec2.x + vec1.y * vec2.y;
     }
 
     template<typename T>
-    static T dot(Vector3<T> vec1, Vector3<T> vec2)
-    {
-        return
-            vec1.x * vec2.x +
-            vec1.y * vec2.y +
-            vec1.z * vec2.z;
+    static T dot(Vector3<T> vec1, Vector3<T> vec2) {
+        return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
     }
 
     template<typename T>
-    static T dot(Vector4<T> vec1, Vector4<T> vec2)
-    {
-        return
-            vec1.x * vec2.x +
-            vec1.y * vec2.y +
-            vec1.z * vec2.z +
-            vec1.w * vec2.w;
+    static T dot(Vector4<T> vec1, Vector4<T> vec2) {
+        return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z + vec1.w * vec2.w;
     }
 
     // CROSS
 
-    template <typename T>
-    static Vector3<T> cross(Vector3<T> x, Vector3<T> y)
-    {
-        return Vector3<T>(
-            x.y * y.z - y.y * x.z,
-            x.z * y.x - y.z * x.x,
-            x.x * y.y - y.x * x.y
-            );
+    template<typename T>
+    static Vector3<T> cross(Vector3<T> x, Vector3<T> y) {
+        return Vector3<T>(x.y * y.z - y.y * x.z, x.z * y.x - y.z * x.x, x.x * y.y - y.x * x.y);
     }
 
     // MAGNITUDE
 
-    template <typename T>
-    static float mag(Vector2<T> vec)
-    {
+    template<typename T>
+    static float mag(Vector2<T> vec) {
         return sqrt(vec.x * vec.x + vec.y * vec.y);
     }
 
-    template <typename T>
-    static float mag(Vector3<T> vec)
-    {
+    template<typename T>
+    static float mag(Vector3<T> vec) {
         return sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
     }
 
-    template <typename T>
-    static float mag(Vector4<T> vec)
-    {
+    template<typename T>
+    static float mag(Vector4<T> vec) {
         return sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
     }
 

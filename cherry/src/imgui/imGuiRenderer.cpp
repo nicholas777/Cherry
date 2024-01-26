@@ -1,19 +1,17 @@
-#include "epch.h"
-
 #include "imGuiRenderer.h"
+
 #include "core/application.h"
 #include "debug/profiler.h"
+#include "epch.h"
 
+#include <GLFW/glfw3.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
-#include <GLFW/glfw3.h>
 // #include <glad/gl.h>
 
-namespace Cherry
-{
-    void ImGuiRenderer::OnInit()
-    {
+namespace Cherry {
+    void ImGuiRenderer::OnInit() {
         CH_PROFILE_FUNC();
 
         IMGUI_CHECKVERSION();
@@ -34,8 +32,7 @@ namespace Cherry
         ImGui::StyleColorsDark();
 
         ImGuiStyle& style = ImGui::GetStyle();
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             style.WindowRounding = 0.0f;
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
@@ -76,34 +73,31 @@ namespace Cherry
         ImGui_ImplOpenGL3_Init("#version 330 core");
     }
 
-    void ImGuiRenderer::OnShutdown()
-    {
+    void ImGuiRenderer::OnShutdown() {
         CH_PROFILE_FUNC();
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
 
-    void ImGuiRenderer::Begin()
-    {
+    void ImGuiRenderer::Begin() {
         CH_PROFILE_FUNC();
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
     }
 
-    void ImGuiRenderer::End()
-    {
+    void ImGuiRenderer::End() {
         CH_PROFILE_FUNC();
         ImGuiIO& io = ImGui::GetIO();
         Application& app = Application::GetApplication();
-        io.DisplaySize = ImVec2((float)app.GetWindow()->GetWidth(), (float)app.GetWindow()->GetHeight());
+        io.DisplaySize =
+            ImVec2((float)app.GetWindow()->GetWidth(), (float)app.GetWindow()->GetHeight());
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             GLFWwindow* Context = glfwGetCurrentContext();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();

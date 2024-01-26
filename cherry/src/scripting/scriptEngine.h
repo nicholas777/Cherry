@@ -1,13 +1,9 @@
 #pragma once
 
-#include "core/pointer.h"
-#include "script.h"
-
-#include <lualib.h>
 #include <entt/entt.hpp>
+#include <lualib.h>
 
-namespace Cherry 
-{
+namespace Cherry {
     class Entity;
     class Scene;
 
@@ -24,8 +20,7 @@ namespace Cherry
         static void UpdateScriptedEntities(float delta);
 
     private:
-        struct ScriptedEntity
-        {
+        struct ScriptedEntity {
             OnCreateFunc OnCreate = nullptr;
             OnUpdateFunc OnUpdate = nullptr;
             OnDestroyFunc OnDestroy = nullptr;

@@ -2,11 +2,10 @@
 
 #include "system/systemInfo.h"
 
-namespace Cherry
-{
-	class WindowsSystemInfoLoader : public SystemInfoLoader
-	{
-	protected:
-		virtual void LoadSystemInfoImpl() override;
-	};
+namespace Cherry {
+    class WindowsSystemInfoLoader : public SystemInfoLoader
+    {
+    protected:
+        virtual void LoadSystemInfoImpl() override;
+    };
 }

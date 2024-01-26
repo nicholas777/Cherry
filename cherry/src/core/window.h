@@ -1,24 +1,21 @@
 #pragma once
 
-namespace Cherry
-{
-    struct WindowData
-    {
+namespace Cherry {
+    struct WindowData {
         unsigned int Width, Height;
         std::string Title;
         bool VSync;
 
         WindowData(int width, int height, std::string title, bool vsync)
-            : Width(width), Height(height), Title(title), VSync(vsync) {};
+            : Width(width), Height(height), Title(title), VSync(vsync){};
 
-        WindowData()
-            : Width(600), Height(400), Title("Game"), VSync(true) {};
+        WindowData(): Width(600), Height(400), Title("Game"), VSync(true){};
     };
 
     class Window
     {
     public:
-        virtual ~Window() {};
+        virtual ~Window(){};
 
         virtual unsigned int GetWidth() const = 0;
         virtual unsigned int GetHeight() const = 0;

@@ -1,16 +1,15 @@
 #pragma once
 
 #ifdef CH_PLATFORM_WINDOWS
-	#include <Windows.h>
+    #include <Windows.h>
 #endif
 
-#include <fstream>
-#include <iostream>
-#include <utility>
-#include <memory>
 #include <algorithm>
+#include <fstream>
 #include <functional>
-
+#include <iostream>
+#include <memory>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <utility>
+#include <vector>

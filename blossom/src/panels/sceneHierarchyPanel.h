@@ -2,29 +2,26 @@
 
 #include "cherry.h"
 
-namespace Cherry
-{
+namespace Cherry {
 
-	class SceneHierarchyPanel
-	{
-	public:
-		SceneHierarchyPanel() = default;
-		SceneHierarchyPanel(Scene* scene);
-		~SceneHierarchyPanel();
+    class SceneHierarchyPanel
+    {
+    public:
+        SceneHierarchyPanel() = default;
+        SceneHierarchyPanel(Scene* scene);
+        ~SceneHierarchyPanel();
 
-		void SetScene(Scene* scene);
+        void SetScene(Scene* scene);
 
-		void OnUpdate();
+        void OnUpdate();
 
-	private:
-		Vector4f m_Color;
-		Shared<Font> m_Font;
+    private:
+        Vector4f m_Color;
+        Shared<Font> m_Font;
 
-		Scene* m_Scene;
+        Scene* m_Scene;
 
-		Entity m_SelectedEntity = Entity(entt::null, nullptr);
+        Entity m_SelectedEntity = Entity(entt::null, nullptr);
+    };
 
-		
-	};
-
-}
+} // namespace Cherry

@@ -1,16 +1,14 @@
-#include "epch.h"
-
 #include "renderer2D.h"
+
+#include "buffers.h"
+#include "debug/profiler.h"
+#include "epch.h"
+#include "renderCommand.h"
 #include "shader.h"
 #include "vertexArray.h"
-#include "buffers.h"
-#include "renderCommand.h"
-#include "debug/profiler.h"
 
-namespace Cherry
-{
-    struct RectVertex
-    {
+namespace Cherry {
+    struct RectVertex {
         Vector2f pos;
         Vector4f color;
         Vector2f texCoord;
@@ -19,12 +17,11 @@ namespace Cherry
         float entityID = -1.0;
     };
 
-    struct RendererData
-    {
-        const uint32_t MaxRects                  = 10000;
-        const uint32_t MaxVertices               = MaxRects * 4;
-        const uint32_t MaxIndices                = MaxRects * 6;
-        static const uint32_t MaxTextureSlots    = 16;
+    struct RendererData {
+        const uint32_t MaxRects = 10000;
+        const uint32_t MaxVertices = MaxRects * 4;
+        const uint32_t MaxIndices = MaxRects * 6;
+        static const uint32_t MaxTextureSlots = 16;
 
         Scoped<Shader> TextureShader;
         int Samplers[MaxTextureSlots];
@@ -49,17 +46,16 @@ namespace Cherry
 
     static RendererData* s_Data = new RendererData();
 
-    void Renderer2D::Init()
-    {
+    void Renderer2D::Init() {
         CH_PROFILE_FUNC();
 
         s_Data->RectBase = new RectVertex[s_Data->MaxVertices];
         s_Data->RectPtr = s_Data->RectBase;
 
         s_Data->RectVertices[0] = { -1.0f, -1.0f, 0.0f, 1.0f };
-        s_Data->RectVertices[1] = {  1.0f, -1.0f, 0.0f, 1.0f };
-        s_Data->RectVertices[2] = {  1.0f,  1.0f, 0.0f, 1.0f };
-        s_Data->RectVertices[3] = { -1.0f,  1.0f, 0.0f, 1.0f };
+        s_Data->RectVertices[1] = { 1.0f, -1.0f, 0.0f, 1.0f };
+        s_Data->RectVertices[2] = { 1.0f, 1.0f, 0.0f, 1.0f };
+        s_Data->RectVertices[3] = { -1.0f, 1.0f, 0.0f, 1.0f };
 
         s_Data->BatchVAO = VertexArray::Create();
         s_Data->BatchVAO->Bind();
@@ -67,11 +63,11 @@ namespace Cherry
         s_Data->BatchVBO = VertexBuffer::Create(s_Data->MaxVertices * sizeof(RectVertex));
 
         s_Data->BatchVBO->SetLayout({
-            { "position", ShaderDataType::Float2 },
-            { "color", ShaderDataType::Float4 },
-            { "UV", ShaderDataType::Float2 },
+            {"position",     ShaderDataType::Float2},
+            { "color",       ShaderDataType::Float4},
+            { "UV",          ShaderDataType::Float2},
             { "TextureSlot", ShaderDataType::Float },
-            { "EntityID", ShaderDataType::Float }
+            { "EntityID",    ShaderDataType::Float }
         });
 
         s_Data->BatchVAO->AddVertexBuffer(s_Data->BatchVBO.Get());
@@ -79,8 +75,7 @@ namespace Cherry
         uint32_t* indices = new uint32_t[s_Data->MaxIndices];
 
         uint32_t offset = 0;
-        for (uint32_t i = 0; i < s_Data->MaxIndices; i += 6)
-        {
+        for (uint32_t i = 0; i < s_Data->MaxIndices; i += 6) {
             indices[i + 0] = offset + 0;
             indices[i + 1] = offset + 1;
             indices[i + 2] = offset + 2;
@@ -98,9 +93,7 @@ namespace Cherry
 
         s_Data->TextureShader = Shader::Create("assets/BatchShader.glsl");
 
-        int Samplers[16] = {
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
-        };
+        int Samplers[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
         s_Data->TextureShader->Bind();
         s_Data->TextureShader->SetIntArray("u_Samplers", Samplers, 16);
@@ -113,13 +106,11 @@ namespace Cherry
         s_Data->TextureSlots[0] = s_Data->WhiteTexture.Get();
     }
 
-    void Renderer2D::Shutdown()
-    {
+    void Renderer2D::Shutdown() {
         delete s_Data;
     }
-    
-    void Renderer2D::Begin(const Matrix4x4f& proj, const Matrix4x4f& transform)
-    {
+
+    void Renderer2D::Begin(const Matrix4x4f& proj, const Matrix4x4f& transform) {
         CH_PROFILE_FUNC();
         s_Data->TextureShader->Bind();
 
@@ -129,8 +120,7 @@ namespace Cherry
         NewBatch();
     }
 
-    void Renderer2D::Begin()
-    {
+    void Renderer2D::Begin() {
         CH_PROFILE_FUNC();
         Matrix4x4f mat = Matrix4x4f();
         mat.SetIdentity();
@@ -140,24 +130,22 @@ namespace Cherry
         NewBatch();
     }
 
-    void Renderer2D::End()
-    {
+    void Renderer2D::End() {
         CH_PROFILE_FUNC();
         Flush();
     }
 
-    void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size, const Scoped<Texture>& texture)
-    {
+    void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size,
+                              const Scoped<Texture>& texture) {
         CH_PROFILE_FUNC();
-        static Vector2f* texCoords = new Vector2f[4] {
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
+        static Vector2f* texCoords = new Vector2f[4]{
+            {0.0f,  0.0f},
+            { 1.0f, 0.0f},
+            { 1.0f, 1.0f},
+            { 0.0f, 1.0f}
         };
 
-        if (s_Data->CurrentRects >= s_Data->MaxRects)
-        {
+        if (s_Data->CurrentRects >= s_Data->MaxRects) {
             Flush();
             NewBatch();
         }
@@ -167,8 +155,7 @@ namespace Cherry
         TransformationMatrix transform(position);
         transform.Scale(size);
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             s_Data->RectPtr->pos = transform * s_Data->RectVertices[i];
             s_Data->RectPtr->texCoord = texCoords[i];
             s_Data->RectPtr->color = { 1, 1, 1, 1 };
@@ -181,11 +168,10 @@ namespace Cherry
         s_Data->CurrentRects++;
     }
 
-    void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size, const SubTexture& texture)
-    {
+    void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size,
+                              const SubTexture& texture) {
         CH_PROFILE_FUNC();
-        if (s_Data->IndexCount >= s_Data->MaxIndices)
-        {
+        if (s_Data->IndexCount >= s_Data->MaxIndices) {
             Flush();
             NewBatch();
         }
@@ -195,8 +181,7 @@ namespace Cherry
         TransformationMatrix transform(position);
         transform.Scale(size);
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             s_Data->RectPtr->pos = transform * s_Data->RectVertices[i];
             s_Data->RectPtr->texCoord = texture.textureCoords[i];
             s_Data->RectPtr->color = { 1, 1, 1, 1 };
@@ -208,18 +193,17 @@ namespace Cherry
         s_Data->IndexCount += 6;
     }
 
-    void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size, const Vector4f& color)
-    {
+    void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size,
+                              const Vector4f& color) {
         CH_PROFILE_FUNC();
         static Vector2f* texCoords = new Vector2f[4]{
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
+            {0.0f,  0.0f},
+            { 1.0f, 0.0f},
+            { 1.0f, 1.0f},
+            { 0.0f, 1.0f}
         };
 
-        if (s_Data->IndexCount >= s_Data->MaxIndices)
-        {
+        if (s_Data->IndexCount >= s_Data->MaxIndices) {
             Flush();
             NewBatch();
         }
@@ -227,8 +211,7 @@ namespace Cherry
         TransformationMatrix transform(position);
         transform.Scale(size);
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             s_Data->RectPtr->pos = transform * s_Data->RectVertices[i];
             s_Data->RectPtr->texCoord = texCoords[i];
             s_Data->RectPtr->color = color;
@@ -240,26 +223,24 @@ namespace Cherry
         s_Data->IndexCount += 6;
     }
 
-    void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture, const Vector4f& color, int entityID)
-    {
+    void Renderer2D::DrawRect(const Matrix4x4f& transform, const Shared<Texture>& texture,
+                              const Vector4f& color, int entityID) {
         CH_PROFILE_FUNC();
         static Vector2f* texCoords = new Vector2f[4]{
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
+            {0.0f,  0.0f},
+            { 1.0f, 0.0f},
+            { 1.0f, 1.0f},
+            { 0.0f, 1.0f}
         };
 
-        if (s_Data->IndexCount >= s_Data->MaxIndices)
-        {
+        if (s_Data->IndexCount >= s_Data->MaxIndices) {
             Flush();
             NewBatch();
         }
 
         float textureIndex = GetTextureIndex(texture.Get());
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             s_Data->RectPtr->pos = transform * s_Data->RectVertices[i];
             s_Data->RectPtr->texCoord = texCoords[i];
             s_Data->RectPtr->color = color;
@@ -271,19 +252,17 @@ namespace Cherry
         s_Data->IndexCount += 6;
     }
 
-    void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture, const Vector4f& color, int entityID)
-    {
+    void Renderer2D::DrawRect(const Matrix4x4f& transform, const SubTexture& texture,
+                              const Vector4f& color, int entityID) {
         CH_PROFILE_FUNC();
-        if (s_Data->IndexCount >= s_Data->MaxIndices)
-        {
+        if (s_Data->IndexCount >= s_Data->MaxIndices) {
             Flush();
             NewBatch();
         }
 
         float textureIndex = GetTextureIndex(texture.texture.Get());
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             s_Data->RectPtr->pos = transform * s_Data->RectVertices[i];
             s_Data->RectPtr->texCoord = texture.textureCoords[i];
             s_Data->RectPtr->color = color;
@@ -295,26 +274,23 @@ namespace Cherry
         s_Data->IndexCount += 6;
     }
 
-    void Renderer2D::DrawRect(const Matrix4x4f& transform, const Vector4f& color, int entityID)
-    {
+    void Renderer2D::DrawRect(const Matrix4x4f& transform, const Vector4f& color, int entityID) {
         CH_PROFILE_FUNC();
         static Vector2f* texCoords = new Vector2f[4]{
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
+            {0.0f,  0.0f},
+            { 1.0f, 0.0f},
+            { 1.0f, 1.0f},
+            { 0.0f, 1.0f}
         };
 
-        if (s_Data->IndexCount >= s_Data->MaxIndices)
-        {
+        if (s_Data->IndexCount >= s_Data->MaxIndices) {
             Flush();
             NewBatch();
         }
 
         float textureIndex = 0;
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             s_Data->RectPtr->pos = transform * s_Data->RectVertices[i];
             s_Data->RectPtr->texCoord = texCoords[i];
             s_Data->RectPtr->color = color;
@@ -325,12 +301,11 @@ namespace Cherry
 
         s_Data->IndexCount += 6;
     }
-    
-    void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const Scoped<Texture>& texture)
-    {
+
+    void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size,
+                              const Scoped<Texture>& texture) {
         CH_PROFILE_FUNC();
-        if (s_Data->IndexCount >= s_Data->MaxIndices)
-        {
+        if (s_Data->IndexCount >= s_Data->MaxIndices) {
             Flush();
             NewBatch();
         }
@@ -338,18 +313,17 @@ namespace Cherry
         float textureIndex = GetTextureIndex(texture.Get());
 
         static Vector2f* texCoords = new Vector2f[4]{
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
+            {0.0f,  0.0f},
+            { 1.0f, 0.0f},
+            { 1.0f, 1.0f},
+            { 0.0f, 1.0f}
         };
 
         TransformationMatrix transform(position);
         transform.Scale(size);
         transform.Rotate(rotation);
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             s_Data->RectPtr->pos = transform * s_Data->RectVertices[i];
             s_Data->RectPtr->texCoord = texCoords[i];
             s_Data->RectPtr->color = { 1, 1, 1, 1 };
@@ -361,11 +335,10 @@ namespace Cherry
         s_Data->IndexCount += 6;
     }
 
-    void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const SubTexture& texture)
-    {
+    void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size,
+                              const SubTexture& texture) {
         CH_PROFILE_FUNC();
-        if (s_Data->IndexCount >= s_Data->MaxIndices)
-        {
+        if (s_Data->IndexCount >= s_Data->MaxIndices) {
             Flush();
             NewBatch();
         }
@@ -376,8 +349,7 @@ namespace Cherry
         transform.Scale(size);
         transform.Rotate(rotation);
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             s_Data->RectPtr->pos = transform * s_Data->RectVertices[i];
             s_Data->RectPtr->texCoord = texture.textureCoords[i];
             s_Data->RectPtr->color = { 1, 1, 1, 1 };
@@ -389,22 +361,21 @@ namespace Cherry
         s_Data->IndexCount += 6;
     }
 
-    void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size, const Vector4f& color)
-    {
+    void Renderer2D::DrawRect(const Vector2f& position, const float& rotation, const Vector2f& size,
+                              const Vector4f& color) {
         CH_PROFILE_FUNC();
         TransformationMatrix transform(position);
         transform.Scale(size);
         transform.Rotate(rotation);
 
         static Vector2f* texCoords = new Vector2f[4]{
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f }
+            {0.0f,  0.0f},
+            { 1.0f, 0.0f},
+            { 1.0f, 1.0f},
+            { 0.0f, 1.0f}
         };
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             s_Data->RectPtr->pos = transform * s_Data->RectVertices[i];
             s_Data->RectPtr->texCoord = texCoords[i];
             s_Data->RectPtr->color = color;
@@ -416,34 +387,29 @@ namespace Cherry
         s_Data->IndexCount += 6;
     }
 
-    void Renderer2D::DrawChar(const Vector2f& coord1, const Vector2f& coord2, const SubTexture& texture, const Vector4f& color)
-    {
+    void Renderer2D::DrawChar(const Vector2f& coord1, const Vector2f& coord2,
+                              const SubTexture& texture, const Vector4f& color) {
         CH_PROFILE_FUNC();
-        if (s_Data->IndexCount >= s_Data->MaxIndices)
-        {
+        if (s_Data->IndexCount >= s_Data->MaxIndices) {
             Flush();
             NewBatch();
         }
 
         float textureIndex = 0;
 
-        for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
-        {
-            if (texture.texture.Get() == s_Data->TextureSlots[i])
-            {
+        for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++) {
+            if (texture.texture.Get() == s_Data->TextureSlots[i]) {
                 textureIndex = i;
                 break;
             }
         }
 
-        if (textureIndex == 0.0)
-        {
-            if (s_Data->TextureSlotIndex >= RendererData::MaxTextureSlots)
-            {
+        if (textureIndex == 0.0) {
+            if (s_Data->TextureSlotIndex >= RendererData::MaxTextureSlots) {
                 Flush();
                 NewBatch();
             }
-            
+
             textureIndex = s_Data->TextureSlotIndex;
             s_Data->TextureSlots[textureIndex] = texture.texture.Get();
             s_Data->TextureSlotIndex++;
@@ -476,14 +442,12 @@ namespace Cherry
         s_Data->IndexCount += 6;
     }
 
-    void Renderer2D::Flush()
-    {
+    void Renderer2D::Flush() {
         CH_PROFILE_FUNC();
         uint32_t dataSize = (uint32_t)((uint8_t*)s_Data->RectPtr - (uint8_t*)s_Data->RectBase);
         s_Data->BatchVBO->InsertData(s_Data->RectBase, dataSize, 0);
 
-        for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
-        {
+        for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++) {
             s_Data->TextureSlots[i]->Bind(i);
         }
 
@@ -491,8 +455,7 @@ namespace Cherry
         RenderCommand::DrawElements(s_Data->BatchVAO.Get(), s_Data->IndexCount);
     }
 
-    void Renderer2D::NewBatch()
-    {
+    void Renderer2D::NewBatch() {
         s_Data->CurrentRects = 0;
         s_Data->IndexCount = 0;
 
@@ -500,21 +463,17 @@ namespace Cherry
         s_Data->TextureSlotIndex = 1;
     }
 
-    float Renderer2D::GetTextureIndex(Texture* ptr)
-    {
+    float Renderer2D::GetTextureIndex(Texture* ptr) {
         CH_PROFILE_FUNC();
 
-        for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
-        {
-            if (ptr == s_Data->TextureSlots[i])
-            {
+        for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++) {
+            if (ptr == s_Data->TextureSlots[i]) {
                 return i;
                 break;
             }
         }
 
-        if (s_Data->TextureSlotIndex >= RendererData::MaxTextureSlots)
-        {
+        if (s_Data->TextureSlotIndex >= RendererData::MaxTextureSlots) {
             Flush();
             NewBatch();
         }

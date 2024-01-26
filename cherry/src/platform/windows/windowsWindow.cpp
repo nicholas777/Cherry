@@ -1,161 +1,144 @@
-#include "epch.h"
-
 #include "windowsWindow.h"
-#include "core/log.h"
-#include "events/eventListener.h"
-#include "events/event.h"
+
 #include "core/application.h"
-#include "renderer/renderCommand.h"
-#include "debug/profiler.h"
-
 #include "core/keyCodes.h"
+#include "core/log.h"
 #include "core/mouseButtonCodes.h"
+#include "debug/profiler.h"
+#include "epch.h"
+#include "events/event.h"
+#include "events/eventListener.h"
+#include "renderer/renderCommand.h"
 
-namespace Cherry
-{
-	static bool GLFWInit = false;
+namespace Cherry {
+    static bool GLFWInit = false;
 
-	void WindowsWindow::ErrorCallback(int error, const char* msg) {
-		Application::GetApplication().OnEvent(GameErrorEvent((std::string("GLFW ERROR: ") + msg).c_str()));
-	}
+    void WindowsWindow::ErrorCallback(int error, const char* msg) {
+        Application::GetApplication().OnEvent(
+            GameErrorEvent((std::string("GLFW ERROR: ") + msg).c_str()));
+    }
 
-	void WindowsWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-	{
-		switch (action)
-		{
-		case GLFW_PRESS:
-			Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), false));
-			break;
-		case GLFW_RELEASE:
-			Application::GetApplication().OnEvent(KeyReleaseEvent(static_cast<Key>(key)));
-			break;
-		case GLFW_REPEAT:
-			Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), true));
-			break;
-		}
-	}
+    void WindowsWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action,
+                                    int mods) {
+        switch (action) {
+            case GLFW_PRESS:
+                Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), false));
+                break;
+            case GLFW_RELEASE:
+                Application::GetApplication().OnEvent(KeyReleaseEvent(static_cast<Key>(key)));
+                break;
+            case GLFW_REPEAT:
+                Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), true));
+                break;
+        }
+    }
 
-	void WindowsWindow::MouseMoveCallback(GLFWwindow* window, double xpos, double ypos)
-	{
-		Application::GetApplication().OnEvent(MouseMoveEvent(int(xpos), int(ypos)));
-	}
+    void WindowsWindow::MouseMoveCallback(GLFWwindow* window, double xpos, double ypos) {
+        Application::GetApplication().OnEvent(MouseMoveEvent(int(xpos), int(ypos)));
+    }
 
-	void WindowsWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-	{
-		switch (action)
-		{
-		case GLFW_PRESS:
-			Application::GetApplication().OnEvent(MouseClickEvent(static_cast<MouseButton>(button)));
-			break;
-		case GLFW_RELEASE:
-			Application::GetApplication().OnEvent(MouseReleaseEvent(static_cast<MouseButton>(button)));
-			break;
-		}
-	}
+    void WindowsWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+        switch (action) {
+            case GLFW_PRESS:
+                Application::GetApplication().OnEvent(
+                    MouseClickEvent(static_cast<MouseButton>(button)));
+                break;
+            case GLFW_RELEASE:
+                Application::GetApplication().OnEvent(
+                    MouseReleaseEvent(static_cast<MouseButton>(button)));
+                break;
+        }
+    }
 
-	void WindowsWindow::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
-	{
-		Application::GetApplication().OnEvent(MouseScrollEvent((int)yoffset));
-	}
+    void WindowsWindow::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+        Application::GetApplication().OnEvent(MouseScrollEvent((int)yoffset));
+    }
 
-	void WindowsWindow::WindowCloseCallback(GLFWwindow* window)
-	{
-		Application::GetApplication().OnEvent(WindowCloseEvent());
-		Application::GetApplication().OnWindowClose();
-	}
+    void WindowsWindow::WindowCloseCallback(GLFWwindow* window) {
+        Application::GetApplication().OnEvent(WindowCloseEvent());
+        Application::GetApplication().OnWindowClose();
+    }
 
-	void WindowsWindow::WindowResizeCallback(GLFWwindow* window, int width, int height)
-	{
-		Application::GetApplication().OnEvent(WindowResizeEvent(width, height));
-		Application::GetApplication().OnWindowResize(width, height);
-	}
-	
-	void WindowsWindow::WindowFocusCallback(GLFWwindow* window, int focused)
-	{
-		if (focused)
-		{
-			Application::GetApplication().OnEvent(WindowFocusEvent());
-		}
-		else
-		{
-			Application::GetApplication().OnEvent(WindowUnfocusEvent());
-		}
-	}
+    void WindowsWindow::WindowResizeCallback(GLFWwindow* window, int width, int height) {
+        Application::GetApplication().OnEvent(WindowResizeEvent(width, height));
+        Application::GetApplication().OnWindowResize(width, height);
+    }
 
-	WindowsWindow::WindowsWindow(WindowData data)
-	{
-		CH_PROFILE_FUNC();
+    void WindowsWindow::WindowFocusCallback(GLFWwindow* window, int focused) {
+        if (focused) {
+            Application::GetApplication().OnEvent(WindowFocusEvent());
+        } else {
+            Application::GetApplication().OnEvent(WindowUnfocusEvent());
+        }
+    }
 
-		m_Data = data;
+    WindowsWindow::WindowsWindow(WindowData data) {
+        CH_PROFILE_FUNC();
 
-		if (!GLFWInit)
-		{
-			int result = glfwInit();
-			CH_ASSERT(result, "Couldn't initialize GLFW");
+        m_Data = data;
 
-			glfwSetErrorCallback(WindowsWindow::ErrorCallback);
+        if (!GLFWInit) {
+            int result = glfwInit();
+            CH_ASSERT(result, "Couldn't initialize GLFW");
 
-			GLFWInit = true;
-		}
+            glfwSetErrorCallback(WindowsWindow::ErrorCallback);
 
-		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		m_Context = RenderingContext::Create(m_Window);
-		m_Context->Init();
+            GLFWInit = true;
+        }
 
-		Application::GetApplication().OnEvent(WindowOpenEvent());
+        m_Window =
+            glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+        m_Context = RenderingContext::Create(m_Window);
+        m_Context->Init();
 
-		CH_ASSERT(m_Window, "GLFW window is null");
-		SetVSync(true);
+        Application::GetApplication().OnEvent(WindowOpenEvent());
 
-		// callback functions
+        CH_ASSERT(m_Window, "GLFW window is null");
+        SetVSync(true);
 
-		glfwSetKeyCallback(m_Window, KeyCallback);
-		glfwSetCursorPosCallback(m_Window, MouseMoveCallback);
-		glfwSetMouseButtonCallback(m_Window, MouseButtonCallback);
-		glfwSetScrollCallback(m_Window, ScrollCallback);
-		glfwSetWindowSizeCallback(m_Window, WindowResizeCallback);
-		glfwSetWindowCloseCallback(m_Window, WindowCloseCallback);
-		glfwSetWindowFocusCallback(m_Window, WindowFocusCallback);
-	}
-	
-	WindowsWindow::~WindowsWindow()
-	{
-		delete m_Window;
-	}
+        // callback functions
 
-	double WindowsWindow::GetTime()
-	{
-		return glfwGetTime();
-	}
+        glfwSetKeyCallback(m_Window, KeyCallback);
+        glfwSetCursorPosCallback(m_Window, MouseMoveCallback);
+        glfwSetMouseButtonCallback(m_Window, MouseButtonCallback);
+        glfwSetScrollCallback(m_Window, ScrollCallback);
+        glfwSetWindowSizeCallback(m_Window, WindowResizeCallback);
+        glfwSetWindowCloseCallback(m_Window, WindowCloseCallback);
+        glfwSetWindowFocusCallback(m_Window, WindowFocusCallback);
+    }
 
-	void WindowsWindow::OnUpdate()
-	{
-		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
-	}
+    WindowsWindow::~WindowsWindow() {
+        delete m_Window;
+    }
 
-	void WindowsWindow::OnResize(int width, int height)
-	{
-		m_Data.Width = width;
-		m_Data.Height = height;
+    double WindowsWindow::GetTime() {
+        return glfwGetTime();
+    }
 
-		RenderCommand::SetViewport(0, 0, width, height);
-	}
+    void WindowsWindow::OnUpdate() {
+        glfwPollEvents();
+        glfwSwapBuffers(m_Window);
+    }
 
-	void WindowsWindow::SetVSync(bool vsync)
-	{
-		if (vsync)
-			glfwSwapInterval(1);
-		else
-			glfwSwapInterval(0);
+    void WindowsWindow::OnResize(int width, int height) {
+        m_Data.Width = width;
+        m_Data.Height = height;
 
-		m_Data.VSync = vsync;
-	}
+        RenderCommand::SetViewport(0, 0, width, height);
+    }
+
+    void WindowsWindow::SetVSync(bool vsync) {
+        if (vsync)
+            glfwSwapInterval(1);
+        else
+            glfwSwapInterval(0);
+
+        m_Data.VSync = vsync;
+    }
 }
 
 #ifdef CH_PLATFORM_WINDOWS
-	Cherry::Window* Cherry::Window::Create(WindowData data)
-	{
-		return new WindowsWindow(data);
-	}
+Cherry::Window* Cherry::Window::Create(WindowData data) {
+    return new WindowsWindow(data);
+}
 #endif

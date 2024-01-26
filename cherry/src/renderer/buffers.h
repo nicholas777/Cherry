@@ -2,11 +2,9 @@
 
 #include "core/pointer.h"
 
-namespace Cherry
-{
+namespace Cherry {
 
-    enum class ShaderDataType
-    {
+    enum class ShaderDataType {
         Float,
         Float2,
         Float3,
@@ -29,7 +27,7 @@ namespace Cherry
         uint32_t Size;
         uint32_t Offset;
         uint32_t ComponentCount;
-        
+
         BufferElement(std::string name, ShaderDataType type);
 
     private:
@@ -40,18 +38,17 @@ namespace Cherry
     {
     public:
         BufferLayout() {}
-        BufferLayout(std::initializer_list<BufferElement> elements)
-            : m_BufferElements(elements)
-        {
+
+        BufferLayout(std::initializer_list<BufferElement> elements): m_BufferElements(elements) {
             m_Stride = 0;
-            for (BufferElement& e : m_BufferElements)
-            {
+            for (BufferElement& e: m_BufferElements) {
                 e.Offset = m_Stride;
                 m_Stride += e.Size;
             }
         }
 
         inline int GetStride() { return m_Stride; }
+
         inline std::vector<BufferElement> GetBufferElements() { return m_BufferElements; };
     private:
         uint32_t m_Stride = 0;
@@ -75,7 +72,7 @@ namespace Cherry
         static Scoped<VertexBuffer> Create(float* data, uint32_t count);
         static Scoped<VertexBuffer> Create(float* data, uint32_t count, BufferLayout layout);
     };
-    
+
     class IndexBuffer
     {
     public:

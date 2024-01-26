@@ -1,15 +1,13 @@
 #pragma once
 
-#include "graphics/cameras/camera.h"
 #include "core/pointer.h"
 #include "core/timestep.h"
-#include "renderer/renderer2D.h"
-#include "graphics/cameras/staticCamera.h"
-
 #include "entt/entt.hpp"
+#include "graphics/cameras/camera.h"
+#include "graphics/cameras/staticCamera.h"
+#include "renderer/renderer2D.h"
 
-namespace Cherry
-{
+namespace Cherry {
     class Entity;
 
     class Scene

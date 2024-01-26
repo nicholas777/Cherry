@@ -4,34 +4,28 @@
 #include "core/entryPoint.h"
 #include "editorLayer.h"
 
-namespace Cherry
-{
+namespace Cherry {
 
-	// TODO: Editor configuration file
+    // TODO: Editor configuration file
 
-	class BlossomEditor : public Application
-	{
-	public:
-		BlossomEditor()
-		{
-			Configuration.Name = "Blossom Editor";
+    class BlossomEditor : public Application
+    {
+    public:
+        BlossomEditor() {
+            Configuration.Name = "Blossom Editor";
 
-			Configuration.WindowWidth = 1200;
-			Configuration.WindowHeight = 800;
-			Configuration.WindowTitle = "Blossom Editor";
-			Configuration.IsVSync = true;
+            Configuration.WindowWidth = 1200;
+            Configuration.WindowHeight = 800;
+            Configuration.WindowTitle = "Blossom Editor";
+            Configuration.IsVSync = true;
 
-			PushLayer(new EditorLayer());
-		}
+            PushLayer(new EditorLayer());
+        }
 
-		~BlossomEditor()
-		{
+        ~BlossomEditor() {}
+    };
 
-		}
-	};
-
-	Application* CreateApplication()
-	{
-		return new BlossomEditor();
-	}
-}
+    Application* CreateApplication() {
+        return new BlossomEditor();
+    }
+} // namespace Cherry

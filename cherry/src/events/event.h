@@ -1,211 +1,164 @@
 #pragma once
 
-#include "eventType.h"
 #include "core/core.h"
+#include "core/keyCodes.h"
 #include "core/log.h"
 #include "core/mouseButtonCodes.h"
-#include "core/keyCodes.h"
+#include "eventType.h"
 
-namespace Cherry
-{
-	struct Event
-	{
-	protected:
-		Event(EventType type, EventCategory category, const char* name)
-			: Type(type), Category(category), Name(name) {};
-	public:
+namespace Cherry {
+    struct Event {
+    protected:
+        Event(EventType type, EventCategory category, const char* name)
+            : Type(type), Category(category), Name(name){};
+    public:
 
-		EventType Type;
-		EventCategory Category;
-		std::string Name;
-		bool handled = false;
+        EventType Type;
+        EventCategory Category;
+        std::string Name;
+        bool handled = false;
 
-		EventType GetType() const { return Type; };
-		EventCategory GetCategory() const { return Category; };
-		std::string GetName() const { return Name; };
+        EventType GetType() const { return Type; };
 
-		virtual std::string ToString() const { return Name; };
-	};
+        EventCategory GetCategory() const { return Category; };
 
-	struct GameErrorEvent : public Event
-	{
-		GameErrorEvent(const char* message)
-			: Event(EventType::GameErrorEvent,
-					EventCategory::GameEvent,
-					"GameErrorEvent"), Message(message) {};
+        std::string GetName() const { return Name; };
 
-		const char* Message;
+        virtual std::string ToString() const { return Name; };
+    };
 
-		std::string ToString() const override { return Name + std::string(": ") + Message; };
-	};
+    struct GameErrorEvent : public Event {
+        GameErrorEvent(const char* message)
+            : Event(EventType::GameErrorEvent, EventCategory::GameEvent, "GameErrorEvent"),
+              Message(message){};
 
-	struct GameWarningEvent : public Event
-	{
-		GameWarningEvent(const char* message)
-			: Event(EventType::GameWarningEvent,
-				EventCategory::GameEvent,
-				"GameWarningEvent"), Message(message) {};
+        const char* Message;
 
-		const char* Message;
+        std::string ToString() const override { return Name + std::string(": ") + Message; };
+    };
 
-		std::string ToString() const override { return Name + std::string(": ") + Message; };
-	};
+    struct GameWarningEvent : public Event {
+        GameWarningEvent(const char* message)
+            : Event(EventType::GameWarningEvent, EventCategory::GameEvent, "GameWarningEvent"),
+              Message(message){};
 
-	struct WindowOpenEvent : public Event
-	{
-		WindowOpenEvent()
-			: Event(EventType::WindowOpenEvent,
-					EventCategory::WindowEvent,
-					"WindowOpenEvent") {};
+        const char* Message;
 
-		std::string ToString() const override { return Name; };
-	};
+        std::string ToString() const override { return Name + std::string(": ") + Message; };
+    };
 
-	struct WindowResizeEvent : public Event
-	{
-		WindowResizeEvent(int width, int height)
-			: Event(EventType::WindowResizeEvent,
-				EventCategory::WindowEvent,
-				"WindowResizeEvent") 
-		{
-			Width = width;
-			Height = height;
-		};
+    struct WindowOpenEvent : public Event {
+        WindowOpenEvent()
+            : Event(EventType::WindowOpenEvent, EventCategory::WindowEvent, "WindowOpenEvent"){};
 
-		int Width, Height;
+        std::string ToString() const override { return Name; };
+    };
 
-		std::string ToString() const override { return Name; };
-	};
+    struct WindowResizeEvent : public Event {
+        WindowResizeEvent(int width, int height)
+            : Event(EventType::WindowResizeEvent, EventCategory::WindowEvent, "WindowResizeEvent") {
+            Width = width;
+            Height = height;
+        };
 
-	struct WindowCloseEvent : public Event
-	{
-		WindowCloseEvent()
-			: Event(EventType::WindowCloseEvent,
-				EventCategory::WindowEvent,
-				"WindowCloseEvent") {};
+        int Width, Height;
 
-		std::string ToString() const override { return Name; };
-	};
+        std::string ToString() const override { return Name; };
+    };
 
-	struct WindowFocusEvent : public Event
-	{
-		WindowFocusEvent()
-			: Event(EventType::WindowFocusEvent,
-				EventCategory::WindowEvent,
-				"WindowFocusEvent") {};
+    struct WindowCloseEvent : public Event {
+        WindowCloseEvent()
+            : Event(EventType::WindowCloseEvent, EventCategory::WindowEvent, "WindowCloseEvent"){};
 
-		std::string ToString() const override { return Name; };
-	};
+        std::string ToString() const override { return Name; };
+    };
 
-	struct WindowUnfocusEvent : public Event
-	{
-		WindowUnfocusEvent()
-			: Event(EventType::WindowUnfocusEvent,
-				EventCategory::WindowEvent,
-				"WindowUnfocusEvent") {};
+    struct WindowFocusEvent : public Event {
+        WindowFocusEvent()
+            : Event(EventType::WindowFocusEvent, EventCategory::WindowEvent, "WindowFocusEvent"){};
 
-		std::string ToString() const override { return Name; };
-	};
+        std::string ToString() const override { return Name; };
+    };
 
-	struct MouseMoveEvent : public Event
-	{
-		MouseMoveEvent(int x, int y)
-			: Event(EventType::MouseMoveEvent,
-				EventCategory::MouseEvent,
-				"MouseMoveEvent") 
-		{
-			this->x = x;
-			this->y = y;
-		};
+    struct WindowUnfocusEvent : public Event {
+        WindowUnfocusEvent()
+            : Event(EventType::WindowUnfocusEvent, EventCategory::WindowEvent,
+                    "WindowUnfocusEvent"){};
 
-		int x, y;
+        std::string ToString() const override { return Name; };
+    };
 
-		std::string ToString() const override 
-		{ 
-			return Name + std::string(": pos=")
-				+ std::to_string(x)
-				+ std::string(",")
-				+ std::to_string(y);
-		};
-	};
+    struct MouseMoveEvent : public Event {
+        MouseMoveEvent(int x, int y)
+            : Event(EventType::MouseMoveEvent, EventCategory::MouseEvent, "MouseMoveEvent") {
+            this->x = x;
+            this->y = y;
+        };
 
-	struct MouseClickEvent : public Event
-	{
-		MouseClickEvent(MouseButton button)
-			: Event(EventType::MouseClickEvent,
-					EventCategory::MouseEvent,
-					"MouseClickEvent"), Button(button) {};
+        int x, y;
 
-		MouseButton Button;
+        std::string ToString() const override {
+            return Name + std::string(": pos=") + std::to_string(x) + std::string(",") +
+                   std::to_string(y);
+        };
+    };
 
-		std::string ToString() const override
-		{
-			return Name + std::string(": pos=");
-		};
-	};
+    struct MouseClickEvent : public Event {
+        MouseClickEvent(MouseButton button)
+            : Event(EventType::MouseClickEvent, EventCategory::MouseEvent, "MouseClickEvent"),
+              Button(button){};
 
-	struct MouseReleaseEvent : public Event
-	{
-		MouseReleaseEvent(MouseButton button)
-			: Event(EventType::MouseReleaseEvent,
-				EventCategory::MouseEvent,
-				"MouseReleaseEvent"), Button(button) {};
+        MouseButton Button;
 
-		MouseButton Button;
+        std::string ToString() const override { return Name + std::string(": pos="); };
+    };
 
-		std::string ToString() const override
-		{
-			return Name + std::string(": btn=")
-				+ std::to_string(Button);
-		};
-	};
+    struct MouseReleaseEvent : public Event {
+        MouseReleaseEvent(MouseButton button)
+            : Event(EventType::MouseReleaseEvent, EventCategory::MouseEvent, "MouseReleaseEvent"),
+              Button(button){};
 
-	struct MouseScrollEvent : public Event
-	{
-		MouseScrollEvent(int offset)
-			: Event(EventType::MouseScrollEvent,
-				EventCategory::MouseEvent,
-				"MouseReleaseEvent"), Offset(offset) {};
+        MouseButton Button;
 
-		int Offset;
+        std::string ToString() const override {
+            return Name + std::string(": btn=") + std::to_string(Button);
+        };
+    };
 
-		std::string ToString() const override
-		{
-			return Name + std::string(": offset=")
-				+ std::to_string(Offset);
-		};
-	};
+    struct MouseScrollEvent : public Event {
+        MouseScrollEvent(int offset)
+            : Event(EventType::MouseScrollEvent, EventCategory::MouseEvent, "MouseReleaseEvent"),
+              Offset(offset){};
 
-	struct KeyPressEvent : public Event
-	{
-		KeyPressEvent(Key key, bool repeat)
-			: Event(EventType::KeyPressEvent,
-				EventCategory::KeyboardEvent,
-				"KeyPressEvent"), Keycode(key), Repeat(repeat) {};
+        int Offset;
 
-		Key Keycode;
-		bool Repeat;
+        std::string ToString() const override {
+            return Name + std::string(": offset=") + std::to_string(Offset);
+        };
+    };
 
-		std::string ToString() const override
-		{
-			return Name + std::string(": key=")
-				+ std::to_string(Keycode);
-		};
-	};
+    struct KeyPressEvent : public Event {
+        KeyPressEvent(Key key, bool repeat)
+            : Event(EventType::KeyPressEvent, EventCategory::KeyboardEvent, "KeyPressEvent"),
+              Keycode(key), Repeat(repeat){};
 
-	struct KeyReleaseEvent : public Event
-	{
-		KeyReleaseEvent(Key key)
-			: Event(EventType::KeyReleaseEvent,
-				EventCategory::KeyboardEvent,
-				"KeyReleaseEvent"), Keycode(key) {};
+        Key Keycode;
+        bool Repeat;
 
-		Key Keycode;
+        std::string ToString() const override {
+            return Name + std::string(": key=") + std::to_string(Keycode);
+        };
+    };
 
-		std::string ToString() const override
-		{
-			return Name + std::string(": key=")
-				+ std::to_string(Keycode);
-		};
-	};
+    struct KeyReleaseEvent : public Event {
+        KeyReleaseEvent(Key key)
+            : Event(EventType::KeyReleaseEvent, EventCategory::KeyboardEvent, "KeyReleaseEvent"),
+              Keycode(key){};
+
+        Key Keycode;
+
+        std::string ToString() const override {
+            return Name + std::string(": key=") + std::to_string(Keycode);
+        };
+    };
 }

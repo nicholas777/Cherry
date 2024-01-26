@@ -1,12 +1,12 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include "core/pointer.h"
 #include "core/window.h"
 #include "renderer/renderingContext.h"
-#include "core/pointer.h"
 
-namespace Cherry
-{
+#include <GLFW/glfw3.h>
+
+namespace Cherry {
     class LinuxWindow : public Window
     {
     public:
@@ -14,6 +14,7 @@ namespace Cherry
         ~LinuxWindow();
 
         virtual unsigned int GetWidth() const override { return m_Data.Width; };
+
         virtual unsigned int GetHeight() const override { return m_Data.Height; };
 
         virtual double GetTime() override;
@@ -22,9 +23,11 @@ namespace Cherry
         virtual void OnResize(int, int) override;
 
         virtual void SetVSync(bool vsync) override;
+
         virtual bool IsVSync() const override { return m_Data.VSync; };
 
         virtual WindowData GetData() override { return m_Data; }
+
         virtual void* GetNativeWindow() override { return m_Window; };
     private:
         GLFWwindow* m_Window;
@@ -39,6 +42,5 @@ namespace Cherry
         static void WindowResizeCallback(GLFWwindow* window, int width, int height);
         static void WindowCloseCallback(GLFWwindow* window);
         static void WindowFocusCallback(GLFWwindow* window, int focused);
-
     };
 }

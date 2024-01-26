@@ -1,7 +1,5 @@
-#include "epch.h"
 #include "renderer3D.h"
 
-namespace Cherry
-{
+#include "epch.h"
 
-}
+namespace Cherry {}

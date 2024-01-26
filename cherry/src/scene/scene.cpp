@@ -1,28 +1,20 @@
-#include "epch.h"
-
 #include "scene.h"
-#include "entity.h"
+
 #include "component.h"
-#include "renderer/renderCommand.h"
 #include "debug/profiler.h"
+#include "entity.h"
+#include "epch.h"
 #include "nativeScript.h"
+#include "renderer/renderCommand.h"
 #include "scripting/scriptEngine.h"
 
-namespace Cherry
-{
-    Scene::Scene()
-    {
-        
-    }
+namespace Cherry {
+    Scene::Scene() {}
 
-    Scene::~Scene()
-    {
-        
-    }
+    Scene::~Scene() {}
 
     // TODO: Events for creating and updating entities
-    Entity Scene::CreateEntity(const std::string& name)
-    {
+    Entity Scene::CreateEntity(const std::string& name) {
         CH_PROFILE_FUNC();
         Entity entity = Entity(m_Registry.create(), this);
         entity.AddComponent<NameComponent>(name);
@@ -30,13 +22,11 @@ namespace Cherry
         return entity;
     }
 
-    void Scene::DeleteEntity(const Entity& entity)
-    {
+    void Scene::DeleteEntity(const Entity& entity) {
         m_Registry.destroy(entity);
     }
 
-    void Scene::OnRuntimeStart()
-    {
+    void Scene::OnRuntimeStart() {
         ScriptEngine::OnRuntimeStart(this);
 
         m_Registry.view<ScriptComponent>().each([=](auto entity, auto& script) {
@@ -44,14 +34,12 @@ namespace Cherry
         });
     }
 
-    void Scene::OnRuntimeStop()
-    {
+    void Scene::OnRuntimeStop() {
         ScriptEngine::OnRuntimeStop();
     }
 
     // TODO: Resizing camera viewport
-    void Scene::OnUpdate(const Timestep& delta)
-    {
+    void Scene::OnUpdate(const Timestep& delta) {
         CH_PROFILE_FUNC();
         RenderCommand::Clear();
 
@@ -59,10 +47,8 @@ namespace Cherry
         Matrix4x4f cameraTransform;
 
         {
-            m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& scriptExecutor)
-            {
-                if (!scriptExecutor.script)
-                {
+            m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& scriptExecutor) {
+                if (!scriptExecutor.script) {
                     scriptExecutor.CreateInstanceFn();
                     scriptExecutor.script->m_Entity = Entity(entity, this);
                     scriptExecutor.OnCreateFn(scriptExecutor.script);
@@ -77,15 +63,13 @@ namespace Cherry
         {
             auto view = m_Registry.view<TransformComponent, CameraComponent>();
 
-            for (auto& entity : view)
-            {
+            for (auto& entity: view) {
                 auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 
-                if (camera.IsPrimary)
-                {
+                if (camera.IsPrimary) {
                     mainCamera = &camera.camera;
 
- 					Vector2f correction = camera.camera.GetTransformCorrection();
+                    Vector2f correction = camera.camera.GetTransformCorrection();
                     Matrix4x4f view = transform.GetMatrix();
                     Translate(&view, correction.x, correction.y);
                     cameraTransform = view;
@@ -95,23 +79,20 @@ namespace Cherry
         }
 
         {
-            if (mainCamera)
-            {
+            if (mainCamera) {
                 Renderer2D::Begin(mainCamera->GetProjection(), cameraTransform);
 
                 auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 
-                for (auto entity : group)
-                {
-                    auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+                for (auto entity: group) {
+                    auto [transform, sprite] =
+                        group.get<TransformComponent, SpriteComponent>(entity);
 
-                    if (sprite.UseTexture)
-                    {
+                    if (sprite.UseTexture) {
                         if (sprite.SpriteTexture.IsAlive())
-                            Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture, sprite.Color);
-                    }
-                    else
-                    {
+                            Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture,
+                                                 sprite.Color);
+                    } else {
                         Renderer2D::DrawRect(transform.GetMatrix(), sprite.Color);
                     }
                 }
@@ -122,8 +103,7 @@ namespace Cherry
     }
 
     // TODO: Proper system for scene rendering
-    void Scene::OnUpdate(const Timestep& delta, const Matrix4x4f& view, const Matrix4x4f& proj)
-    {
+    void Scene::OnUpdate(const Timestep& delta, const Matrix4x4f& view, const Matrix4x4f& proj) {
         CH_PROFILE_FUNC();
 
         RenderCommand::Clear();
@@ -132,17 +112,14 @@ namespace Cherry
         {
             auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 
-            for (auto entity : group)
-            {
+            for (auto entity: group) {
                 auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
-                if (sprite.UseTexture)
-                {
+                if (sprite.UseTexture) {
                     if (sprite.SpriteTexture->texture.IsAlive())
-                        Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture, sprite.Color, (uint32_t)entity);
-                }
-                else
-                {
+                        Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture,
+                                             sprite.Color, (uint32_t)entity);
+                } else {
                     Renderer2D::DrawRect(transform.GetMatrix(), sprite.Color, (uint32_t)entity);
                 }
             }
@@ -151,12 +128,10 @@ namespace Cherry
         Renderer2D::End();
     }
 
-    Entity Scene::GetPrimaryCamera()
-    {
+    Entity Scene::GetPrimaryCamera() {
         auto view = m_Registry.view<CameraComponent>();
 
-        for (auto entity : view)
-        {
+        for (auto entity: view) {
             auto& comp = view.get<CameraComponent>(entity);
 
             if (comp.IsPrimary)
@@ -164,13 +139,11 @@ namespace Cherry
         }
         return {};
     }
-    
-    Entity Scene::GetEntityByName(const std::string& name)
-    {
+
+    Entity Scene::GetEntityByName(const std::string& name) {
         auto view = m_Registry.view<NameComponent>();
 
-        for (auto entity : view)
-        {
+        for (auto entity: view) {
             if (view.get<NameComponent>(entity).Name == name)
                 return Entity(entity, this);
         }
@@ -178,30 +151,30 @@ namespace Cherry
         return Entity();
     }
 
-    template <typename... Components>
-    static void CopyComponents(ComponentList<Components...>, entt::registry& src, entt::registry& dest, std::unordered_map<std::string, entt::entity>& entities)
-    {
-        ([&] {
-            auto view = src.view<Components>(); 
-            for (auto entity : view)
-            {
-                auto DestEntity = entities[src.get<NameComponent>(entity).Name];
-                auto comp = src.get<Components>(entity);
+    template<typename... Components>
+    static void CopyComponents(ComponentList<Components...>, entt::registry& src,
+                               entt::registry& dest,
+                               std::unordered_map<std::string, entt::entity>& entities) {
+        (
+            [&] {
+                auto view = src.view<Components>();
+                for (auto entity: view) {
+                    auto DestEntity = entities[src.get<NameComponent>(entity).Name];
+                    auto comp = src.get<Components>(entity);
 
-                dest.emplace_or_replace<Components>(DestEntity, comp);
-            }
-        } (), ...);
+                    dest.emplace_or_replace<Components>(DestEntity, comp);
+                }
+            }(),
+            ...);
     }
 
-    void Scene::Copy(Scene* dest, Scene* src)
-    {
+    void Scene::Copy(Scene* dest, Scene* src) {
         // Creating the entities
         dest->m_Registry.clear();
 
         std::unordered_map<std::string, entt::entity> entities{};
         auto nameView = src->m_Registry.view<NameComponent>();
-        for (auto e : nameView)
-        {
+        for (auto e: nameView) {
             const std::string& name = src->m_Registry.get<NameComponent>(e).Name;
             Entity entity = dest->CreateEntity(name);
             entities[name] = entity;

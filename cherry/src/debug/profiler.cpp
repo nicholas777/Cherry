@@ -1,13 +1,12 @@
-#include "epch.h"
-
 #include "profiler.h"
 
-namespace Cherry
-{
-	Profiler::InstrumentationSession* Profiler::m_Session = nullptr;
-	std::ofstream Profiler::m_Stream;
+#include "epch.h"
 
-    void Profiler::BeginSession(const char *name) {
+namespace Cherry {
+    Profiler::InstrumentationSession* Profiler::m_Session = nullptr;
+    std::ofstream Profiler::m_Stream;
+
+    void Profiler::BeginSession(const char* name) {
         if (m_Session) {
             EndSession();
         }
@@ -15,7 +14,8 @@ namespace Cherry
         m_Session = new InstrumentationSession;
         m_Session->Name = name;
 
-        m_Stream.open(((std::string(CH_INSTRUMENTATION_DIR) + "/instrumentation_") + name) + ".json");
+        m_Stream.open(((std::string(CH_INSTRUMENTATION_DIR) + "/instrumentation_") + name) +
+                      ".json");
 
         m_Stream << "{\"otherData\": {},\"traceEvents\":[{}";
         m_Stream.flush();
@@ -33,7 +33,7 @@ namespace Cherry
         m_Session = nullptr;
     }
 
-    void Profiler::WriteInstrumentationData(const char *name, long long start, long long end) {
+    void Profiler::WriteInstrumentationData(const char* name, long long start, long long end) {
         m_Stream << ",{";
         m_Stream << "\"cat\":\"function\",";
         m_Stream << "\"dur\":" << (end - start) << ',';

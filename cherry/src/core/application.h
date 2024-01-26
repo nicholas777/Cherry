@@ -1,22 +1,18 @@
 #pragma once
 
-#include "layer.h"
-#include "layerStack.h"
 #include "events/event.h"
-#include "window.h"
-#include "renderer/renderAPI.h"
 #include "imgui/imGuiRenderer.h"
+#include "layerStack.h"
+#include "window.h"
 
-namespace Cherry
-{
-    #define WINDOW_WIDTH (float)Application::GetApplication().GetWindow()->GetWidth()
-    #define WINDOW_HEIGHT (float)Application::GetApplication().GetWindow()->GetHeight()
+namespace Cherry {
+#define WINDOW_WIDTH  (float)Application::GetApplication().GetWindow()->GetWidth()
+#define WINDOW_HEIGHT (float)Application::GetApplication().GetWindow()->GetHeight()
 
     class Application
     {
     public:
-        struct ApplicationConfig
-        {
+        struct ApplicationConfig {
             int WindowWidth = 600, WindowHeight = 400;
             std::string WindowTitle;
             bool IsVSync = true;
@@ -29,8 +25,9 @@ namespace Cherry
         virtual ~Application();
 
         LayerStack& GetLayerStack() { return *m_LayerStack; };
+
         void PushLayer(Layer* layer) { m_LayerStack->PushLayer(layer); };
-        
+
         void Startup();
         void Run();
 

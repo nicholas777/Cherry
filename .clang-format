@@ -1,0 +1,86 @@
+IndentWidth: 4
+UseTab: false
+TabWidth: 4
+IndentCaseLabels: true
+ColumnLimit: 100
+NamespaceIndentation: All
+AccessModifierOffset: -4
+IndentPPDirectives: BeforeHash
+
+AlignConsecutiveMacros: AcrossComments
+AlignArrayOfStructures: Left
+AlignTrailingComments: true
+AlignEscapedNewlines: DontAlign
+AlignOperands: Align
+AlignTrailingComments: true
+
+AllowShortIfStatementsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortBlocksOnASingleLine: Always
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: true
+
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: true
+BinPackParameters: true
+
+BitFieldColonSpacing: After
+
+BreakBeforeBinaryOperators: None
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeColon
+BreakStringLiterals: false
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: false
+  AfterClass: true
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+
+CompactNamespaces: false
+Cpp11BracedListStyle: false
+EmptyLineAfterAccessModifier: Leave
+EmptyLineBeforeAccessModifier: Leave
+FixNamespaceComments: false
+IncludeBlocks: Regroup
+KeepEmptyLinesAtTheStartOfBlocks: true
+MaxEmptyLinesToKeep: 1
+PackConstructorInitializers: BinPack
+PointerAlignment: Left
+ReferenceAlignment: Pointer
+
+ReflowComments: true
+SeparateDefinitionBlocks: Always
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: false
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: false
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpacesInAngles: Never
+SpacesInSquareBrackets: false
+SpacesInLineCommentPrefix: 
+  Minimum: 1
+  Maximum: 1
+

@@ -5,8 +5,7 @@
 
 extern Cherry::Application* Cherry::CreateApplication();
 
-int main(int argc, char** argv) 
-{
+int main(int argc, char** argv) {
     Cherry::Profiler::BeginSession("Startup");
     auto app = Cherry::CreateApplication();
     app->Startup();
@@ -18,4 +17,3 @@ int main(int argc, char** argv)
     delete app;
     Cherry::Profiler::EndSession();
 }
-

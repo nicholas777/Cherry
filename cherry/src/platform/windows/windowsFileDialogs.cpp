@@ -1,23 +1,22 @@
+#include "windowsFileDialogs.h"
+
+#include "debug/profiler.h"
 #include "epch.h"
 
-#include "windowsFileDialogs.h"
-#include "debug/profiler.h"
-
-#include <commdlg.h>
 #include <GLFW/glfw3.h>
+#include <commdlg.h>
 
 #define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
-
 #include "core/application.h"
 
-namespace Cherry
-{
-    std::string WindowsFileDialogManager::OpenFileImpl(const char* filter)
-    {
+#include <GLFW/glfw3native.h>
+
+namespace Cherry {
+    std::string WindowsFileDialogManager::OpenFileImpl(const char* filter) {
         CH_PROFILE_FUNC();
 
-        HWND win = glfwGetWin32Window((GLFWwindow*)Application::GetApplication().GetWindow()->GetNativeWindow());
+        HWND win = glfwGetWin32Window(
+            (GLFWwindow*)Application::GetApplication().GetWindow()->GetNativeWindow());
 
         OPENFILENAMEA opendialog = { 0 };
         char szFile[260] = { 0 };
@@ -37,17 +36,15 @@ namespace Cherry
             opendialog.lpstrInitialDir = currentDir;
 
         opendialog.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-            
-        if (GetOpenFileNameA(&opendialog) == TRUE)
-        {
+
+        if (GetOpenFileNameA(&opendialog) == TRUE) {
             return opendialog.lpstrFile;
         }
-        
+
         return std::string();
     }
 
-    std::string WindowsFileDialogManager::SaveFileImpl(const char* filter)
-    {
+    std::string WindowsFileDialogManager::SaveFileImpl(const char* filter) {
         CH_PROFILE_FUNC();
 
         OPENFILENAMEA opendialog;
@@ -56,7 +53,8 @@ namespace Cherry
         ZeroMemory(&opendialog, sizeof(OPENFILENAME));
 
         opendialog.lStructSize = sizeof(OPENFILENAME);
-        opendialog.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::GetApplication().GetWindow()->GetNativeWindow());
+        opendialog.hwndOwner = glfwGetWin32Window(
+            (GLFWwindow*)Application::GetApplication().GetWindow()->GetNativeWindow());
 
         opendialog.lpstrFile = szFile;
         opendialog.nMaxFile = sizeof(szFile);
@@ -65,15 +63,15 @@ namespace Cherry
 
         opendialog.lpstrFilter = filter;
         opendialog.nFilterIndex = 1;
-        opendialog.lpstrDefExt = std::string(filter).substr(std::string(filter).find_last_of('.') + 1).c_str();
-        
+        opendialog.lpstrDefExt =
+            std::string(filter).substr(std::string(filter).find_last_of('.') + 1).c_str();
+
         opendialog.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 
-        if (GetSaveFileNameA(&opendialog) == TRUE)
-        {
+        if (GetSaveFileNameA(&opendialog) == TRUE) {
             return opendialog.lpstrFile;
         }
-            
+
         return std::string();
     }
 }

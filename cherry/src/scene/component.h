@@ -1,125 +1,114 @@
 #pragma once
 
-#include "nativeScript.h"
-#include "scripting/class.h"
-#include "math/matrix.h"
 #include "core/pointer.h"
-#include "renderer/texture.h"
-#include "graphics/cameras/sceneCamera.h"
 #include "core/timestep.h"
+#include "graphics/cameras/sceneCamera.h"
+#include "math/matrix.h"
+#include "nativeScript.h"
+#include "renderer/texture.h"
+#include "scripting/class.h"
 
-namespace Cherry
-{
-	struct NameComponent
-	{
-		std::string Name;
+namespace Cherry {
+    struct NameComponent {
+        std::string Name;
 
-		NameComponent() = default;
-		NameComponent(const NameComponent&) = default;
+        NameComponent() = default;
+        NameComponent(const NameComponent&) = default;
 
-		NameComponent(const std::string& name)
-			: Name(name) {}
-	};
+        NameComponent(const std::string& name): Name(name) {}
+    };
 
-	struct TransformComponent
-	{
-		Vector2f Translation = Vector2f(0.0f);
-		float Rotation = 0.0f;
-		Vector2f Scale = Vector2f(1.0f);
+    struct TransformComponent {
+        Vector2f Translation = Vector2f(0.0f);
+        float Rotation = 0.0f;
+        Vector2f Scale = Vector2f(1.0f);
 
-		TransformComponent() = default;
-		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const Vector2f& pos, float rot, const Vector2f scale)
-			: Translation(pos), Rotation(rot), Scale(scale) {}
+        TransformComponent() = default;
+        TransformComponent(const TransformComponent&) = default;
 
-		Matrix4x4f GetMatrix()
-		{
-			Matrix4x4f mat = Matrix4x4f::Identity();
+        TransformComponent(const Vector2f& pos, float rot, const Vector2f scale)
+            : Translation(pos), Rotation(rot), Scale(scale) {}
 
-			Translate(&mat, Translation.x, Translation.y);
-			Rotate(&mat, Rotation);
-			Cherry::Scale(&mat, Scale.x, Scale.y);
+        Matrix4x4f GetMatrix() {
+            Matrix4x4f mat = Matrix4x4f::Identity();
 
-			return mat;
-		}
-	};
+            Translate(&mat, Translation.x, Translation.y);
+            Rotate(&mat, Rotation);
+            Cherry::Scale(&mat, Scale.x, Scale.y);
 
-	struct SpriteComponent
-	{
-		Vector4f Color = { 1, 1, 1, 1 };
+            return mat;
+        }
+    };
 
-		Shared<SubTexture> SpriteTexture;
+    struct SpriteComponent {
+        Vector4f Color = { 1, 1, 1, 1 };
 
-		bool UseTexture = false;
+        Shared<SubTexture> SpriteTexture;
 
-		SpriteComponent() = default;
-		SpriteComponent(const SpriteComponent&) = default;
+        bool UseTexture = false;
 
-		SpriteComponent(const Vector4f& color)
-			: Color(color), SpriteTexture(new SubTexture(nullptr)), UseTexture(false) {}
+        SpriteComponent() = default;
+        SpriteComponent(const SpriteComponent&) = default;
 
-		SpriteComponent(const Shared<Texture>& texture, 
-			const Vector2f& bottomLeft = Vector2f(0.0f, 0.0f),
-			const Vector2f& topRight = Vector2f(1.0f, 1.0f))
-			: Color({ 1, 1, 1, 1 }), SpriteTexture(new SubTexture(texture, bottomLeft, topRight)), UseTexture(true) {}
-	};
+        SpriteComponent(const Vector4f& color)
+            : Color(color), SpriteTexture(new SubTexture(nullptr)), UseTexture(false) {}
 
-	struct CameraComponent
-	{
-		SceneCamera camera;
-		bool IsPrimary = true;
+        SpriteComponent(const Shared<Texture>& texture,
+                        const Vector2f& bottomLeft = Vector2f(0.0f, 0.0f),
+                        const Vector2f& topRight = Vector2f(1.0f, 1.0f))
+            : Color({ 1, 1, 1, 1 }), SpriteTexture(new SubTexture(texture, bottomLeft, topRight)),
+              UseTexture(true) {}
+    };
 
-		CameraComponent() = default;
-		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const SceneCamera& cam, bool primary)
-			: camera(cam), IsPrimary(primary) {}
-	};
+    struct CameraComponent {
+        SceneCamera camera;
+        bool IsPrimary = true;
 
-	struct ScriptComponent
-	{
-		std::string Name;
+        CameraComponent() = default;
+        CameraComponent(const CameraComponent&) = default;
 
-		ScriptComponent() = default;
-		ScriptComponent(std::string name)
-			: Name(name) {};
-	};
+        CameraComponent(const SceneCamera& cam, bool primary): camera(cam), IsPrimary(primary) {}
+    };
 
-	struct NativeScriptComponent
-	{
-		NativeScript* script = nullptr;
+    struct ScriptComponent {
+        std::string Name;
 
-		std::function<void()> CreateInstanceFn;
-		std::function<void()> DeleteInstanceFn;
+        ScriptComponent() = default;
+        ScriptComponent(std::string name): Name(name){};
+    };
 
-		std::function<void(NativeScript*)> OnCreateFn;
-		std::function<void(NativeScript*)> OnDestroyFn;
-		std::function<void(NativeScript*, Timestep)> OnUpdateFn;
+    struct NativeScriptComponent {
+        NativeScript* script = nullptr;
 
-		NativeScriptComponent() = default;
-		NativeScriptComponent(const NativeScriptComponent&) = default;
+        std::function<void()> CreateInstanceFn;
+        std::function<void()> DeleteInstanceFn;
 
-		template <typename T>
-		void Bind()
-		{
-			CreateInstanceFn = [&]() { script = new T; };
-			DeleteInstanceFn = [&]() { delete script; };
+        std::function<void(NativeScript*)> OnCreateFn;
+        std::function<void(NativeScript*)> OnDestroyFn;
+        std::function<void(NativeScript*, Timestep)> OnUpdateFn;
 
-			OnCreateFn  = [](NativeScript* executor) { ((T*)executor)->OnCreate(); };
-			OnDestroyFn = [](NativeScript* executor) { ((T*)executor)->OnDestroy(); };
-			OnUpdateFn  = [](NativeScript* executor, Timestep delta) { ((T*)executor)->OnUpdate(delta); };
-		}
-	};
+        NativeScriptComponent() = default;
+        NativeScriptComponent(const NativeScriptComponent&) = default;
 
-	template <typename... T>
-	struct ComponentList
-	{
+        template<typename T>
+        void Bind() {
+            CreateInstanceFn = [&]() { script = new T; };
+            DeleteInstanceFn = [&]() { delete script; };
 
-	};
+            OnCreateFn = [](NativeScript* executor) { ((T*)executor)->OnCreate(); };
+            OnDestroyFn = [](NativeScript* executor) { ((T*)executor)->OnDestroy(); };
+            OnUpdateFn = [](NativeScript* executor, Timestep delta) {
+                ((T*)executor)->OnUpdate(delta);
+            };
+        }
+    };
 
-	using AllComponents = ComponentList<NameComponent, TransformComponent, SpriteComponent,
-										CameraComponent, NativeScriptComponent, ScriptComponent>;
+    template<typename... T>
+    struct ComponentList {};
 
-	using OptionalComponents = ComponentList<TransformComponent, SpriteComponent,
-											 CameraComponent, NativeScriptComponent, 
-											 ScriptComponent>;
+    using AllComponents = ComponentList<NameComponent, TransformComponent, SpriteComponent,
+                                        CameraComponent, NativeScriptComponent, ScriptComponent>;
+
+    using OptionalComponents = ComponentList<TransformComponent, SpriteComponent, CameraComponent,
+                                             NativeScriptComponent, ScriptComponent>;
 }

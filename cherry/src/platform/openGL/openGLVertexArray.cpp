@@ -1,50 +1,41 @@
-#include "epch.h"
 #include "openGLVertexArray.h"
+
+#include "epch.h"
 
 #include <glad/glad.h>
 
-namespace Cherry
-{
-	OpenGLVertexArray::OpenGLVertexArray()
-	{
-		glGenVertexArrays(1, &m_ID);
-	}
+namespace Cherry {
+    OpenGLVertexArray::OpenGLVertexArray() {
+        glGenVertexArrays(1, &m_ID);
+    }
 
-	OpenGLVertexArray::~OpenGLVertexArray()
-	{
-		glDeleteVertexArrays(1, &m_ID);
-	}
+    OpenGLVertexArray::~OpenGLVertexArray() {
+        glDeleteVertexArrays(1, &m_ID);
+    }
 
-	void OpenGLVertexArray::Bind()
-	{
-		glBindVertexArray(m_ID);
-	}
+    void OpenGLVertexArray::Bind() {
+        glBindVertexArray(m_ID);
+    }
 
-	void OpenGLVertexArray::Unbind()
-	{
-		glBindVertexArray(0);
-	}
-	
-	void OpenGLVertexArray::AddVertexBuffer(VertexBuffer* buffer)
-	{
-		glBindVertexArray(m_ID);
-		m_VertexBuffers.push_back(buffer);
+    void OpenGLVertexArray::Unbind() {
+        glBindVertexArray(0);
+    }
 
-	}
+    void OpenGLVertexArray::AddVertexBuffer(VertexBuffer* buffer) {
+        glBindVertexArray(m_ID);
+        m_VertexBuffers.push_back(buffer);
+    }
 
-	void OpenGLVertexArray::SetIndexBuffer(IndexBuffer* buffer)
-	{
-		glBindVertexArray(m_ID);
-		m_IndexBuffer = buffer;
-	}
+    void OpenGLVertexArray::SetIndexBuffer(IndexBuffer* buffer) {
+        glBindVertexArray(m_ID);
+        m_IndexBuffer = buffer;
+    }
 
-	std::vector<VertexBuffer*>& OpenGLVertexArray::GetVertexBuffers()
-	{
-		return m_VertexBuffers;
-	}
+    std::vector<VertexBuffer*>& OpenGLVertexArray::GetVertexBuffers() {
+        return m_VertexBuffers;
+    }
 
-	IndexBuffer* OpenGLVertexArray::GetIndexBuffer()
-	{
-		return m_IndexBuffer;
-	}
+    IndexBuffer* OpenGLVertexArray::GetIndexBuffer() {
+        return m_IndexBuffer;
+    }
 }

@@ -4,8 +4,7 @@
 
 class GLFWwindow;
 
-namespace Cherry
-{
+namespace Cherry {
     class OpenGLContext : public RenderingContext
     {
     public:

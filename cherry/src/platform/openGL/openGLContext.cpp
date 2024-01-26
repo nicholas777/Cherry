@@ -1,20 +1,16 @@
-#include "epch.h"
 #include "openGLContext.h"
-#include "core/log.h"
+
 #include "core/core.h"
+#include "core/log.h"
+#include "epch.h"
 
-#include <glad/gl.h>
 #include <GLFW/glfw3.h>
+#include <glad/gl.h>
 
-namespace Cherry
-{
-    OpenGLContext::OpenGLContext(GLFWwindow* window)
-        : m_Window(window)
-    {
-    }
+namespace Cherry {
+    OpenGLContext::OpenGLContext(GLFWwindow* window): m_Window(window) {}
 
-    void OpenGLContext::Init()
-    {
+    void OpenGLContext::Init() {
         glfwMakeContextCurrent(m_Window);
         int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         if (!success) {
@@ -24,8 +20,7 @@ namespace Cherry
         }
     }
 
-    void OpenGLContext::SwapBuffers()
-    {
+    void OpenGLContext::SwapBuffers() {
         glfwSwapBuffers(m_Window);
     }
 }

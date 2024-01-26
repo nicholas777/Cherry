@@ -1,30 +1,21 @@
 #pragma once
 
-namespace Cherry
-{
-	struct SystemInfo
-	{
+namespace Cherry {
+    struct SystemInfo {
+    };
 
-	};
+    class SystemInfoLoader
+    {
+    public:
+        static void LoadSystemInfo() { m_Instance->LoadSystemInfoImpl(); };
 
-	class SystemInfoLoader
-	{
-	public:
-		static void LoadSystemInfo()
-		{
-			m_Instance->LoadSystemInfoImpl();
-		};
+        static SystemInfo GetSystemInfo() { return SystemInfo(); };
 
-		static SystemInfo GetSystemInfo()
-		{
-			return SystemInfo();
-		};
+    protected:
 
-	protected:
+        virtual void LoadSystemInfoImpl(){};
 
-		virtual void LoadSystemInfoImpl() {};
-
-	private:
-		static SystemInfoLoader* m_Instance;
-	};
+    private:
+        static SystemInfoLoader* m_Instance;
+    };
 }

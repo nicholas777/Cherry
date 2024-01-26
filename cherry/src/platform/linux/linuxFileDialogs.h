@@ -2,8 +2,7 @@
 
 #include "system/fileDialogs.h"
 
-namespace Cherry
-{
+namespace Cherry {
     class LinuxFileDialogManager : public FileDialogManager
     {
     public:

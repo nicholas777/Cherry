@@ -1,18 +1,18 @@
 #pragma once
 
-#include "math/vector.h"
 #include "events/eventListener.h"
-#include "uiComponent.h"
 #include "label.h"
+#include "math/vector.h"
+#include "uiComponent.h"
 
-namespace Cherry
-{
+namespace Cherry {
     class Button : public UIElement, public EventListener
     {
     public:
         using ClickEventHandler = std::function<void(const MouseClickEvent&)>;
 
-        Button(Label* label, Vector2f pos, Vector2f size, Vector4f color, const ClickEventHandler& handler);
+        Button(Label* label, Vector2f pos, Vector2f size, Vector4f color,
+               const ClickEventHandler& handler);
 
         virtual void OnEvent(const Event& e) override;
         virtual void OnUpdate() override;
