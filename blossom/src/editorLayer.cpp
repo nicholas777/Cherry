@@ -28,7 +28,7 @@ namespace Cherry {
     std::vector<ReversableAction*> EditorLayer::m_ActionsToUndo = std::vector<ReversableAction*>();
     std::vector<ReversableAction*> EditorLayer::m_ActionsToRedo = std::vector<ReversableAction*>();
 
-    Vector2f GetCameraOffsets(const Timestep& delta) {
+    static Vector2f GetCameraOffsets(const Timestep& delta) {
         float x = 0, y = 0;
 
         if (Input::GetKeyPressed(Key::W)) {
@@ -127,7 +127,6 @@ namespace Cherry {
         } else {
             Vector2f xy = GetCameraOffsets(delta);
             Vector2f correction = m_EditorCamera.GetTransformCorrection();
-            Translate(&m_EditorCamera.GetTransform(), xy.x, xy.y);
 
             Matrix4x4f mat = m_EditorCamera.GetTransform();
             Translate(&mat, correction.x, correction.y);
@@ -135,13 +134,12 @@ namespace Cherry {
             m_Scene->OnUpdate(delta, mat, m_EditorCamera.GetProjection());
 
             // Gizmos
-            if (m_SelectedEntity && !m_IsRuntime &&
-                m_SelectedEntity.HasComponent<TransformComponent>()) {
+            if (m_SelectedEntity && m_SelectedEntity.HasComponent<TransformComponent>()) {
                 TransformComponent& tc = m_SelectedEntity.GetComponent<TransformComponent>();
                 Matrix4x4f transform = Matrix4x4f::Identity();
                 Translate(&transform, tc.Translation.x, tc.Translation.y);
 
-                Renderer2D::Begin(m_EditorCamera.GetProjection(), m_EditorCamera.GetTransform());
+                Renderer2D::Begin(m_EditorCamera.GetProjection(), mat);
 
                 Translate(&transform, 0.75f, 0);
                 Renderer2D::DrawRect(transform, m_RedArrow, { 1, 1, 1, 1 }, -1);
@@ -348,7 +346,8 @@ namespace Cherry {
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
-        ImGui::Begin("Scene bar", &IsOpen, ImGuiWindowFlags_NoTitleBar);
+        ImGuiWindowFlags titleBarFlags = ImGuiWindowFlags_NoTitleBar;
+        ImGui::Begin("Scene bar", &IsOpen, titleBarFlags);
         if (ImGui::Button("Play")) {
             m_IsRuntime = !m_IsRuntime;
         }

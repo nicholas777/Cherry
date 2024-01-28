@@ -29,3 +29,5 @@ Textures:
       MinFilter: 2
       MagFilter: 1
       Wrap: 1
+Scripts:
+  []
