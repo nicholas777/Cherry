@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace Cherry {
     enum Key : uint32_t {
         Space = 32,

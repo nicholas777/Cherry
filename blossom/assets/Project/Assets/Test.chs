@@ -1,4 +1,0 @@
-Scene:
-  name: Unknown
-  Entities:
-    []

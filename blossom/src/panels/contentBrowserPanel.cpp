@@ -23,7 +23,7 @@ namespace Cherry {
 
         if (std::filesystem::exists(directory) && std::filesystem::is_directory(directory)) {
             m_ProjectRoot = std::filesystem::path(directory);
-            m_AssetRoot = std::filesystem::path(directory + "/Assets");
+            m_AssetRoot = m_ProjectRoot;
             m_CurrentDir = m_AssetRoot;
             Assetmap::Load(m_ProjectRoot);
         } else {

@@ -103,9 +103,7 @@ namespace Cherry {
         glfwSetWindowFocusCallback(m_Window, WindowFocusCallback);
     }
 
-    LinuxWindow::~LinuxWindow() {
-        delete m_Window;
-    }
+    LinuxWindow::~LinuxWindow() {}
 
     double LinuxWindow::GetTime() {
         return glfwGetTime();

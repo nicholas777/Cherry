@@ -31,7 +31,8 @@ namespace Cherry {
             DrawAsset();
     }
 
-    static void DisplayScriptField(Field* field, Entity entity, bool runtime) {
+    static void DisplayScriptField(void* field, Entity entity, bool runtime) {
+        /*
         if (!entity.HasComponent<ScriptComponent>())
             return;
 
@@ -77,6 +78,7 @@ namespace Cherry {
                 field->SetData(ScriptEngine::GetScriptedEntity(entity), (const char*)buff);
             }
         }
+        */
     }
 
     void PropertiesPanel::DrawEntity(bool runtime) {

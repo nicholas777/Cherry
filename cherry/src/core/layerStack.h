@@ -2,6 +2,8 @@
 
 #include "layer.h"
 
+#include <vector>
+
 namespace Cherry {
     class LayerStack
     {

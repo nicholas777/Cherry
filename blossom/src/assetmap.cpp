@@ -10,7 +10,7 @@ namespace Cherry {
     void Assetmap::Load(const std::filesystem::path &filepath) {
         CH_PROFILE_FUNC();
 
-        YAML::Node map = YAML::LoadFile(filepath.generic_u8string());
+        YAML::Node map = YAML::LoadFile(filepath.generic_u8string() + "/assetmap.yaml");
 
         if (map["Textures"]) {
             for (int i = 0; i < map["Textures"].size(); i++) {
@@ -56,7 +56,7 @@ namespace Cherry {
                 continue;
             }
 
-            if (entry.path().extension() == ".cs") {
+            if (entry.path().extension() == ".lua") {
                 auto test1 = entry.path().parent_path().filename();
 
                 AssetManager::CreateScriptIfNotExists(entry.path().string());
@@ -166,7 +166,7 @@ namespace Cherry {
                 continue;
             }
 
-            if (entry.path().extension() == ".cs") {
+            if (entry.path().extension() == ".lua") {
                 AssetManager::CreateScript(entry.path().generic_string());
                 continue;
             }

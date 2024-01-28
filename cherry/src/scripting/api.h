@@ -1,3 +1,7 @@
-#include "scriptEngine.h"
+namespace Cherry {
 
-namespace Cherry {}
+    struct lua_State;
+
+    void registerScriptingApi(lua_State* state);
+
+}

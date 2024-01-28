@@ -1,10 +1,10 @@
 #pragma once
 
-#include "core/core.h"
 #include "core/keyCodes.h"
-#include "core/log.h"
 #include "core/mouseButtonCodes.h"
 #include "eventType.h"
+
+#include <string>
 
 namespace Cherry {
     struct Event {

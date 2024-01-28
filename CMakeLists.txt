@@ -25,7 +25,7 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 file(GLOB CH_SOURCES cherry/src/core/**.cpp cherry/src/events/**.cpp
     cherry/src/graphics/**.cpp cherry/src/imgui/**.cpp cherry/src/math/**.cpp
     cherry/src/renderer/**.cpp cherry/src/scene/**.cpp cherry/src/system/**.cpp
-    cherry/src/utils/**.cpp)
+    cherry/src/utils/**.cpp cherry/src/scripting/**.cpp cherry/src/debug/**.cpp)
 
 set(CH_STB_IMAGE cherry/vendor/stb_image/stb_image.cpp)
 
@@ -87,16 +87,16 @@ include_directories(cherry/vendor/glfw/include)
 link_libraries(imgui)
 include_directories(cherry/vendor/imgui)
 
-include(cherry/vendor/lua.cmake)
-link_libraries(lua)
+add_subdirectory(cherry/vendor/lua-cmake)
+target_link_libraries(cherry lua)
 include_directories(cherry/vendor/lua)
 
 file(GLOB BLOSSOM_SOURCES blossom/src/*.cpp blossom/src/panels/*.cpp)
 
 add_executable(blossom ${BLOSSOM_SOURCES})
 target_include_directories(blossom PRIVATE cherry/src blossom/src)
-target_link_libraries(blossom cherry imgui glfw)
 target_include_directories(blossom PRIVATE blossom/vendor/filewatch)
+target_link_libraries(blossom cherry imgui glfw lua)
 
 if(BUILD_EXAMPLE)
     add_executable(example tests/src/hello.cpp) 

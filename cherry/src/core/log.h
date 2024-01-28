@@ -57,7 +57,7 @@ namespace Cherry {
 
     #define CH_ASSERT(condition, error) \
         { \
-            CH_ERROR(error); \
+            if (!(condition)) CH_ERROR(error); \
             assert(condition); \
         }
     #define CH_VALIDATE(condition) \

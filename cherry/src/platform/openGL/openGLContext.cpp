@@ -1,11 +1,10 @@
-#include "openGLContext.h"
-
-#include "core/core.h"
-#include "core/log.h"
 #include "epch.h"
 
-#include <GLFW/glfw3.h>
+#include "openGLContext.h"
+#include "core/log.h"
+
 #include <glad/gl.h>
+#include <GLFW/glfw3.h>
 
 namespace Cherry {
     OpenGLContext::OpenGLContext(GLFWwindow* window): m_Window(window) {}

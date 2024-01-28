@@ -218,7 +218,7 @@ namespace Cherry {
             } else if (event.Keycode == Key::R) {
                 if (Input::GetKeyPressed(Key::Control)) {
                     if (Input::GetKeyPressed(Key::Shift) && !m_IsRuntime)
-                        ScriptEngine::ReloadAssemblies();
+                        ScriptEngine::ReloadScripts();
                     else
                         ReloadAssets();
                 }
@@ -287,7 +287,6 @@ namespace Cherry {
         CH_PROFILE_FUNC();
         static bool IsOpen = true;
         static bool opt_fullscreen = true;
-        static bool opt_padding = false;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -497,6 +496,11 @@ namespace Cherry {
         }
 
         SceneSerializer::Serialize(m_Scene, m_ScenePath);
+    }
+
+
+    void EditorLayer::ReloadAssets() {
+        // TODO: Implement this
     }
 
 } // namespace Cherry

@@ -3,6 +3,8 @@
 #include "events/event.h"
 #include "timestep.h"
 
+#include <string>
+
 namespace Cherry {
     class Layer
     {

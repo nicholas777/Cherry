@@ -47,7 +47,6 @@ namespace Cherry {
     void OpenGLFramebuffer::RegenerateFramebuffer() {
         CH_PROFILE_FUNC();
 
-        uint32_t error = glGetError();
         if (m_FramebufferID) {
             glDeleteFramebuffers(1, &m_FramebufferID);
 

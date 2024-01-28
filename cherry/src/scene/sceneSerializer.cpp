@@ -173,7 +173,7 @@ namespace Cherry {
             return nullptr;
         }
 
-        for (int i = 0; i < scene["Scene"]["Entities"].size(); i++) {
+        for (size_t i = 0; i < scene["Scene"]["Entities"].size(); i++) {
             YAML::Node entity = scene["Scene"]["Entities"][i];
             Entity e;
 

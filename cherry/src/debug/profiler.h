@@ -3,6 +3,8 @@
 #include <chrono>
 #include <sstream>
 
+#include "core/log.h"
+
 namespace Cherry {
 
     class Profiler

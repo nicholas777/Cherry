@@ -6,7 +6,6 @@
 #include "math/matrix.h"
 #include "nativeScript.h"
 #include "renderer/texture.h"
-#include "scripting/class.h"
 
 namespace Cherry {
     struct NameComponent {
@@ -74,7 +73,7 @@ namespace Cherry {
         std::string Name;
 
         ScriptComponent() = default;
-        ScriptComponent(std::string name): Name(name){};
+        ScriptComponent(const std::string& name): Name(name) {};
     };
 
     struct NativeScriptComponent {

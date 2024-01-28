@@ -29,7 +29,7 @@ namespace Cherry {
     void Scene::OnRuntimeStart() {
         ScriptEngine::OnRuntimeStart(this);
 
-        m_Registry.view<ScriptComponent>().each([=](auto entity, auto& script) {
+        m_Registry.view<ScriptComponent>().each([=](auto entity, [[maybe_unused]] auto& script) {
             ScriptEngine::InitScriptedEntity(Entity(entity, this));
         });
     }
