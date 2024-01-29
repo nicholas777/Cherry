@@ -42,11 +42,8 @@ namespace Cherry {
 
         void SetFar(float Far) { m_Far = Far; };
 
-        const Matrix4x4f& GetTransform() const { return m_Transform; }
-
         Matrix4x4f& GetTransform() { return m_Transform; }
-
-        void GetTransform(const Matrix4x4f& mat) { m_Transform = mat; }
+        void SetTransform(const Matrix4x4f& mat) { m_Transform = mat; }
 
     private:
         Matrix4x4f m_Transform;

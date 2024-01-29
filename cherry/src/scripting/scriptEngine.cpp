@@ -1,12 +1,12 @@
 #include "epch.h"
 #include "scriptEngine.h"
 #include "core/core.h"
-#include "lua.h"
 #include "scene/assetManager.h"
 
 #include <cstdio>
 
 extern "C" {
+    #include "lua.h"
     #include <lauxlib.h>
     #include <lualib.h>
 }

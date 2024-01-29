@@ -5,6 +5,7 @@
 #include "system/fileDialogs.h"
 
 #include <entt/entt.hpp>
+#include <filesystem>
 #include <imgui.h>
 
 // BUG: Zooming doesn't zoom into the center of the screen, rather it zooms
@@ -129,6 +130,9 @@ namespace Cherry {
             Vector2f correction = m_EditorCamera.GetTransformCorrection();
 
             Matrix4x4f mat = m_EditorCamera.GetTransform();
+            Translate(&mat, xy.x, xy.y);
+
+            m_EditorCamera.SetTransform(mat);
             Translate(&mat, correction.x, correction.y);
 
             m_Scene->OnUpdate(delta, mat, m_EditorCamera.GetProjection());
@@ -165,7 +169,7 @@ namespace Cherry {
 
             // TODO: Renderer2D::RenderRect() defaults entityID parameter to -1
             // which in editor activates gizmos
-            if (id == -1 || id == -2 && m_SelectedEntity) {
+            if ((id == -1 || id == -2) && m_SelectedEntity) {
                 m_GizmoType = id;
                 m_GizmoSelected = true;
                 m_GizmoStart = Vector2i(mouseX, mouseY);
@@ -380,7 +384,7 @@ namespace Cherry {
         }
 
         uint32_t textureID = m_Framebuffer->GetColorAttachmentID(0);
-        ImGui::Image((void*)textureID, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)(uintptr_t)textureID, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
 
         ImGui::PopStyleVar();
 
@@ -465,15 +469,22 @@ namespace Cherry {
     }
 
     void EditorLayer::OpenFile() {
-        std::filesystem::path path = FileDialogManager::OpenFile("Cherry Scene (.chs)\0*.chs\0\0)");
+        const char* path = FileDialogManager::OpenFile("Cherry scene:chs");
 
-        if (!path.empty()) {
-            if (path.extension() != ".chs") {
+        if (!path) {
+            CH_ERROR("No scene selected");
+            return;
+        }
+
+        std::filesystem::path _path = std::string(path);
+
+        if (!_path.empty()) {
+            if (_path.extension() != ".chs") {
                 CH_ERROR("Could not open file, not a Scene");
                 return;
             }
 
-            m_ScenePath = path.string();
+            m_ScenePath = _path.string();
             m_Scene = SceneSerializer::Deserialize(m_ScenePath);
             m_SceneHierarchyPanel->SetScene(m_Scene);
         }
@@ -487,7 +498,13 @@ namespace Cherry {
     }
 
     void EditorLayer::SaveFileAs() {
-        std::filesystem::path path = FileDialogManager::SaveFile("Cherry Scene (.chs)\0*.chs\0\0)");
+        const char* _path = FileDialogManager::SaveFile("Scene:chs");
+        if (!_path) {
+            CH_ERROR("No file selected");
+            return;
+        }
+
+        std::filesystem::path path = std::string(_path);
         m_ScenePath = path.string();
 
         if (path.extension() != ".chs") {

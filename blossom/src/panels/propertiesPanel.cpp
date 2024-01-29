@@ -31,7 +31,9 @@ namespace Cherry {
             DrawAsset();
     }
 
-    static void DisplayScriptField(void* field, Entity entity, bool runtime) {
+    static void DisplayScriptField([[maybe_unused]] void* field, 
+                                   [[maybe_unused]] Entity entity, 
+                                   [[maybe_unused]] bool runtime) {
         /*
         if (!entity.HasComponent<ScriptComponent>())
             return;
@@ -372,7 +374,7 @@ namespace Cherry {
                         }
                     } else {
                         ImGui::Text("Texture");
-                        ImGui::Image((void*)sprite.SpriteTexture->texture->GetTextureID(),
+                        ImGui::Image((void*)(uintptr_t)sprite.SpriteTexture->texture->GetTextureID(),
                                      ImVec2(160.0f, 160.0f), ImVec2(0, 1), ImVec2(1, 0));
 
                         if (ImGui::BeginDragDropTarget()) {

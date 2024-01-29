@@ -19,6 +19,7 @@ namespace Cherry {
             case ShaderDataType::Int4: return GL_INT;
             case ShaderDataType::Mat3: return GL_FLOAT;
             case ShaderDataType::Mat4: return GL_FLOAT;
+            default: return 0;
         }
     }
 
@@ -86,11 +87,11 @@ namespace Cherry {
         CH_PROFILE_FUNC();
 
         int i = 0;
-        for (auto e: m_Layout.GetBufferElements()) {
+        for (auto& e: m_Layout.GetBufferElements()) {
 
             glEnableVertexAttribArray(i);
             glVertexAttribPointer(i, e.ComponentCount, ShaderDataTypeToGLType(e.Type), GL_FALSE,
-                                  m_Layout.GetStride(), (const void*)e.Offset);
+                                  m_Layout.GetStride(), (void*)(uintptr_t)e.Offset);
             i++;
         }
     }

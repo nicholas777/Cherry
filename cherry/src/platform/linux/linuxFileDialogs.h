@@ -9,7 +9,7 @@ namespace Cherry {
         LinuxFileDialogManager() = default;
 
     protected:
-        virtual std::string OpenFileImpl(const char* filter) override;
-        virtual std::string SaveFileImpl(const char* filter) override;
+        virtual const char* OpenFileImpl(const char* filter) override;
+        virtual const char* SaveFileImpl(const char* filter) override;
     };
 }

@@ -13,7 +13,7 @@ namespace Cherry {
         YAML::Node map = YAML::LoadFile(filepath.generic_u8string() + "/assetmap.yaml");
 
         if (map["Textures"]) {
-            for (int i = 0; i < map["Textures"].size(); i++) {
+            for (size_t i = 0; i < map["Textures"].size(); i++) {
                 YAML::Node texture = map["Textures"][i];
 
                 AssetManager::CreateTextureIfNotExists(
@@ -27,7 +27,7 @@ namespace Cherry {
         }
 
         if (map["Scenes"] && map["Scenes"].IsSequence()) {
-            for (int i = 0; i < map["Scenes"].size(); i++) {
+            for (size_t i = 0; i < map["Scenes"].size(); i++) {
                 YAML::Node texture = map["Scenes"][i];
 
                 AssetManager::CreateSceneIfNotExists(texture["ID"].as<uint32_t>(),
@@ -36,7 +36,7 @@ namespace Cherry {
         }
 
         if (map["Scripts"] && map["Scripts"].IsSequence()) {
-            for (int i = 0; i < map["Scripts"].size(); i++) {
+            for (size_t i = 0; i < map["Scripts"].size(); i++) {
                 YAML::Node script = map["Scripts"][i];
 
                 AssetManager::CreateScriptIfNotExists(script["ID"].as<uint32_t>(),

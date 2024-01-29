@@ -22,3 +22,9 @@
 [submodule "blossom/vendor/filewatch"]
 	path = blossom/vendor/filewatch
 	url = https://github.com/ThomasMonkman/filewatch.git
+[submodule "blossom/vendor/osdialog"]
+	path = blossom/vendor/osdialog
+	url = https://github.com/AndrewBelt/osdialog.git
+[submodule "cherry/vendor/osdialog"]
+	path = cherry/vendor/osdialog
+	url = https://github.com/AndrewBelt/osdialog.git

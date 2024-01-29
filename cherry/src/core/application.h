@@ -18,6 +18,9 @@ namespace Cherry {
             bool IsVSync = true;
 
             std::string Name = "App";
+            
+            int argc = -1;
+            char** argv = nullptr;
         };
 
     public:
@@ -28,7 +31,7 @@ namespace Cherry {
 
         void PushLayer(Layer* layer) { m_LayerStack->PushLayer(layer); };
 
-        void Startup();
+        void Startup(int argc, char** argv);
         void Run();
 
         void OnEvent(const Event& e);

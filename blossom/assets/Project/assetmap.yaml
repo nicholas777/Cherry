@@ -1,19 +1,19 @@
 Scenes:
-  - ID: 0
-    File: assets/Project/example.chs
-  - ID: 1
-    File: assets/Project/level1.chs
-  - ID: 2
-    File: assets/Project/a/level2.chs
   - ID: 3
     File: assets/Project/Test.chs
+  - ID: 2
+    File: assets/Project/a/level2.chs
+  - ID: 1
+    File: assets/Project/level1.chs
+  - ID: 0
+    File: assets/Project/example.chs
 Textures:
-  - ID: 5
-    File: assets/Project/tilemap_packed.png
+  - ID: 0
+    File: assets/Project/Smile.png
     Params:
-      Format: 1
-      MinFilter: 1
-      MagFilter: 2
+      Format: 2
+      MinFilter: 2
+      MagFilter: 1
       Wrap: 1
   - ID: 3
     File: assets/Project/Smile2.png
@@ -22,12 +22,13 @@ Textures:
       MinFilter: 1
       MagFilter: 2
       Wrap: 1
-  - ID: 0
-    File: assets/Project/Smile.png
+  - ID: 5
+    File: assets/Project/tilemap_packed.png
     Params:
-      Format: 2
-      MinFilter: 2
-      MagFilter: 1
+      Format: 1
+      MinFilter: 1
+      MagFilter: 2
       Wrap: 1
 Scripts:
-  []
+  - ID: 0
+    File: assets/Project/scripts/player.lua

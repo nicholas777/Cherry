@@ -4,10 +4,10 @@ function CreateScript(name)
     return __CHERRY_SCRIPTS__[name]
 end
 
-CreateScript("player");
-CreateScript("object");
-CreateScript("enemy");
-CreateScript("skybox");
-CreateScript("ai");
-CreateScript("inventory");
+print(CreateScript("player"))
+print(CreateScript("object"))
+print(CreateScript("enemy"))
+print(CreateScript("skybox"))
+print(CreateScript("ai"))
+print(CreateScript("inventory"))
 

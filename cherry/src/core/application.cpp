@@ -33,8 +33,11 @@ namespace Cherry {
         Renderer2D::Shutdown();
     }
 
-    void Application::Startup() {
+    void Application::Startup(int argc, char** argv) {
         CH_PROFILE_FUNC();
+
+        Configuration.argc = argc;
+        Configuration.argv = argv;
 
         m_Running = true;
 

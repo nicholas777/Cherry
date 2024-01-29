@@ -29,6 +29,8 @@ namespace Cherry {
         uint32_t m_FramebufferID = 0;
         uint32_t* m_AttachmentsGL;
 
+        FramebufferData m_Data;
+
         std::vector<FramebufferAttachment> m_Attachments;
 
         uint32_t m_DepthAttachment;
@@ -37,7 +39,6 @@ namespace Cherry {
         std::vector<uint32_t> m_ColorAttachments;
         std::vector<FramebufferAttachment> m_ColorAttachmentsData;
 
-        FramebufferData m_Data;
 
         void RegenerateFramebuffer();
     };

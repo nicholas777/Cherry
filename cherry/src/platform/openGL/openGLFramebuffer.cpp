@@ -25,7 +25,6 @@ namespace Cherry {
         int value;
         glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &value);
 
-        uint32_t error = glGetError();
         return value;
     }
 
@@ -64,7 +63,7 @@ namespace Cherry {
         glGenTextures(m_Attachments.size(), m_AttachmentsGL);
 
         int colorAttachments = 0;
-        for (int i = 0; i < m_Attachments.size(); i++) {
+        for (size_t i = 0; i < m_Attachments.size(); i++) {
             FramebufferAttachment attachment = m_Attachments[i];
 
             if (IsDepthAttachment(attachment)) {
@@ -124,7 +123,7 @@ namespace Cherry {
 
                         break;
 
-                    case FramebufferTextureFormat::Invalid:
+                    default:
                         CH_ASSERT(false, "Invalid framebuffer texture format!");
                 }
             }

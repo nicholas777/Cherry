@@ -8,7 +8,7 @@ extern Cherry::Application* Cherry::CreateApplication();
 int main(int argc, char** argv) {
     Cherry::Profiler::BeginSession("Startup");
     auto app = Cherry::CreateApplication();
-    app->Startup();
+    app->Startup(argc, argv);
     Cherry::Profiler::EndSession();
 
     Cherry::Profiler::BeginSession("Runtime");

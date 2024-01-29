@@ -4,6 +4,7 @@
 #include "core/mouseButtonCodes.h"
 #include "editorLayer.h"
 
+#include <cstdint>
 #include <imgui.h>
 
 namespace Cherry {
@@ -28,7 +29,7 @@ namespace Cherry {
             ImGuiTreeNodeFlags flags =
                 (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) |
                 ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-            bool opened = ImGui::TreeNodeEx((void*)(uint32_t)entity, flags, name.Name.c_str());
+            bool opened = ImGui::TreeNodeEx((void*)(uintptr_t)(uint32_t)entity, flags, name.Name.c_str());
 
             if (ImGui::IsItemClicked()) {
                 EditorLayer::SelectEntity(entity);

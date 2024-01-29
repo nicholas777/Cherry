@@ -20,6 +20,8 @@ add_library(imgui ${IMGUI_SOURCES})
 add_library(glad cherry/vendor/glad/src/glad.c)
 include_directories(cherry/vendor/glad/include)
 
+add_library(osdialog cherry/vendor/osdialog/osdialog.c cherry/vendor/osdialog/osdialog_zenity.c)
+
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
 file(GLOB CH_SOURCES cherry/src/core/**.cpp cherry/src/events/**.cpp
@@ -90,6 +92,9 @@ include_directories(cherry/vendor/imgui)
 add_subdirectory(cherry/vendor/lua-cmake)
 target_link_libraries(cherry lua)
 include_directories(cherry/vendor/lua)
+
+include_directories(cherry/vendor/osdialog)
+target_link_libraries(cherry osdialog)
 
 file(GLOB BLOSSOM_SOURCES blossom/src/*.cpp blossom/src/panels/*.cpp)
 

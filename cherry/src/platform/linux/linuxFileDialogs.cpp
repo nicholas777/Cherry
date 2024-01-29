@@ -1,69 +1,23 @@
-#include "linuxFileDialogs.h"
-
-#include "core/application.h"
 #include "epch.h"
 
-#include <GLFW/glfw3.h>
+#include "linuxFileDialogs.h"
+
+#include <osdialog.h>
 
 namespace Cherry {
-    std::string LinuxFileDialogManager::OpenFileImpl(const char* filter) {
-        /*HWND win =
-        glfwGetWin32Window((GLFWwindow*)Application::GetApplication().GetWindow()->GetNativeWindow());
+    const char* LinuxFileDialogManager::OpenFileImpl(const char* filter) {
+        osdialog_filters* filters = filter ? osdialog_filters_parse(filter) : nullptr;
+        char* result = osdialog_file(OSDIALOG_OPEN, NULL, NULL, filters);
+        if (filter) osdialog_filters_free(filters);
 
-        OPENFILENAMEA opendialog = { 0 };
-        char szFile[260] = { 0 };
-        char currentDir[260] = { 0 };
-
-        opendialog.lStructSize = sizeof(opendialog);
-        opendialog.hwndOwner = win;
-        opendialog.hInstance = GetModuleHandle(NULL);
-
-        opendialog.lpstrFile = szFile;
-        opendialog.nMaxFile = sizeof(szFile);
-
-        opendialog.lpstrFilter = filter;
-        opendialog.nFilterIndex = 1;
-
-        if (GetCurrentDirectoryA(256, currentDir))
-            opendialog.lpstrInitialDir = currentDir;
-
-        opendialog.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-
-        if (GetOpenFileNameA(&opendialog) == TRUE)
-        {
-            return opendialog.lpstrFile;
-        }
-        */
-        return std::string();
+        return result;
     }
 
-    std::string LinuxFileDialogManager::SaveFileImpl(const char* filter) {
-        /*OPENFILENAMEA opendialog;
-        char szFile[260] = { 0 };
-        char currentDir[256] = { 0 };
-        ZeroMemory(&opendialog, sizeof(OPENFILENAME));
+    const char* LinuxFileDialogManager::SaveFileImpl(const char* filter) {
+        osdialog_filters* filters = filter ? osdialog_filters_parse(filter) : nullptr;
+        char* result = osdialog_file(OSDIALOG_SAVE, NULL, NULL, filters);
+        if (filter) osdialog_filters_free(filters);
 
-        opendialog.lStructSize = sizeof(OPENFILENAME);
-        opendialog.hwndOwner =
-        glfwGetWin32Window((GLFWwindow*)Application::GetApplication().GetWindow()->GetNativeWindow());
-
-        opendialog.lpstrFile = szFile;
-        opendialog.nMaxFile = sizeof(szFile);
-        if (GetCurrentDirectoryA(256, currentDir))
-            opendialog.lpstrInitialDir = currentDir;
-
-        opendialog.lpstrFilter = filter;
-        opendialog.nFilterIndex = 1;
-        opendialog.lpstrDefExt = std::string(filter).substr(std::string(filter).find_last_of('.') +
-        1).c_str();
-
-        opendialog.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
-
-        if (GetSaveFileNameA(&opendialog) == TRUE)
-        {
-            return opendialog.lpstrFile;
-        }
-        */
-        return std::string();
+        return result;
     }
 }

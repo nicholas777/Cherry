@@ -8,6 +8,8 @@ namespace Cherry {
     class ReversableAction
     {
     public:
+        virtual ~ReversableAction() {};
+
         virtual void Reverse() = 0;
         virtual ReversableAction* ToReversed() = 0;
 

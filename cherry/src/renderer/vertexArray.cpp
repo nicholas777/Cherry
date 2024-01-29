@@ -11,6 +11,7 @@ namespace Cherry {
                 CH_ASSERT(false, "API::None is not supported");
                 return nullptr;
             case RenderAPI::API::OpenGL: return Scoped<VertexArray>(new OpenGLVertexArray());
+            default: return nullptr;
         }
     }
 }
