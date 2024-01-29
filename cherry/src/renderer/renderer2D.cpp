@@ -132,7 +132,8 @@ namespace Cherry {
 
     void Renderer2D::End() {
         CH_PROFILE_FUNC();
-        Flush();
+        if (s_Data->RectPtr != s_Data->RectBase)
+            Flush();
     }
 
     void Renderer2D::DrawRect(const Vector2f& position, const Vector2f& size,

@@ -27,30 +27,38 @@ namespace Cherry {
         static void OnRuntimeStart(Scene* scene);
         static void OnRuntimeStop();
 
+        static void InitScriptedEntity(Entity e);
+
         static void UpdateScriptedEntities(float delta);
         static void RegisterScriptedEntity(const Entity& e);
         static void ReloadScripts();
-
-        static void InitScriptedEntity(Entity e);
 
         static bool IsScriptClass(const std::string& table);
         static std::vector<Shared<Field>>* ScriptClassGetFields(const std::string& table);
 
     private:
-        typedef void* OnCreateFunc;
-        typedef void* OnUpdateFunc;
-        typedef void* OnDestroyFunc;
+        struct ScriptClass {
+            const char* name;
+            bool onCreate = false, onUpdate = false, onDestroy = false;
+            int luaNewMethod = -1;
+        };
+
+        static std::vector<ScriptClass> m_ScriptClasses;
+
+    private:
+        typedef int OnCreateFunc;
+        typedef int OnUpdateFunc;
+        typedef int OnDestroyFunc;
 
         struct ScriptedEntity {
-            OnCreateFunc OnCreate = nullptr;
-            OnUpdateFunc OnUpdate = nullptr;
-            OnDestroyFunc OnDestroy = nullptr;
+            OnCreateFunc OnCreate = -1;
+            OnUpdateFunc OnUpdate = -1;
+            OnDestroyFunc OnDestroy = -1;
+            int luaTable = -1;
             entt::entity entity;
         };
 
         static std::vector<ScriptedEntity> m_ScriptedEntities;
-
-        static void UnloadScriptedEntities();
     private:
         static lua_State* m_State;
         static Scene* m_RuntimeScene;

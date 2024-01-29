@@ -68,6 +68,7 @@ link_libraries(freetype-gl)
 include_directories(cherry/vendor/freetype_gl)
 include_directories($<TARGET_PROPERTY:freetype-gl,BINARY_DIR>)
 
+set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "Build yaml-cpp tools")
 add_subdirectory(cherry/vendor/yaml_cpp)
 link_libraries(yaml-cpp)
 include_directories(cherry/vendor/yaml_cpp/include)

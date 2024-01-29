@@ -252,9 +252,9 @@ namespace Cherry {
                 if (valid) {
                     auto fields = ScriptEngine::ScriptClassGetFields(str);
 
-                    for (auto& field: *fields) {
-                        DisplayScriptField(field.Get(), m_Current, runtime);
-                    }
+                    // for (auto& field: *fields) {
+                    //     DisplayScriptField(field.Get(), m_Current, runtime);
+                    // }
                 }
 
                 ImGui::NewLine();

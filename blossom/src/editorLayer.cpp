@@ -1,5 +1,6 @@
 #include "editorLayer.h"
 
+#include "core/log.h"
 #include "debug/profiler.h"
 #include "scene/nativeScript.h"
 #include "system/fileDialogs.h"
@@ -30,6 +31,7 @@ namespace Cherry {
     std::vector<ReversableAction*> EditorLayer::m_ActionsToRedo = std::vector<ReversableAction*>();
 
     static Vector2f GetCameraOffsets(const Timestep& delta) {
+        if (Input::GetKeyPressed(Key::Control)) return Vector2f(0, 0);
         float x = 0, y = 0;
 
         if (Input::GetKeyPressed(Key::W)) {
@@ -88,7 +90,7 @@ namespace Cherry {
 
         m_ScenePath = "";
         m_Scene = new Scene;
-        m_RuntimeScene = new Scene;
+        m_RuntimeScene = m_Scene;
         m_State = EditorState::Edit;
 
         m_PlayButton = Texture::Create("assets/PlayButton.png");
@@ -353,7 +355,7 @@ namespace Cherry {
         ImGuiWindowFlags titleBarFlags = ImGuiWindowFlags_NoTitleBar;
         ImGui::Begin("Scene bar", &IsOpen, titleBarFlags);
         if (ImGui::Button("Play")) {
-            m_IsRuntime = !m_IsRuntime;
+            ToggleRuntime();
         }
         if (ImGui::IsItemHovered()) {
             ImGui::SetTooltip("Play scene");
@@ -405,6 +407,7 @@ namespace Cherry {
 
     void EditorLayer::SelectScene(Scene* asset, const std::string& path) {
         m_Scene = asset;
+        m_RuntimeScene = m_Scene;
         m_SceneHierarchyPanel->SetScene(asset);
         m_ScenePath = path;
     }
@@ -464,6 +467,7 @@ namespace Cherry {
 
     void EditorLayer::NewFile() {
         m_Scene = new Scene();
+        m_RuntimeScene = m_Scene;
         m_SceneHierarchyPanel->SetScene(m_Scene);
         m_ScenePath = "";
     }
@@ -486,15 +490,18 @@ namespace Cherry {
 
             m_ScenePath = _path.string();
             m_Scene = SceneSerializer::Deserialize(m_ScenePath);
+            m_RuntimeScene = m_Scene;
             m_SceneHierarchyPanel->SetScene(m_Scene);
         }
     }
 
     void EditorLayer::SaveFile() {
-        if (m_ScenePath.empty())
+        if (m_ScenePath.empty()) {
             SaveFileAs();
-        else
+        } else {
+            CH_INFO("Saving scene...");
             SceneSerializer::Serialize(m_Scene, m_ScenePath);
+        }
     }
 
     void EditorLayer::SaveFileAs() {
@@ -503,6 +510,8 @@ namespace Cherry {
             CH_ERROR("No file selected");
             return;
         }
+
+        CH_INFO("Saving scene as...");
 
         std::filesystem::path path = std::string(_path);
         m_ScenePath = path.string();
@@ -517,6 +526,14 @@ namespace Cherry {
 
     void EditorLayer::ReloadAssets() {
         // TODO: Implement this
+    }
+
+    void EditorLayer::ToggleRuntime() {
+        m_IsRuntime = !m_IsRuntime;
+        if (m_IsRuntime)
+            m_RuntimeScene->OnRuntimeStart();
+        else
+            m_RuntimeScene->OnRuntimeStop();
     }
 
 } // namespace Cherry

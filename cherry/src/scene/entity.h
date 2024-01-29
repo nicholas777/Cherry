@@ -1,8 +1,9 @@
 #pragma once
 
-#include "core/core.h"
-#include "entt/entt.hpp"
+#include "core/log.h"
 #include "scene.h"
+
+#include <entt/entt.hpp>
 
 namespace Cherry {
 

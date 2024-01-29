@@ -27,11 +27,11 @@ namespace Cherry {
     }
 
     void Scene::OnRuntimeStart() {
-        ScriptEngine::OnRuntimeStart(this);
-
         m_Registry.view<ScriptComponent>().each([=](auto entity, [[maybe_unused]] auto& script) {
             ScriptEngine::InitScriptedEntity(Entity(entity, this));
         });
+
+        ScriptEngine::OnRuntimeStart(this);
     }
 
     void Scene::OnRuntimeStop() {
@@ -78,27 +78,24 @@ namespace Cherry {
             }
         }
 
-        {
-            if (mainCamera) {
-                Renderer2D::Begin(mainCamera->GetProjection(), cameraTransform);
+        if (mainCamera) {
+            Renderer2D::Begin(mainCamera->GetProjection(), cameraTransform);
 
-                auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
+            auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 
-                for (auto entity: group) {
-                    auto [transform, sprite] =
-                        group.get<TransformComponent, SpriteComponent>(entity);
+            for (auto entity: group) {
+                auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
-                    if (sprite.UseTexture) {
-                        if (sprite.SpriteTexture.IsAlive())
-                            Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture,
-                                                 sprite.Color);
-                    } else {
-                        Renderer2D::DrawRect(transform.GetMatrix(), sprite.Color);
-                    }
+                if (sprite.UseTexture) {
+                    if (sprite.SpriteTexture.IsAlive())
+                        Renderer2D::DrawRect(transform.GetMatrix(), *sprite.SpriteTexture,
+                                sprite.Color);
+                } else {
+                    Renderer2D::DrawRect(transform.GetMatrix(), sprite.Color);
                 }
-
-                Renderer2D::End();
             }
+
+            Renderer2D::End();
         }
     }
 
