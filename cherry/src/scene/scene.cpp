@@ -1,12 +1,12 @@
+#include "epch.h"
 #include "scene.h"
 
 #include "component.h"
 #include "debug/profiler.h"
 #include "entity.h"
-#include "epch.h"
-#include "nativeScript.h"
 #include "renderer/renderCommand.h"
 #include "scripting/scriptEngine.h"
+#include "renderer/renderer2D.h"
 
 namespace Cherry {
     Scene::Scene() {}
@@ -103,7 +103,7 @@ namespace Cherry {
     }
 
     // TODO: Proper system for scene rendering
-    void Scene::OnUpdate(const Timestep& delta, const Matrix4x4f& view, const Matrix4x4f& proj) {
+    void Scene::OnUpdate(const Matrix4x4f& view, const Matrix4x4f& proj) {
         CH_PROFILE_FUNC();
 
         RenderCommand::Clear();

@@ -11,12 +11,12 @@
 namespace Cherry {
     static bool GLFWInit = false;
 
-    void LinuxWindow::ErrorCallback(int error, const char* msg) {
+    void LinuxWindow::ErrorCallback([[maybe_unused]] int error, const char* msg) {
         Application::GetApplication().OnEvent(
             GameErrorEvent((std::string("GLFW ERROR: ") + std::string(msg)).c_str()));
     }
 
-    void LinuxWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    void LinuxWindow::KeyCallback([[maybe_unused]] GLFWwindow* window, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int mods) {
         switch (action) {
             case GLFW_PRESS:
                 Application::GetApplication().OnEvent(KeyPressEvent(static_cast<Key>(key), false));
@@ -30,11 +30,11 @@ namespace Cherry {
         }
     }
 
-    void LinuxWindow::MouseMoveCallback(GLFWwindow* window, double xpos, double ypos) {
+    void LinuxWindow::MouseMoveCallback([[maybe_unused]] GLFWwindow* window, double xpos, double ypos) {
         Application::GetApplication().OnEvent(MouseMoveEvent(int(xpos), int(ypos)));
     }
 
-    void LinuxWindow::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    void LinuxWindow::MouseButtonCallback([[maybe_unused]] GLFWwindow* window, int button, int action, [[maybe_unused]] int mods) {
         switch (action) {
             case GLFW_PRESS:
                 Application::GetApplication().OnEvent(
@@ -47,22 +47,22 @@ namespace Cherry {
         }
     }
 
-    void LinuxWindow::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    void LinuxWindow::ScrollCallback([[maybe_unused]] GLFWwindow* window, [[maybe_unused]] double xoffset, double yoffset) {
         Application::GetApplication().OnEvent(MouseScrollEvent((int)yoffset));
     }
 
-    void LinuxWindow::WindowCloseCallback(GLFWwindow* window) {
+    void LinuxWindow::WindowCloseCallback([[maybe_unused]] GLFWwindow* window) {
         Application::GetApplication().OnEvent(WindowCloseEvent());
         Application::GetApplication().OnWindowClose();
         CH_INFO("window closing");
     }
 
-    void LinuxWindow::WindowResizeCallback(GLFWwindow* window, int width, int height) {
+    void LinuxWindow::WindowResizeCallback([[maybe_unused]] GLFWwindow* window, int width, int height) {
         Application::GetApplication().OnEvent(WindowResizeEvent(width, height));
         Application::GetApplication().OnWindowResize(width, height);
     }
 
-    void LinuxWindow::WindowFocusCallback(GLFWwindow* window, int focused) {
+    void LinuxWindow::WindowFocusCallback([[maybe_unused]] GLFWwindow* window, int focused) {
         if (focused) {
             Application::GetApplication().OnEvent(WindowFocusEvent());
         } else {

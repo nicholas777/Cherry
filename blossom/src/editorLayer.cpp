@@ -135,7 +135,7 @@ namespace Cherry {
             m_EditorCamera.SetTransform(mat);
             Translate(&mat, correction.x, correction.y);
 
-            m_Scene->OnUpdate(delta, mat, m_EditorCamera.GetProjection());
+            m_Scene->OnUpdate(mat, m_EditorCamera.GetProjection());
 
             // Gizmos
             if (m_SelectedEntity && m_SelectedEntity.HasComponent<TransformComponent>()) {

@@ -1,6 +1,5 @@
-#include "openGLRenderAPI.h"
-
 #include "epch.h"
+#include "openGLRenderAPI.h"
 
 #include <glad/glad.h>
 
@@ -23,7 +22,7 @@ namespace Cherry {
     }
 
     void OpenGLRenderAPI::DrawElements(VertexArray* vao, uint32_t indexCount) {
-        uint32_t indices = indexCount != -1 ? indexCount : vao->GetIndexBuffer()->GetCount();
+        uint32_t indices = indexCount != 0 ? indexCount : vao->GetIndexBuffer()->GetCount();
         glDrawElements(GL_TRIANGLES, indices, GL_UNSIGNED_INT, nullptr);
     }
 }

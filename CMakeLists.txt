@@ -102,6 +102,7 @@ add_executable(blossom ${BLOSSOM_SOURCES})
 target_include_directories(blossom PRIVATE cherry/src blossom/src)
 target_include_directories(blossom PRIVATE blossom/vendor/filewatch)
 target_link_libraries(blossom cherry imgui glfw lua)
+target_compile_options(blossom PRIVATE "-Wno-unknown-pragmas")
 
 if(BUILD_EXAMPLE)
     add_executable(example tests/src/hello.cpp) 
