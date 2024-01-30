@@ -31,56 +31,44 @@ namespace Cherry {
             DrawAsset();
     }
 
-    static void DisplayScriptField([[maybe_unused]] void* field, 
-                                   [[maybe_unused]] Entity entity, 
-                                   [[maybe_unused]] bool runtime) {
-        /*
+    static void DisplayScriptField(Field* field, 
+                                   Entity entity, 
+                                   bool runtime) {
+        
         if (!entity.HasComponent<ScriptComponent>())
             return;
 
         if (!runtime)
             return;
 
-        if (field->GetType() == ScriptFieldType::Int) {
-            int data;
-            field->GetData(ScriptEngine::GetScriptedEntity(entity), &data);
-
-            if (ImGui::InputInt(field->GetName(), &data))
-                field->SetData(ScriptEngine::GetScriptedEntity(entity), data);
-        } else if (field->GetType() == ScriptFieldType::Float) {
-            float data;
-            field->GetData(ScriptEngine::GetScriptedEntity(entity), &data);
-
-            if (ImGui::InputFloat(field->GetName(), &data, 0, 0, "%.8f"))
-                field->SetData(ScriptEngine::GetScriptedEntity(entity), data);
-        } else if (field->GetType() == ScriptFieldType::Double) {
+        if (field->GetType() == ScriptFieldType::Number) {
             double data;
-            field->GetData(ScriptEngine::GetScriptedEntity(entity), &data);
+            field->GetData(&data, sizeof(data));
 
             if (ImGui::InputDouble(field->GetName(), &data, 0, 0, "%.16f"))
-                field->SetData(ScriptEngine::GetScriptedEntity(entity), data);
+                field->SetData(&data);
+
         } else if (field->GetType() == ScriptFieldType::Bool) {
             bool data;
-            field->GetData(ScriptEngine::GetScriptedEntity(entity), &data);
+            field->GetData(&data, sizeof(data));
 
-            if (ImGui::RadioButton(field->GetName(), data))
-                field->SetData(ScriptEngine::GetScriptedEntity(entity), !data);
+            if (ImGui::RadioButton(field->GetName(), data)) {
+                data = !data;
+                field->SetData(&data);
+            }
         }
 
         else if (field->GetType() == ScriptFieldType::String) {
-            char* data = new char[256];
-            memset(data, 0, sizeof(data));
-            char* buff = new char[256];
-            field->GetData(ScriptEngine::GetScriptedEntity(entity), (const char**)&data);
-            memset(buff, 0, sizeof(buff));
-            strcpy(buff, data);
+            char data[256];
+            memset(data, 0, 256);
+            field->GetData(data, 256);
 
-            if (ImGui::InputText(field->GetName(), (char*)buff, 256,
+            if (ImGui::InputText(field->GetName(), data, 256,
                                  ImGuiInputTextFlags_EnterReturnsTrue)) {
-                field->SetData(ScriptEngine::GetScriptedEntity(entity), (const char*)buff);
+                field->SetData(data);
             }
         }
-        */
+        
     }
 
     void PropertiesPanel::DrawEntity(bool runtime) {
@@ -249,12 +237,12 @@ namespace Cherry {
                 if (!valid)
                     ImGui::TextColored({ 1, 0, 0, 1 }, "Invalid class name");
 
-                if (valid) {
-                    auto fields = ScriptEngine::ScriptClassGetFields(str);
+                if (valid && runtime) {
+                    auto fields = ScriptEngine::ScriptedEntityGetFields(m_Current);
 
-                    // for (auto& field: *fields) {
-                    //     DisplayScriptField(field.Get(), m_Current, runtime);
-                    // }
+                    for (auto& field: *fields) {
+                        DisplayScriptField(field.Get(), m_Current, runtime);
+                    }
                 }
 
                 ImGui::NewLine();

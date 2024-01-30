@@ -15,7 +15,30 @@ namespace Cherry {
     class Entity;
     class Scene;
 
-    class Field {};
+    enum ScriptFieldType {
+        Unsupported,
+        Number, Bool, String
+    };
+
+    class Field 
+    {
+    public:
+        Field(lua_State* L, int tableRef, const char* field);
+        ~Field();
+
+        void GetData(void* buf, size_t size);
+        void SetData(void* buf);
+
+        ScriptFieldType GetType() { return m_Type; }
+        const char* GetName() { return m_Name; }
+
+    private:
+        lua_State* m_State;
+        ScriptFieldType m_Type;
+        int m_Table;
+        const char* m_Name;
+        int m_Ref;
+    };
 
     class ScriptEngine
     {
@@ -34,7 +57,7 @@ namespace Cherry {
         static void ReloadScripts();
 
         static bool IsScriptClass(const std::string& table);
-        static std::vector<Shared<Field>>* ScriptClassGetFields(const std::string& table);
+        static std::vector<Shared<Field>>* ScriptedEntityGetFields(Entity e);
 
     private:
         struct ScriptClass {
@@ -56,6 +79,8 @@ namespace Cherry {
             OnDestroyFunc OnDestroy = -1;
             int luaTable = -1;
             entt::entity entity;
+
+            std::vector<Shared<Field>> fields;
         };
 
         static std::vector<ScriptedEntity> m_ScriptedEntities;
