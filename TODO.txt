@@ -1,7 +1,9 @@
 ﻿Scripting Engine
 - Expose c++ API to Lua
 - Write Lua API
-- Scripted behaviour to entities
+# Scripted behaviour to entities
+# Editing script fields in editor
+- Serializing script fields
 
 Minor improvments
 - Profiling in the scripting engine
@@ -10,7 +12,6 @@ Minor improvments
 - Give all entities transform z component to determine rendering order
 - Rework viewport resize code
 - Show camera location in editor
-- Support for editing script fields in editor of types UInt, Short, UShort, Long, ULong, Byte
 
 Bug fixes
 # Camera component viewpoint is offset

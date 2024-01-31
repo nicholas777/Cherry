@@ -1,6 +1,20 @@
+StatusCode = {
+    [0] = "Success",
+    [1] = "Invalid parameters",
+}
+
+CherryScript = {
+    getComponent = function (self, type)
+       return __CPP_API.getComponent(self.__ch_entity, type)
+    end
+}
+
+CherryScript.__index = CherryScript
 
 function CreateScript(name)
     __CHERRY_SCRIPTS__[name] = { __IS_SCRIPT=true }
+    setmetatable(__CHERRY_SCRIPTS__[name], {__index = CherryScript})
+
     __CHERRY_SCRIPTS__[name].__new_obj = function (obj)
         obj = {}
         -- Move this to C land
@@ -8,6 +22,7 @@ function CreateScript(name)
         __CHERRY_SCRIPTS__[name].__index = __CHERRY_SCRIPTS__[name]
         return obj
     end
+
     return __CHERRY_SCRIPTS__[name]
 end
 

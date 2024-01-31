@@ -15,7 +15,7 @@ namespace Cherry {
     class Entity;
     class Scene;
 
-    enum ScriptFieldType {
+    enum class ScriptFieldType {
         Unsupported,
         Number, Bool, String
     };

@@ -135,7 +135,6 @@ namespace Cherry {
     }
 
     void ScriptEngine::OnRuntimeStop() {
-        m_RuntimeScene = nullptr;
 
         for (auto& se : m_ScriptedEntities) {
             if (se.OnDestroy == -1) continue;
@@ -150,7 +149,62 @@ namespace Cherry {
 
         lua_pop(m_State, lua_gettop(m_State));
 
+        for (ScriptedEntity& e : m_ScriptedEntities) {
+            if (e.OnCreate != -1)
+                luaL_unref(m_State, LUA_REGISTRYINDEX, e.OnCreate);
+            if (e.OnUpdate != -1)
+                luaL_unref(m_State, LUA_REGISTRYINDEX, e.OnUpdate);
+            if (e.OnDestroy != -1)
+                luaL_unref(m_State, LUA_REGISTRYINDEX, e.OnDestroy);
+
+            ScriptComponent& comp = Entity(e.entity, m_RuntimeScene).GetComponent<ScriptComponent>();
+            for (auto& f : e.fields) {
+                switch (f->GetType()) {
+                    case ScriptFieldType::String:
+                        if (comp.Fields.find(f->GetName()) == comp.Fields.end()) {
+                            FieldData data;
+                            data.type = f->GetType();
+
+                            char buf[256]; memset(buf, 0, 256);
+                            f->GetData(buf, 256);
+                            data.string = new char[256];
+                            strncpy((char*)data.string, buf, 256);
+
+                            comp.Fields[f->GetName()] = data;
+                        } else {
+                            char buf[256]; memset(buf, 0, 256);
+                            f->GetData(buf, 256);
+                            strncpy((char*)comp.Fields[f->GetName()].string, buf, 256);
+                        }
+                        break;
+                    case ScriptFieldType::Bool:
+                        if (comp.Fields.find(f->GetName()) == comp.Fields.end()) {
+                            FieldData data;
+                            data.type = ScriptFieldType::Bool;
+                            f->GetData(&data.boolean, 1);
+                            comp.Fields[f->GetName()] = data;
+                        } else {
+                            f->GetData(&comp.Fields[f->GetName()].boolean, 1);
+                        }
+                        break;
+                    case ScriptFieldType::Number:
+                        if (comp.Fields.find(f->GetName()) == comp.Fields.end()) {
+                            FieldData data;
+                            data.type = ScriptFieldType::Number;
+                            f->GetData(&data.number, sizeof(data.number));
+                            comp.Fields[f->GetName()] = data;
+                        } else {
+                            f->GetData(&comp.Fields[f->GetName()].number, 1);
+                        }
+                        break;
+                    default: break;
+                }
+            }
+        }
+
         m_ScriptedEntities.clear();
+
+        m_RuntimeScene = nullptr;
     }
 
     void ScriptEngine::InitScriptedEntity(Entity e) {
@@ -195,7 +249,7 @@ namespace Cherry {
                 if (!lua_isstring(m_State, -2)) continue;
 
                 const char* name = lua_tostring(m_State, -2);
-                if (strcmp(name, "__IS_SCRIPT") == 0) {
+                if (strncmp(name, "_", 1) == 0) {
                     lua_pop(m_State, 1);
                     continue;
                 }
@@ -206,14 +260,35 @@ namespace Cherry {
                     continue;
                 }
 
-                lua_rawgeti(m_State, LUA_REGISTRYINDEX, se.luaTable);
-                lua_pushvalue(m_State, -2);
-                lua_setfield(m_State, -2, name);
+                if (comp.Fields.find(name) != comp.Fields.end()) {
+                    lua_rawgeti(m_State, LUA_REGISTRYINDEX, se.luaTable);
+                    switch (comp.Fields[name].type) {
+                        case ScriptFieldType::String:
+                            lua_pushstring(m_State, comp.Fields[name].string);
+                            break;
+                        case ScriptFieldType::Bool:
+                            lua_pushboolean(m_State, comp.Fields[name].boolean);
+                            break;
+                        case ScriptFieldType::Number:
+                            lua_pushnumber(m_State, comp.Fields[name].number);
+                            break;
+                        default: CH_ASSERT(false, "Invalid field type"); break;
+                    }
+                    lua_setfield(m_State, -2, name);
+                } else {
+                    lua_rawgeti(m_State, LUA_REGISTRYINDEX, se.luaTable);
+                    lua_pushvalue(m_State, -2);
+                    lua_setfield(m_State, -2, name);
+                }
                 
                 se.fields.emplace_back(new Field(m_State, se.luaTable, name));
 
                 lua_pop(m_State, 2);
             }
+
+            lua_rawgeti(m_State, LUA_REGISTRYINDEX, se.luaTable);
+            lua_pushnumber(m_State, (double)se.entity);
+            lua_setfield(m_State, -2, "__ch_entity");
 
             lua_pop(m_State, lua_gettop(m_State));
 
@@ -222,6 +297,7 @@ namespace Cherry {
         }
 
         CH_ASSERT(false, "No such script class");
+        return;
     }
 
     void ScriptEngine::ReloadScripts() {

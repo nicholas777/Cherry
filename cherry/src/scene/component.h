@@ -6,6 +6,8 @@
 #include "math/matrix.h"
 #include "nativeScript.h"
 #include "renderer/texture.h"
+#include "scripting/scriptEngine.h"
+#include <unordered_map>
 
 namespace Cherry {
     struct NameComponent {
@@ -69,8 +71,19 @@ namespace Cherry {
         CameraComponent(const SceneCamera& cam, bool primary): camera(cam), IsPrimary(primary) {}
     };
 
+    struct FieldData {
+        ScriptFieldType type;
+
+        union {
+            double number;
+            const char* string;
+            bool boolean;
+        };
+    };
+
     struct ScriptComponent {
         std::string Name;
+        std::unordered_map<std::string, FieldData> Fields;
 
         ScriptComponent() = default;
         ScriptComponent(const std::string& name): Name(name) {};

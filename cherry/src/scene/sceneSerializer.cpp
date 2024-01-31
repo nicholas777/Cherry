@@ -1,13 +1,18 @@
+#include "epch.h"
 #include "sceneSerializer.h"
 
 #include "assetManager.h"
 #include "component.h"
 #include "debug/profiler.h"
 #include "entity.h"
-#include "entt/entt.hpp"
-#include "epch.h"
 #include "math/vector.h"
-#include "yaml-cpp/yaml.h"
+#include "scripting/scriptEngine.h"
+#include "yaml-cpp/emittermanip.h"
+#include "yaml-cpp/null.h"
+
+#include <cstring>
+#include <entt/entt.hpp>
+#include <yaml-cpp/yaml.h>
 
 namespace Cherry {
     static void SerializeVec2(Vector2f vec, const char* name, YAML::Emitter& out) {
@@ -70,6 +75,38 @@ namespace Cherry {
 
             out << YAML::Key << "name";
             out << YAML::Value << comp.Name;
+
+            out << YAML::Key << "fields";
+            out << YAML::Value << YAML::BeginSeq;
+
+            for (auto& field : comp.Fields) {
+                out << YAML::BeginMap;
+                out << YAML::Key << "name";
+                out << YAML::Value << field.first;
+
+                out << YAML::Key << "type";
+                out << YAML::Value << static_cast<int>(field.second.type);
+
+                out << YAML::Key << "value";
+                switch (field.second.type) {
+                    case ScriptFieldType::Bool: 
+                        out << YAML::Value << field.second.boolean;
+                        break;
+                    case ScriptFieldType::String: 
+                        out << YAML::Value << field.second.string;
+                        break;
+                    case ScriptFieldType::Number: 
+                        out << YAML::Value << field.second.number;
+                        break;
+                    default: 
+                        out << YAML::Value << YAML::Null;
+                        break;
+                }
+
+                out << YAML::EndMap;
+            }
+
+            out << YAML::EndSeq; // fields
 
             out << YAML::EndMap;
         }
@@ -157,19 +194,8 @@ namespace Cherry {
         YAML::Node scene = YAML::LoadFile(filepath);
         Scene* s = new Scene;
 
-        if (!scene["Scene"]) {
+        if (!scene["Scene"] || !scene["Scene"]["Entities"] || !scene["Scene"]["Entities"].IsSequence()) {
             CH_ASSERT(false, "Invadlid scene file!");
-            return nullptr;
-        }
-
-        // TODO: Scene names
-        if (!scene["Scene"]["Entities"]) {
-            CH_ASSERT(false, "Invalid scene file!");
-            return nullptr;
-        }
-
-        if (!scene["Scene"]["Entities"].IsSequence()) {
-            CH_ASSERT(false, "Invalid scene file!");
             return nullptr;
         }
 
@@ -199,6 +225,33 @@ namespace Cherry {
                 ScriptComponent& comp = e.AddComponent<ScriptComponent>();
 
                 comp.Name = entity["ScriptComponent"]["name"].as<std::string>();
+
+                if (entity["ScriptComponent"]["fields"]) {
+                    for (size_t i = 0; i < entity["ScriptComponent"]["fields"].size(); i++) {
+                        YAML::Node field = entity["ScriptComponent"]["fields"][i];
+
+                        FieldData data;
+                        data.type = (ScriptFieldType)field["type"].as<int>();
+
+                        switch (data.type) {
+                            case ScriptFieldType::Bool:
+                                data.boolean = field["value"].as<bool>();
+                                break;
+                            case ScriptFieldType::String:
+                                data.string = new char[field["value"].as<std::string>().size()];
+                                strcpy((char*)data.string, field["value"].as<std::string>().c_str());
+                                break;
+                            case ScriptFieldType::Number:
+                                data.number = field["value"].as<double>();
+                                break;
+                            default:
+                                CH_ASSERT(false, "Invalid field type");
+                                break;
+                        }
+
+                        comp.Fields[field["name"].as<std::string>()] = data;
+                    }
+                }
             }
 
             if (entity["SpriteComponent"]) {
